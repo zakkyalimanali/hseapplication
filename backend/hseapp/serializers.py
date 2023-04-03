@@ -1,10 +1,18 @@
 from rest_framework import serializers
 from .models import Staff , Incident
+# from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
+
+    # def update(self, instance, validated_data):
+    #     instance.name = validated_data.get('name', instance.name)
+    #     instance.position = validated_data.get('position', instance.position)
+    #     instance.staff_id_number = validated_data.get('staff_id_number', instance.position)
+    #     instance.save()
+    #     return instance
 
     
 
