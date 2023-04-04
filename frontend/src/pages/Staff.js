@@ -135,7 +135,7 @@ export default function Staff() {
               <tbody>
                 {staffs.map((staff, index) => {
                   return (
-                    <tr key={staff.staff_id}>
+                    <tr key={staff.id}>
                       <td>{staff.name}</td>
                       <td>{staff.position}</td>
                       <td>{staff.staff_id_number}</td>

@@ -338,14 +338,30 @@ export default function OneIncident() {
     console.log(params.id);
     const [short_desc , setShortDesc] = useState('')
     const [what_happened , setWhatHappened] = useState('')
+    const [why_happened , setWhyHappened] = useState('')
+    const [date_raised , setDateRaised] = useState('')
+    const [raised_by , setRaisedBy] = useState('')
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
+    const [staffs , setStaffs] = useState([])
+
+    useEffect(() => {
+        fetchStaff()
+     },[]) 
 
 
     useEffect(() => {
         setId(params.id);
         dataIncident()
     },[params.id])
+
+     const fetchStaff = () => {
+         axios.get('http://127.0.0.1:8000/hseapp/staff/')
+         .then((res) => {
+             setStaffs(res.data)
+         })
+         .catch(console.log)
+     }
 
 
     const dataIncident = () => {
@@ -355,7 +371,10 @@ export default function OneIncident() {
           .then((res) => {
             setIncidents(res.data);
             setShortDesc(res.data.short_desc);
-            setWhatHappened(res.data.what_happened)
+            setWhatHappened(res.data.what_happened);
+            setWhyHappened(res.data.why_happened);
+            setRaisedBy(res.data.raised_by)
+            setDateRaised(res.data.date_raised)
             console.log(incidents)
           })
           .catch(console.log);
@@ -363,16 +382,19 @@ export default function OneIncident() {
     };
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {short_desc , what_happened}
+        let item = {short_desc , what_happened, why_happened , raised_by , date_raised}
         IncidentAPI.post('/', item).then(() => dataIncident());
     }
 
 
   
 const onUpdate = (id) => {
-  let item = {short_desc ,what_happened};
+  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised};
   IncidentAPI.patch(`/${id}/`, item).then(() => {
     setWhatHappened('')
+    setWhyHappened('')
+    setRaisedBy('')
+    setDateRaised('')
     setShortDesc(''); // Reset the short_desc state value after update
     dataIncident();
   });
@@ -384,6 +406,9 @@ const onUpdate = (id) => {
         let item = incidents.filter((incident) => incident.id === id)[0];
         setShortDesc(item.short_desc)
         setWhatHappened(item.what_happened)
+        setWhyHappened(item.why_happened)
+        setRaisedBy(item.raised_by)
+        setDateRaised(item.date_raised)
         setId(item.id)
     }
     return( 
@@ -410,10 +435,50 @@ const onUpdate = (id) => {
                    onChange={(e) => setWhatHappened(e.target.value)}
                  >
                    <option value=''>------</option>
-                   <option value={'(A) Head Protection not worn'}>(A) Head Protection not worn</option>
-                   <option value={'(B) Eye protection not worn'}>(B) Eye protection not worn</option>
+                   <option value='(A) Head Protection not worn'>(A) Head Protection not worn</option>
+                   <option value='(B) Eye protection not worn'>(B) Eye protection not worn</option>
+                 </Form.Control>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Why it happened</Form.Label>
+                 <Form.Control
+                  as="select"
+                  placeholder="Enter Staff Id Number"
+                  value={why_happened}
+                 onChange={(e) => setWhyHappened(e.target.value)}
+              >
+                  <option value=''>------</option>
+                  <option value='(1) Not Informed'>(1) Not Informed</option>
+                  <option value='(2) Languague Problem'>(2) Languague Problem</option>
+                </Form.Control>
+
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Date it happend</Form.Label>
+                 <Form.Control
+                  type="date"
+                  placeholder="Enter Staff Id Number"
+                  value={date_raised}
+                   onChange={(e) => setDateRaised(e.target.value)}
+                 />
+               </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formStaffName">
+                <Form.Label>Raised by: </Form.Label>
+                <Form.Control
+                  as ="select"
+                  placeholder="Enter Staff Name"
+                  value={raised_by}
+                  onChange={(e) => setRaisedBy(e.target.value)}
+                 >
+                <option value=''>Select An Option</option>
+                 {staffs.map(staff => {
+                   return <option key={staff.id} value={staff.id}>{staff.name}</option>
+                 })}
                  </Form.Control>
                </Form.Group>
+
               <div className="mt-3 float-right">
                 <Button
                   variant="primary"

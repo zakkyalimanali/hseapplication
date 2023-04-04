@@ -115,7 +115,7 @@ export default function AddIncidents() {
                   value={raised_by}
                   onChange={(e) => setRaisedBy(e.target.value)}
                 >
-                <option>Select An Option</option>
+                <option value=''>Select An Option</option>
                 {staffs.map(staff => {
                   return <option key={staff.id} value={staff.id}>{staff.name}</option>
                 })}

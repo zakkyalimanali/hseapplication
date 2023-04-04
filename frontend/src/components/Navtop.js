@@ -9,7 +9,7 @@ export default function Navtop() {
             <NavLink className="navlink"to="addincident">Add Incident</NavLink>
             <NavLink className="navlink" to="incident">Incident</NavLink>
             <NavLink className="navlink" to="incidenttable">Incidenttable</NavLink>
-            <NavLink className="navlink" to="oneincident">One Incident</NavLink>
+            {/* <NavLink className="navlink" to="oneincident">One Incident</NavLink> */}
             
         </div>
     )

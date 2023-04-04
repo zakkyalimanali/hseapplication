@@ -313,7 +313,8 @@ export default function Incident() {
                         <td>{incident.what_happened}</td>
                         <td>{incident.why_happened}</td>
                         <td>{incident.date_raised}</td>
-                        <td>{incident.raised_by}</td>
+                        {/* <td>{incident.raised_by}</td> */}
+                        <td>{staffs.find((staff) => staff.id === incident.raised_by)?.name}</td>
                         <td>{incident.life_saving_rule}</td>
                         <td>{incident.findings }</td>
                         <td>{incident.incident_date }</td>
