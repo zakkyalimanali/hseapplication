@@ -8,7 +8,7 @@ export default function Staff() {
     const [position , setPosition] = useState('')
     const [staff_id_number , setStaffIdNumber] = useState('') 
     const [staffs , setStaffs] = useState([])
-    const [staff_id, setStaffId] = useState(null)
+    const [id, setId] = useState(null)
 
 
     useEffect(() => {
@@ -29,21 +29,21 @@ export default function Staff() {
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
-    const onUpdate = (staff_id) => {
+    const onUpdate = (id) => {
         let item = {name, position, staff_id_number};
-        StaffAPI.patch(`/${staff_id}/`, item).then((res) => dataStaff())
+        StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
       }
 
-    const onDelete = (staff_id) => {
-        StaffAPI.delete(`/${staff_id}/`).then((res) => dataStaff())
+    const onDelete = (id) => {
+        StaffAPI.delete(`/${id}/`).then((res) => dataStaff())
     }
 
-    function selectStaff(staff_id) {
-        let item = staffs.filter((staff) => staff.staff_id === staff_id)[0];
+    function selectStaff(id) {
+        let item = staffs.filter((staff) => staff.id === id)[0];
         setName(item.name)
         setPosition(item.position)
         setStaffIdNumber(item.staff_id_number)
-        setStaffId(item.staff_id)
+        setId(item.id)
     }
 
     return(
@@ -108,7 +108,7 @@ export default function Staff() {
               <Button
                 variant="success"
                 type="button"
-                onClick={(e) => onUpdate(staff_id)}
+                onClick={(e) => onUpdate(id)}
                 className="mx-2"
               >
                 Update
@@ -145,12 +145,12 @@ export default function Staff() {
                         <i
                           className="fa fa-pencil-square text-primary d-inline"
                           aria-hidden="true"
-                          onClick={(e) => {selectStaff(staff.staff_id)}}
+                          onClick={(e) => {selectStaff(staff.id)}}
                         >Edit</i>
                         <i
                           className="fa fa-trash-o text-danger d-inline mx-3"
                           aria-hidden="true"
-                          onClick={() => onDelete(staff.staff_id)}
+                          onClick={() => onDelete(staff.id)}
                         >Delete</i>
                       </td>
                     </tr>

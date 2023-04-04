@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render 
 from .models import Staff , Incident
-# from .models import Staff 
 from .serializers import StaffSeriallizer , IncidentSeriallizer
-# from .serializers import StaffSeriallizer
 from rest_framework import viewsets
+from django.http import JsonResponse , request
+# from django.views.decorators.http import require_GET
+from django.views import View
 
 class StaffViewSet(viewsets.ModelViewSet):
     serializer_class = StaffSeriallizer 
@@ -12,5 +13,11 @@ class StaffViewSet(viewsets.ModelViewSet):
 class IncidentViewSet(viewsets.ModelViewSet):
     serializer_class = IncidentSeriallizer
     queryset = Incident.objects.all()
+
+class IncidentListView(View):
+    def get(self, request):
+        incidents = Incident.objects.all()
+        what_happened_list = list(incidents.values_list('what_happened', flat=True))
+        return JsonResponse({'what_happened_list': what_happened_list})
 
 # Create your views here.
