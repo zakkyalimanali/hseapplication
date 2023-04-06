@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash  } from '@fortawesome/free-solid-svg-icons'
-import { faPen  } from '@fortawesome/free-solid-svg-icons'
+import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+// import {   } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -52,34 +52,23 @@ export default function IncidentTable() {
 
     return (
       <div className="row justify-content-center"> 
-        
-        <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
+        {/* <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
                         Add Incident
-        </Button>
-
+        </Button> */}
+        <div className="mt-4 col-md-10 m row justify-content-center">
         
-        <div className="table_main mt-4 col-md-12 m">
-                   {/* <button className="center">
-                      <a  href="addincident">Add Incident</a>
-                   </button>
-                    */}
-                    
-                   {/* <button className="center col-2">
-                      <a  href="addincident">Add Incident</a>
-                   </button> */}
-                   
-                   
-                   
-              
+        <Button href="/addincident" variant="secondary" className="middle col-2 mb-4">Add Incident</Button>
+        
+
               <Table striped bordered hover>
               <thead>
                   <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Short Desc</th>
-                    <th scope="col">Date Raised</th>
-                    <th scope="col">Raised By</th>
-                    <th scope="col">More Info</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col" className="col-1">ID</th>
+                    <th scope="col" className="col-3">Short Desc</th>
+                    <th scope="col" className="col-2">Date Raised</th>
+                    <th scope="col" className="col-2">Raised By</th>
+                    <th scope="col" className="col-1">More Info</th>
+                    <th scope="col" className="col-1">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,7 +101,7 @@ export default function IncidentTable() {
 
               </Table>
 
-  
+         
             </div>
           </div>
     )

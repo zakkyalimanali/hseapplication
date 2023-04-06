@@ -4,6 +4,8 @@ import StaffAPI from '../API/StaffAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function StaffList() {
@@ -31,7 +33,7 @@ export default function StaffList() {
 
     return(
         <div className="row justify-content-center"> 
-            <div className="mt-5 col-md-10 m row justify-content-center">
+            <div className="mt-4 col-md-10 m row justify-content-center">
                 
         <Button className="middle col-2 mb-4" variant="secondary" href="/addstaff">
             Add Staff
@@ -62,11 +64,11 @@ export default function StaffList() {
           
 
                     <td>
-                        <Link to={`/editstaff/${staff.id}`}>Edit</Link>
+                        <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>
                                             
                     </td>
-                    <td>
-                        Delete
+                    <td className="delete" onClick={() => onDelete(staff.id)}>
+                      <FontAwesomeIcon icon={faTrash } />
                     </td>
               
                   </tr>

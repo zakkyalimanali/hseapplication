@@ -2,6 +2,7 @@ import {useEffect , useState} from 'react'
 import StaffAPI from '../API/StaffAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
+import { Link , useNavigate } from 'react-router-dom';
 
 export default function AddStaff() {
     const [name , setName] = useState('')
@@ -9,7 +10,7 @@ export default function AddStaff() {
     const [staff_id_number , setStaffIdNumber] = useState('') 
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
-
+    let navigate = useNavigate();
 
     useEffect(() => {
         dataStaff()
@@ -26,6 +27,7 @@ export default function AddStaff() {
     const onSubmit = (e) => {
         e.preventDefault();
         let item = {name, position, staff_id_number}
+        navigate("/stafflist");
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 

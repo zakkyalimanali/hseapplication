@@ -2,7 +2,7 @@ import {useState , useEffect} from 'react'
 import IncidentAPI from '../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 
 export default function AddIncidents() {
     // const [id , setId] = useState(null)
@@ -28,6 +28,7 @@ export default function AddIncidents() {
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
+    let navigate = useNavigate();
 
     useEffect(() => {
         incidentData()
@@ -51,6 +52,7 @@ export default function AddIncidents() {
     const onSubmit = (e) => {
         e.preventDefault()
         let item = {short_desc, raised_by , date_raised  ,findings }
+        navigate("/incidenttable");
         IncidentAPI.post('/' , item).then(() => incidentData())
     }
     const onDelete = (id) => {
@@ -61,8 +63,8 @@ export default function AddIncidents() {
 
     <div className="container mt-5">
         <div className="row">
-          <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
+          <div className= "col-md-2"></div>
+            <div className="col-md-8 ">
                 <h3 className="float-left">Create a new Incident</h3>
             
             <Form onSubmit={onSubmit} className="mt-4">
@@ -122,7 +124,7 @@ export default function AddIncidents() {
                 })}
                 </Form.Control>
               </Form.Group>
-              
+{/*               
               <Button
                   variant="primary"
                   type="submit"
@@ -130,9 +132,17 @@ export default function AddIncidents() {
                   className="mx-2"
                 >
                   <Link className="white" to="/incidenttable">Save</Link>
-                </Button>
-                
+                </Button> */}
+                {/* <Link  onClick={onSubmit} className="white" to="/incidenttable">Save</Link> */}
+                  <Button
+                    variant="primary"
+                    onClick={onSubmit}>
+                      Save
+                  </Button>
+  
             </Form>
+
+            
             </div>
         </div>
     </div>
