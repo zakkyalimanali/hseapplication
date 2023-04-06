@@ -329,6 +329,7 @@
 import {useEffect , useState} from 'react'
 import IncidentAPI from '../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { useParams } from 'react-router';
 
@@ -341,9 +342,20 @@ export default function OneIncident() {
     const [why_happened , setWhyHappened] = useState('')
     const [date_raised , setDateRaised] = useState('')
     const [raised_by , setRaisedBy] = useState('')
+    const [life_saving_rule , setLifeSavingRule] = useState('')
+    const [findings , setFindings] = useState('')
+    const [incident_date , setIncidentDate] = useState('')
+    const [location , setLocation] = useState('')
+    const [discussion, setDiscussion] = useState('')
+    const [target_date  , setTargetDate] = useState('')
+    const [follow_up , setFollowUp] = useState('')
+    const [follow_up_remarks , setFollowUpRemarks] = useState('')
+    const [status , setStatus] = useState('')
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
+    const [responsible_party , setResponsibleParty] = useState('')
+    
 
     useEffect(() => {
         fetchStaff()
@@ -375,6 +387,16 @@ export default function OneIncident() {
             setWhyHappened(res.data.why_happened);
             setRaisedBy(res.data.raised_by)
             setDateRaised(res.data.date_raised)
+            setLifeSavingRule(res.data.life_saving_rule)
+            setFindings(res.data.findings)
+            setIncidentDate(res.data.incident_date)
+            setLocation(res.data.location)
+            setDiscussion(res.data.discussion)
+            setTargetDate(res.data.target_date)
+            setFollowUp(res.data.follow_up)
+            setFollowUpRemarks(res.data.follow_up_remarks)
+            setStatus(res.data.status)
+            setResponsibleParty(res.data.responsible_party)
             console.log(incidents)
           })
           .catch(console.log);
@@ -382,19 +404,29 @@ export default function OneIncident() {
     };
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {short_desc , what_happened, why_happened , raised_by , date_raised}
+        let item = {short_desc , what_happened, why_happened , raised_by , date_raised, life_saving_rule,findings ,incident_date , location, discussion , target_date, follow_up, follow_up_remarks , status, responsible_party}
         IncidentAPI.post('/', item).then(() => dataIncident());
     }
 
 
   
 const onUpdate = (id) => {
-  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised};
+  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
   IncidentAPI.patch(`/${id}/`, item).then(() => {
     setWhatHappened('')
     setWhyHappened('')
     setRaisedBy('')
     setDateRaised('')
+    setLifeSavingRule('')
+    setFindings('')
+    setIncidentDate('')
+    setLocation('')
+    setDiscussion('')
+    setTargetDate('')
+    setFollowUp('')
+    setFollowUpRemarks('')
+    setStatus('')
+    setResponsibleParty('')
     setShortDesc(''); // Reset the short_desc state value after update
     dataIncident();
   });
@@ -409,6 +441,16 @@ const onUpdate = (id) => {
         setWhyHappened(item.why_happened)
         setRaisedBy(item.raised_by)
         setDateRaised(item.date_raised)
+        setLifeSavingRule(item.life_saving_rule)
+        setFindings(item.findings)
+        setIncidentDate(item.incident_date)
+        setLocation(item.location)
+        setDiscussion(item.discussion)
+        setTargetDate(item.target_date)
+        setFollowUp(item.follow_up)
+        setFollowUpRemarks(item.follow_up_remarks)
+        setStatus(item.status)
+        setResponsibleParty(item.responsible_party)
         setId(item.id)
     }
     return( 
@@ -417,7 +459,7 @@ const onUpdate = (id) => {
           <div className= "col-md-4"></div>
             <div className="col-md-4 ">
                 <h3 className="float-left">Create a new Incident</h3>
-            <Form onSubmit={onSubmit} className="mt-4">
+            <Form onSubmit={onSubmit} className="update mt-4">
               <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
@@ -478,24 +520,130 @@ const onUpdate = (id) => {
                  })}
                  </Form.Control>
                </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Life Saving Rule</Form.Label>
+                 <Form.Control
+                   as="select"
+                   placeholder="Enter Staff Id Number"
+                   value={life_saving_rule}
+                   onChange={(e) => setLifeSavingRule(e.target.value)}
+                 >
+                   <option value=''>------</option>
+                   <option value='(1) Work with a valid work permit when required'>(1) Work with a valid work permit when required</option>
+                   <option value='(2) Conduct gas test when required'>(2) Conduct gas test when required</option>
+                 </Form.Control>
+               </Form.Group>
+
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Findings</Form.Label>
+                 <Form.Control
+                   type="text"
+                   placeholder="Findings"
+                   value={findings}
+                   onChange={(e) => setFindings(e.target.value)}
+                 >
+                  
+                 </Form.Control>
+               </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Incident Date</Form.Label>
+                 <Form.Control
+                   type="date"
+                   placeholder="Incident Date"
+                   value={incident_date}
+                   onChange={(e) => setIncidentDate(e.target.value)}
+                 />
+               </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Location</Form.Label>
+                 <Form.Control
+                   type="text"
+                   placeholder="Location"
+                   value={location}
+                   onChange={(e) => setLocation(e.target.value)}
+                 />
+               </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Discussion</Form.Label>
+                 <Form.Control
+                   type="text"
+                   placeholder="Discussion"
+                   value={discussion}
+                   onChange={(e) => setDiscussion(e.target.value)}
+                 />
+               </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Target Date</Form.Label>
+                 <Form.Control
+                   type="date"
+                   placeholder="Target Date"
+                   value={target_date}
+                   onChange={(e) => setTargetDate(e.target.value)}
+                 />
+               </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Follow Up</Form.Label>
+                 <Form.Control
+                   as="select"
+                   placeholder="Follow Up"
+                   value={follow_up}
+                   onChange={(e) => setFollowUp(e.target.value)}
+                 >
+                   <option value=''>------</option>
+                   <option value='Yes'>Yes</option>
+                   <option value='No'>No</option>
+                 </Form.Control>
+               </Form.Group>
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Follow Up Remarks</Form.Label>
+                 <Form.Control
+                   type="text"
+                   placeholder="Follow Up Remarks"
+                   value={follow_up_remarks}
+                   onChange={(e) => setFollowUpRemarks(e.target.value)}
+                 />
+               </Form.Group>
+
+               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                 <Form.Label>Status</Form.Label>
+                 <Form.Control
+                   type="text"
+                   placeholder="Target Date"
+                   value={status}
+                   onChange={(e) => setStatus(e.target.value)}
+                 />
+               </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Responsible Party</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Responsible Party"
+                  value={responsible_party}
+                  onChange={(e) => setResponsibleParty(e.target.value)}
+                />
+              </Form.Group>
 
               <div className="mt-3 float-right">
-                <Button
+                {/* <Button
                   variant="primary"
                   type="submit"
                   onClick={onSubmit}
                   className="mx-2"
                 >
                   Save
-                </Button>
-                <Button
-                  variant="success"
-                  type="button"
-                  onClick={(e) => onUpdate(id)}
-                  className="mx-2"
-                >
-                  Update
-                </Button>
+                </Button> */}
+                <Link to="/incidenttable/">
+                  <Button
+                    variant="success"
+                    type="button"
+                    onClick={(e) => onUpdate(id)}
+                    className="mx-2"
+                  >
+                    Update
+                  </Button>
+                </Link>
               </div>
              </Form>
           </div>

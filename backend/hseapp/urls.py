@@ -9,6 +9,8 @@ router.register(r'incident', views.IncidentViewSet, basename="incident")
 router.register(r'addincident', views.IncidentViewSet, basename="addincident")
 router.register(r'incidenttable', views.IncidentViewSet, basename="incidenttable")
 router.register(r'oneincident', views.IncidentViewSet, basename="oneincident")
+# router.register(r'about', views.IncidentViewSet, basename="about")
+
 # router.register(r'incidenttable/oneincident', views.IncidentViewSet, basename="incidenttable/oneincident")
 
 
