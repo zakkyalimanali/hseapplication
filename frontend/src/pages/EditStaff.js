@@ -3,6 +3,7 @@ import StaffAPI from '../API/StaffAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export default function EditStaff() {
     const params = useParams()
@@ -130,14 +131,16 @@ export default function EditStaff() {
       
 
             <div className="mt-3 float-right">
-              <Button
-                variant="success"
-                type="button"
-                onClick={(e) => onUpdate(id)}
-                className="mx-2"
-              >
-                Update
-              </Button>
+              <Link to="/stafflist/">
+                <Button
+                  variant="success"
+                  type="button"
+                  onClick={(e) => onUpdate(id)}
+                  className="mx-2"
+                >
+                  Update
+                </Button>
+              </Link>
             </div>
 
           </Form>
