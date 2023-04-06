@@ -54,3 +54,24 @@
     color: white;
     text-decoration: none;
 }
+
+.middle {
+    align-items: center;
+}
+
+.delete {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.d-none {
+    display: none !important;
+  }
+
+.invisible {
+    visibility: hidden;
+  }
+
+.middle {
+    justify-content: center;
+}

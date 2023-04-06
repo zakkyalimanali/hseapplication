@@ -2,6 +2,7 @@ import {useState , useEffect} from 'react'
 import IncidentAPI from '../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function AddIncidents() {
     // const [id , setId] = useState(null)
@@ -121,15 +122,16 @@ export default function AddIncidents() {
                 })}
                 </Form.Control>
               </Form.Group>
-
+              
               <Button
                   variant="primary"
                   type="submit"
                   onClick={onSubmit}
                   className="mx-2"
                 >
-                  Save
+                  <Link className="white" to="/incidenttable">Save</Link>
                 </Button>
+                
             </Form>
             </div>
         </div>

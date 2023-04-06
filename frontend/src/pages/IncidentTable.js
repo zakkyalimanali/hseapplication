@@ -3,6 +3,12 @@ import { ListGroup, Card, Button, Form } from 'react-bootstrap';
 import IncidentAPI from '../API/IncidentAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Table from 'react-bootstrap/Table';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash  } from '@fortawesome/free-solid-svg-icons'
+import { faPen  } from '@fortawesome/free-solid-svg-icons'
+
+
 
 export default function IncidentTable() {
     const [incidents , setIncidents] = useState([])
@@ -45,30 +51,35 @@ export default function IncidentTable() {
     };
 
     return (
-        <div className="table_main mt-5 col-md-12 m ">
+      <div className="row justify-content-center"> 
+        
+        <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
+                        Add Incident
+        </Button>
+
+        
+        <div className="table_main mt-4 col-md-12 m">
                    {/* <button className="center">
                       <a  href="addincident">Add Incident</a>
                    </button>
                     */}
-                    <div class="col-5"></div>
+                    
                    {/* <button className="center col-2">
                       <a  href="addincident">Add Incident</a>
                    </button> */}
-                   <Button  variant="secondary">
-                        <a  className="white" href="addincident">Add Incident</a>
-                   </Button>
-                   <div class="col-5"></div>
                    
-              <table className="table">
-                <thead>
+                   
+                   
+              
+              <Table striped bordered hover>
+              <thead>
                   <tr>
-                    {/* <th scope="col">#</th> */}
-                    <th scope="col-1">ID</th>
-                    <th scope="col-3">Short Desc</th>
-                    <th scope="col-3">Date Raised</th>
-                    <th scope="col-3">Raised By</th>
-                    <th scope="col-1">Edit</th>
-                    <th scope="col-1">Delete</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Short Desc</th>
+                    <th scope="col">Date Raised</th>
+                    <th scope="col">Raised By</th>
+                    <th scope="col">More Info</th>
+                    <th scope="col">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -83,33 +94,27 @@ export default function IncidentTable() {
                         <td>{staffs.find((staff) => staff.id === incident.raised_by)?.name}</td>
                         <td>
                             <Link to={`/oneincident/${incident.id}`}>
-                              Edit
+                            <FontAwesomeIcon icon={faPen } />
                             </Link>
                         </td>
   
-                        <td>
-                          {/* <Link to={`/oneincident/21`}> */}
-                          {/* <Link to={`/incidenttable/oneincident/${incident.id}`}>
-  
-                          <i
-                            className="fa fa-pencil-square text-primary d-inline"
-                            aria-hidden="true"
-                            onClick={(e) => {selectIncident(incident.id)}}
-                          >Edit</i>
-                          </Link> */}
-                          <i
-                            className="fa fa-trash-o text-danger d-inline mx-3"
-                            aria-hidden="true"
-                            onClick={() => onDelete(incident.id)}
-                          >Delete</i>
+                        <td className="delete" onClick={() => onDelete(incident.id)}>
+                          {/* <i class="fa fa-trash" aria-hidden="true"></i> */}
+                          {/* <FontAwesomeIcon icon="check-square" />
+      Your <FontAwesomeIcon icon="coffee" /> is hot and ready! */}
+      <FontAwesomeIcon icon={faTrash } />
                         </td>
                       </tr>
-                    );
-                  })}
+                       );
+                      })}
                 </tbody>
-              </table>
+
+
+              </Table>
+
   
             </div>
+          </div>
     )
 
 }

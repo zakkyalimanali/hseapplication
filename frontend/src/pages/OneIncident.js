@@ -456,9 +456,9 @@ const onUpdate = (id) => {
     return( 
     <div className="container mt-5">
         <div className="row">
-          <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-                <h3 className="float-left">Create a new Incident</h3>
+          <div className= "col-md-2"></div>
+            <div className="col-md-8 ">
+                <h3 className="float-center">Update an Incident</h3>
             <Form onSubmit={onSubmit} className="update mt-4">
               <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Description</Form.Label>

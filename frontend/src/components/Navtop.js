@@ -7,7 +7,8 @@ export default function Navtop() {
             <div></div>
             <header className="navtop">
                 <NavLink className="navlink" to="/">Home</NavLink>
-                <NavLink className="navlink"to="staff">Staff</NavLink>
+                <NavLink className="navlink" to="stafflist">StaffLink</NavLink>
+                {/* <NavLink className="navlink"to="staff">Staff</NavLink> */}
                 {/* <NavLink className="navlink"to="addincident">Add Incident</NavLink> */}
                 {/* <NavLink className="navlink" to="incident">Incident</NavLink> */}
                 <NavLink className="navlink" to="incidenttable">List of Incidents</NavLink>
