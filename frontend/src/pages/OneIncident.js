@@ -461,10 +461,11 @@ const onUpdate = (id) => {
                 <h3 className="float-center">Update an Incident</h3>
             <Form onSubmit={onSubmit} className="update mt-4">
               <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Description</Form.Label>
+                <Form.Label>Write a short Description</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter Name"
+                  as="textarea"
+                  rows={3}
+                  placeholder="Short description"
                   value={short_desc}
                   onChange={(e) => setShortDesc(e.target.value)}
                 />
@@ -485,7 +486,7 @@ const onUpdate = (id) => {
                 <Form.Label>Why it happened</Form.Label>
                  <Form.Control
                   as="select"
-                  placeholder="Enter Staff Id Number"
+                  placeholder="Why it happened"
                   value={why_happened}
                  onChange={(e) => setWhyHappened(e.target.value)}
               >
@@ -497,10 +498,10 @@ const onUpdate = (id) => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                 <Form.Label>Date it happend</Form.Label>
+                 <Form.Label>Date it happened</Form.Label>
                  <Form.Control
                   type="date"
-                  placeholder="Enter Staff Id Number"
+                  placeholder="Date it happened"
                   value={date_raised}
                    onChange={(e) => setDateRaised(e.target.value)}
                  />
@@ -510,7 +511,7 @@ const onUpdate = (id) => {
                 <Form.Label>Raised by: </Form.Label>
                 <Form.Control
                   as ="select"
-                  placeholder="Enter Staff Name"
+                  placeholder="Raised By"
                   value={raised_by}
                   onChange={(e) => setRaisedBy(e.target.value)}
                  >
@@ -524,7 +525,7 @@ const onUpdate = (id) => {
                  <Form.Label>Life Saving Rule</Form.Label>
                  <Form.Control
                    as="select"
-                   placeholder="Enter Staff Id Number"
+                   placeholder="Life Saving Rule"
                    value={life_saving_rule}
                    onChange={(e) => setLifeSavingRule(e.target.value)}
                  >
@@ -537,7 +538,8 @@ const onUpdate = (id) => {
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                  <Form.Label>Findings</Form.Label>
                  <Form.Control
-                   type="text"
+                   as="textarea"
+                   rows={3}
                    placeholder="Findings"
                    value={findings}
                    onChange={(e) => setFindings(e.target.value)}
@@ -567,7 +569,8 @@ const onUpdate = (id) => {
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                  <Form.Label>Discussion</Form.Label>
                  <Form.Control
-                   type="text"
+                   as="textarea"
+                   rows={3}
                    placeholder="Discussion"
                    value={discussion}
                    onChange={(e) => setDiscussion(e.target.value)}
@@ -598,23 +601,27 @@ const onUpdate = (id) => {
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                  <Form.Label>Follow Up Remarks</Form.Label>
                  <Form.Control
-                   type="text"
+                   as="textarea"
+                   rows={3}
                    placeholder="Follow Up Remarks"
                    value={follow_up_remarks}
                    onChange={(e) => setFollowUpRemarks(e.target.value)}
                  />
                </Form.Group>
-
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                 <Form.Label>Status</Form.Label>
-                 <Form.Control
-                   type="text"
-                   placeholder="Target Date"
-                   value={status}
-                   onChange={(e) => setStatus(e.target.value)}
-                 />
-               </Form.Group>
-
+                  <Form.Label>Status</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="status"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value=''>------</option>
+                    <option value='No Further Action Required'>No Further Action Required</option>
+                    <option value='Resolved'>Resolved</option>
+                    <option value='Ongoing'>Ongoing</option>
+                  </Form.Control>
+                </Form.Group>
               <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Responsible Party</Form.Label>
                 <Form.Control
