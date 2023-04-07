@@ -19,7 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor: 'beige'}}>
       <BrowserRouter>
         <Routes>
           <Route element={<Layout/>}>

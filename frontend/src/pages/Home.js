@@ -41,27 +41,28 @@ export default function Home() {
 
         <div className=" mt-3 row justify-content-around">
             <div className="display-box col-2 text-center"><h4><b>Staff: {staffs.length}</b></h4></div>
-            <div className="display-box col-2 text-center"><h4><b>incidents: {incidents.length}</b></h4></div>
+            <div className="display-box col-2 text-center"><h4><b>Incidents: {incidents.length}</b></h4></div>
             <div className="display-box col-2 text-center"><h4><b> {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</b></h4></div>
         </div>
-            <div className="mt-3 row">
-                <div className="display-border ms-5 col-3">
+            <div className="mt-3 row justify-content-around">
+                <div className="display-border col-3">
                     <GenderChart/>
                 </div>
-                <div className="col-1">
-                </div>
+                {/* <div className="col-1">
+                </div> */}
                 <div className="display-border col-3">
                     <StatusChart/>
                 </div>
-                <div className="col-1">
-                </div>
+                {/* <div className="col-1">
+                </div> */}
                 <div className="display-border col-3">
                     <SmartCardColorChart/>
                 </div>
             </div>
             {/* <hr className="thick"></hr> */}
-            <div className="row justify-content-center">
-                <div className="row mt-3 col-10 display-large display-border">
+            <div className="row mt-3 justify-content-center">
+                {/* <div className="row mt-3 col-10 display-large display-border"> */}
+                <div className="display-border col-6">
                         <NumIncidents/>
                 </div>
             </div>    
