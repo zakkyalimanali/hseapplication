@@ -80,8 +80,9 @@ export default function NumIncidents() {
 
      
     return(
-        <div>
+        <div className=" row justify-content-center" style={{height:'300px'}}>
             <Bar data={data} options={options}/>
         </div>
+
     )
 }

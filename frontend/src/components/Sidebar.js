@@ -7,15 +7,15 @@ export default function Sidebar() {
     return(
       <div className="container-fluid">
         <div className="row">
-          <div className="col-1 min-vh-100 bg-dark">
+          <div className="col-1  bg-dark sideNav">
             <ul>
-              <li className="mt-5">
+              <li className="mt-5 me-5">
                 <NavLink className="white" to="stats">Stats</NavLink>
               </li>
-              <li className="mt-5">
+              <li className="mt-5 me-5" >
                 <NavLink className="white" to="stafflist">Staff</NavLink>
               </li>
-              <li className="mt-5">
+              <li className="mt-5 me-5" >
                 <NavLink className="white" to="incidenttable">Incidents</NavLink>
               </li>
           

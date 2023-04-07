@@ -13,6 +13,7 @@ export default function EditStaff() {
     const [staff_id_number , setStaffIdNumber] = useState('') 
     const [date_of_birth , setDateOfBirth] = useState('')
     const [gender , setGender] = useState('')
+    const [smart_card_colour , setSmartCardColour] = useState('')
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
 
@@ -31,6 +32,7 @@ export default function EditStaff() {
             setStaffIdNumber(res.data.staff_id_number)
             setDateOfBirth(res.data.date_of_birth)
             setGender(res.data.gender)
+            setSmartCardColour(res.data.smart_card_colour)
         })
         .catch(console.log)
     }
@@ -42,7 +44,7 @@ export default function EditStaff() {
     // }
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {name ,position, staff_id_number, date_of_birth ,gender}
+        let item = {name ,position, staff_id_number, date_of_birth ,gender, smart_card_colour}
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
@@ -51,13 +53,14 @@ export default function EditStaff() {
     //     StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
     //   }
     const onUpdate = (id) => {
-        let item = {name ,position, staff_id_number, date_of_birth, gender};
+        let item = {name ,position, staff_id_number, date_of_birth, gender, smart_card_colour};
         StaffAPI.patch(`/${id}/`, item).then(() => { 
           setPosition('')
           setStaffIdNumber('')
           setName('')
           setDateOfBirth('')
           setGender('')
+          setSmartCardColour('')
           dataStaff()
           }
         )
@@ -139,6 +142,20 @@ export default function EditStaff() {
               <option value=''>-------</option>
               <option value='Male'>Male</option>
               <option value='Female'>Female</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Smart Card Colour</Form.Label>
+              <Form.Control
+                as="select"
+                placeholder="Smart Card Colour"
+                value={smart_card_colour}
+                onChange={(e) => setSmartCardColour(e.target.value)}
+              >
+              <option value=''>-------</option>
+              <option value='Yellow'>Yellow</option>
+              <option value='Red'>Red</option>
+              <option value='Green'>Green</option>
               </Form.Control>
             </Form.Group>
 
