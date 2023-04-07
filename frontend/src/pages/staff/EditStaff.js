@@ -1,5 +1,5 @@
 import {useEffect , useState} from 'react'
-import StaffAPI from '../API/StaffAPI'
+import StaffAPI from '../../API/StaffAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { useParams } from 'react-router';
@@ -12,6 +12,7 @@ export default function EditStaff() {
     const [position , setPosition] = useState('')
     const [staff_id_number , setStaffIdNumber] = useState('') 
     const [date_of_birth , setDateOfBirth] = useState('')
+    const [gender , setGender] = useState('')
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
 
@@ -29,6 +30,7 @@ export default function EditStaff() {
             setPosition(res.data.position)
             setStaffIdNumber(res.data.staff_id_number)
             setDateOfBirth(res.data.date_of_birth)
+            setGender(res.data.gender)
         })
         .catch(console.log)
     }
@@ -40,7 +42,7 @@ export default function EditStaff() {
     // }
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {name ,position, staff_id_number, date_of_birth}
+        let item = {name ,position, staff_id_number, date_of_birth ,gender}
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
@@ -49,12 +51,13 @@ export default function EditStaff() {
     //     StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
     //   }
     const onUpdate = (id) => {
-        let item = {name ,position, staff_id_number, date_of_birth};
+        let item = {name ,position, staff_id_number, date_of_birth, gender};
         StaffAPI.patch(`/${id}/`, item).then(() => { 
           setPosition('')
           setStaffIdNumber('')
           setName('')
           setDateOfBirth('')
+          setGender('')
           dataStaff()
           }
         )
@@ -124,6 +127,19 @@ export default function EditStaff() {
                 value={date_of_birth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
               />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Gender</Form.Label>
+              <Form.Control
+                as="select"
+                placeholder="Staff Gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+              <option value=''>-------</option>
+              <option value='Male'>Male</option>
+              <option value='Female'>Female</option>
+              </Form.Control>
             </Form.Group>
 
         

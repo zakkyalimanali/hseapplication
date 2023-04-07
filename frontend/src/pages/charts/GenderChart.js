@@ -1,8 +1,8 @@
+import {useEffect, useState} from 'react'
+import StaffAPI from '../../API/StaffAPI'
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto";
-import StaffAPI from "../API/StaffAPI";
-import {useState , useEffect} from 'react'
-export default function About() {
+
+export default function GenderChart() {
     const [staffs , setStaff] = useState([])
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export default function About() {
         labels: ["Male", "Female"],
         datasets: [
             {
-                label: "# of Votes",
+                label: "Gender",
                 data: [
                     staffs.filter((staff) => staff.gender === "Male").length,
                     staffs.filter((staff) => staff.gender === "Female").length,
@@ -35,16 +35,16 @@ export default function About() {
         plugins: {
             title: {
                 display: true,
-                text: "My Pie Chart",
+                text: "Gender Pie Chart",
             },
         },
         responsive: true,
         maintainAspectRatio: false,
     };
-
+    
     return(
         <div>
-           <Pie data={data} options={options} />
+            <Pie data={data} options={options} />
         </div>
         
     )

@@ -1,8 +1,8 @@
 import {useEffect , useState} from 'react'
-import IncidentAPI from '../API/IncidentAPI'
+import IncidentAPI from '../../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
-import StaffAPI from '../API/StaffAPI';
+import StaffAPI from '../../API/StaffAPI';
 
 export default function Incident() {
     const [short_desc , setShortDesc] = useState('')

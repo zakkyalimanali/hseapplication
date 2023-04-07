@@ -1,5 +1,5 @@
 import {useEffect , useState} from 'react'
-import StaffAPI from '../API/StaffAPI'
+import StaffAPI from '../../API/StaffAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { Link , useNavigate } from 'react-router-dom';

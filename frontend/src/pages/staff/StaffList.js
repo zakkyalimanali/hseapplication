@@ -1,6 +1,6 @@
 import {useEffect , useState} from 'react'
 import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import StaffAPI from '../API/StaffAPI';
+import StaffAPI from '../../API/StaffAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
@@ -46,7 +46,8 @@ export default function StaffList() {
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
                 <th scope="col" className="col-3">Name</th>
                 <th scope="col" className="col-3">Position</th>
-                <th scope="col" className="col-2">Staff Id Number</th>
+                <th scope="col" className="col-1">Staff Id Number</th>
+                <th scope="col" className="col-1">Gender</th>
                 <th scope="col" className="col-1">Edit</th>
                 <th scope="col" className="col-1">Delete</th>
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
@@ -60,12 +61,9 @@ export default function StaffList() {
                     <td>{staff.name}</td>
                     <td>{staff.position}</td>
                     <td>{staff.staff_id_number}</td>
-                    
-          
-
+                    <td>{staff.gender}</td>
                     <td>
-                        <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>
-                                            
+                        <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
                     </td>
                     <td className="delete" onClick={() => onDelete(staff.id)}>
                       <FontAwesomeIcon icon={faTrash } />
@@ -75,12 +73,7 @@ export default function StaffList() {
                 );
               })}
             </tbody>
-
-
-           
           </Table>
-          
-
         </div>
     </div>
 

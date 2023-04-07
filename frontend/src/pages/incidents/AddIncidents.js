@@ -1,5 +1,5 @@
 import {useState , useEffect} from 'react'
-import IncidentAPI from '../API/IncidentAPI'
+import IncidentAPI from '../../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import { Link , useNavigate } from 'react-router-dom';

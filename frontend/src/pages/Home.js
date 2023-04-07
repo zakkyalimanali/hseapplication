@@ -1,6 +1,9 @@
 import {useState , useEffect } from 'react'
 import StaffAPI from '../API/StaffAPI'
 import IncidentAPI from '../API/IncidentAPI'
+import GenderChart from './charts/GenderChart'
+import StatusChart from './charts/StatusChart'
+
 
 export default function Home() {
     const [staffs , setStaff] = useState([])
@@ -29,10 +32,16 @@ export default function Home() {
     return(
         <div>
         <h1>Home Page/Dashboard</h1>
-        <h3>Total Number of Staff: {staffs.length}</h3>
+        {/* <h3>Total Number of Staff: {staffs.length}</h3>
         <h3>Total Number of Incidents: {incidents.length}</h3>
         <h3>(A) Head Protection not worn: {incidents.filter(incident => incident.what_happened === "(A) Head Protection not worn").length}</h3>
-        <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3>
+        <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3> */}
+        <div className="display-border col-4">
+            <GenderChart/>
+        </div>
+        <div className="display-border col-4">
+            <StatusChart/>
+        </div>
         </div>
     )
 }

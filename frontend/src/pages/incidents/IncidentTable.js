@@ -1,6 +1,6 @@
 import {useEffect , useState} from 'react'
 import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import IncidentAPI from '../API/IncidentAPI';
+import IncidentAPI from '../../API/IncidentAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
@@ -82,7 +82,7 @@ export default function IncidentTable() {
                         {/* <td>{incident.raised_by}</td> */}
                         <td>{staffs.find((staff) => staff.id === incident.raised_by)?.name}</td>
                         <td>
-                            <Link to={`/oneincident/${incident.id}`}>
+                            <Link to={`/editincident/${incident.id}`}>
                             <FontAwesomeIcon icon={faPen } />
                             </Link>
                         </td>
