@@ -19,7 +19,7 @@ export default function StatusChart() {
         labels: ["No Further Action Required", "Resolved", 'Ongoing', 'Not Stated'],
         datasets: [
             {
-                label: "Gender",
+                label: "Status",
                 data: [
                     incidents.filter((incident) => incident.status === "No Further Action Required").length,
                     incidents.filter((incident) => incident.status === "Resolved").length,

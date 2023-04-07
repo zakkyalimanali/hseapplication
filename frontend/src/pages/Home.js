@@ -3,6 +3,7 @@ import StaffAPI from '../API/StaffAPI'
 import IncidentAPI from '../API/IncidentAPI'
 import GenderChart from './charts/GenderChart'
 import StatusChart from './charts/StatusChart'
+import NumIncidents from './charts/NumIncidents'
 
 
 export default function Home() {
@@ -41,6 +42,9 @@ export default function Home() {
         </div>
         <div className="display-border col-4">
             <StatusChart/>
+        </div>
+        <div className="display-border col-4">
+            <NumIncidents/>
         </div>
         </div>
     )

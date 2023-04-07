@@ -24,6 +24,10 @@ export default function Stats() {
         .catch(console.log)
     },[])
 
+    // const ZakkyPakat = () => {
+    //     return incidents.filter(incident => incident.raised_by === 'Zakky Ali');
+    //   }
+
 
     return(
         <div>
@@ -32,6 +36,8 @@ export default function Stats() {
             <h3>Total Number of Incidents: {incidents.length}</h3>
             <h3>(A) Head Protection not worn: {incidents.filter(incident => incident.what_happened === "(A) Head Protection not worn").length}</h3>
             <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3>
-        </div>
+            <h3>Zakky Ali Safety Cards: {incidents.filter(incident => incident.name === 'Zakky Ali').length}</h3>        
+            
+            </div>
     ) 
 }
