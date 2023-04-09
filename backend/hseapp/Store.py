@@ -39,3 +39,4 @@ class schProfileForm(ModelForm):
                 "class": 'form-control form-control-sm'
             }
             self.fields[str(field)].widget.attrs.update(new_data)
+

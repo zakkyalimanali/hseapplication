@@ -76,6 +76,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'hseapp.Account'
+
 WSGI_APPLICATION = 'hseproject.wsgi.application'
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident
-from .serializers import StaffSeriallizer , IncidentSeriallizer
+from .models import Staff , Incident , Account
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AccountSeriallizer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -21,3 +21,7 @@ class IncidentListView(View):
         return JsonResponse({'what_happened_list': what_happened_list})
 
 # Create your views here.
+
+class AccountViewSet(viewsets.ModelViewSet):
+    serializer_class = AccountSeriallizer
+    queryset = Account.objects.all()
