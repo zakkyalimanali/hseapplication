@@ -42,6 +42,12 @@ class Incident(models.Model):
     def __str__(self):
         return self.short_desc
 
+class Attendence(models.Model):
+    attendence_date = models.DateField(null=True , blank=True)
+    staff_name = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    attendence_status = models.CharField(max_length= 100 , null=True , blank= True)
+    
+
 
 
 # Create your models here.
