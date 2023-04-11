@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -14,14 +14,26 @@ class IncidentViewSet(viewsets.ModelViewSet):
     serializer_class = IncidentSeriallizer
     queryset = Incident.objects.all()
 
+class AttendenceViewSet(viewsets.ModelViewSet):
+    serializer_class = AttendenceSeriallizer
+    queryset = Attendence.objects.all()
+
+class DateListViewSet(viewsets.ModelViewSet):
+    serializer_class = DateListSeriallizer
+    queryset = DateList.objects.all()
+
+class ToolBoxTalkViewSet(viewsets.ModelViewSet):
+    serializer_class = ToolBoxTalkSeriallizer
+    queryset = ToolBoxTalk.objects.all()
+
 class IncidentListView(View):
     def get(self, request):
         incidents = Incident.objects.all()
         what_happened_list = list(incidents.values_list('what_happened', flat=True))
         return JsonResponse({'what_happened_list': what_happened_list})
+    
 
-class AttendenceViewSet(View):
-    serializer_class = AttendenceSeriallizer
-    queryset = Attendence.objects.all()
+
+
 
 # Create your views here.

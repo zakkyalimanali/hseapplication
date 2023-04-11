@@ -42,12 +42,36 @@ class Incident(models.Model):
     def __str__(self):
         return self.short_desc
 
+
+class DateList(models.Model):
+    date_attendence = models.DateField(null=True , blank=True)
+
 class Attendence(models.Model):
-    attendence_date = models.DateField(null=True , blank=True)
+    # attendence_date = models.ForeignKey(DateList, on_delete=models.CASCADE)
+    attendence_date = models.DateField(null=True , blank= True)
     staff_name = models.ForeignKey(Staff, on_delete=models.CASCADE)
     attendence_status = models.CharField(max_length= 100 , null=True , blank= True)
-    
 
+class ToolBoxTalk(models.Model):
+    toolbox_date = models.DateField(null=True , blank= True)
+    topic = models.CharField(max_length= 100 , null=True , blank= True)
+    # presenter = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_presenter')
+    project = models.CharField(max_length= 100 , null=True , blank= True)
+    # supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_supervissor')
+    time = models.TimeField(null=True , blank= True)
+    crew_number = models.IntegerField(null=True , blank= True)
+    attendees = models.IntegerField(null=True , blank= True)
+    address = models.CharField(max_length= 500 , null=True , blank= True)
+    employer = models.CharField(max_length= 100 , null=True , blank= True)
+    shift = models.CharField(max_length= 100 , null=True , blank= True)
+    textbox = models.TextField(max_length=1000, null=True , blank=True )
+    # attendeesone = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesone')
+    # attendeestwo = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeestwo')
+    # attendeesthree = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesthree')
+    # attendeesfour = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesfour')
+    # attendeesfive = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesfive')
+
+    
 
 
 # Create your models here.
