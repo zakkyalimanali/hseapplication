@@ -11,6 +11,8 @@ export default function ToolBoxTalkEdit() {
     const [toolbox_date , setToolBoxDate] = useState('')
     const [topic , setTopic] = useState('')
     const [project , setProject] = useState('')
+    const [presenter , setPresenter] = useState('')
+    const [supervisor , setSupervisor] = useState('')
     const [staffs , setStaffs] = useState([])
     const [toolBoxTalks , setToolBoxTalks] = useState([])
     const [id, setId] = useState(null)
@@ -20,6 +22,17 @@ export default function ToolBoxTalkEdit() {
         fetchToolBoxTalk()
     },[params.id])
 
+    useEffect(() => {
+        staffData()
+    },[])
+
+    const staffData = () => {
+        axios.get('http://127.0.0.1:8000/hseapp/staff/')
+        .then((res) => {
+            setStaffs(res.data);
+        }).catch(console.log)
+    }
+
     const fetchToolBoxTalk = () => {
         axios.get(`http://127.0.0.1:8000/hseapp/toolboxtalk/${params.id}/`)
         .then((res) => {
@@ -27,22 +40,26 @@ export default function ToolBoxTalkEdit() {
             setToolBoxDate(res.data.toolbox_date)
             setTopic(res.data.topic)
             setProject(res.data.project)
+            setPresenter(res.data.presenter)
+            setSupervisor(res.data.supervisor)
         })
         .catch(console.log)
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {toolbox_date , topic , project}
+        let item = {toolbox_date , topic , project , presenter , supervisor}
         ToolBoxTalkAPI.post('/', item).then(() => fetchToolBoxTalk());
     }
 
     const onUpdate = (id) => {
-        let item = {toolbox_date , topic, project};
+        let item = {toolbox_date , topic, project ,presenter ,supervisor};
         ToolBoxTalkAPI.patch(`/${id}/`, item).then(() => { 
             setToolBoxDate('')
             setTopic('')
             setProject('')
+            setPresenter('')
+            setSupervisor('')
             fetchToolBoxTalk()
           }
         )
@@ -84,6 +101,37 @@ export default function ToolBoxTalkEdit() {
                     value={project}
                     onChange={(e) => setProject(e.target.value)}
                   />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Presenter</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="ToolBox Talk Date"
+                    value={presenter}
+                    onChange={(e) => setPresenter(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name}</option>
+                })}
+
+                  </Form.Control>
+                </Form.Group>
+     
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Supervisor</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="supervisor"
+                    value={supervisor}
+                    onChange={(e) => setSupervisor(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name}</option>
+                })}
+
+                  </Form.Control>
                 </Form.Group>
      
             <div className="mt-3 float-right">

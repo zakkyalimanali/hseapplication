@@ -1,5 +1,6 @@
 import {useEffect , useState} from 'react'
 import ToolBoxTalkAPI from '../../API/ToolBoxTalkAPI'
+import StaffAPI from '../../API/StaffAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { Link , useNavigate } from 'react-router-dom';
@@ -8,12 +9,15 @@ export default function ToolBoxTalkAdd() {
     const [toolbox_date , setToolBoxDate] = useState('')
     const [topic , setTopic] = useState('')
     const [project , setProject] = useState('')
+    const [presenter , setPresenter] = useState('')
+    const [staffs , setStaffs] = useState([])
     const [toolBoxTalks , setToolBoxTalks] = useState([])
     const [id, setId] = useState(null)
     let navigate = useNavigate()
 
     useEffect(() => {
         fetchToolBoxTalk()
+        staffData()
     },[])
 
     const fetchToolBoxTalk = () => {
@@ -24,9 +28,16 @@ export default function ToolBoxTalkAdd() {
         .catch(console.log)
     }
 
+    const staffData = () => {
+      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      .then((res) => {
+          setStaffs(res.data);
+      }).catch(console.log)
+  }
+
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {toolbox_date , topic , project}
+        let item = {toolbox_date , topic , project , presenter}
         // let item = {toolbox_date }
         navigate("/toolboxtalklist");
         ToolBoxTalkAPI.post('/', item).then(() => fetchToolBoxTalk());
@@ -68,6 +79,21 @@ export default function ToolBoxTalkAdd() {
                     value={project}
                     onChange={(e) => setProject(e.target.value)}
                   />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Presenter</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="ToolBox Talk Date"
+                    value={presenter}
+                    onChange={(e) => setPresenter(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name}</option>
+                })}
+
+                  </Form.Control>
                 </Form.Group>
                 <div className="mt-3 float-right">
                   <Button

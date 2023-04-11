@@ -1,5 +1,6 @@
 import {useEffect , useState} from 'react'
 import ToolBoxTalkAPI from '../../API/ToolBoxTalkAPI'
+import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 // import { Link , useNavigate } from 'react-router-dom';
@@ -11,11 +12,13 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 export default function ToolBoxTalkList() {
     const [toolBoxTalks , setToolBoxTalks] = useState([])
+    const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
     // const navigate = useNavigate()
 
     useEffect(() => {
         fetchToolBoxTalk()
+        staffData()
     },[])
 
     const fetchToolBoxTalk = () => {
@@ -25,6 +28,13 @@ export default function ToolBoxTalkList() {
         })
         .catch(console.log)
     }
+
+    const staffData = () => {
+      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      .then((res) => {
+          setStaffs(res.data);
+      }).catch(console.log)
+  }
 
     const onDelete = (id) => {
         ToolBoxTalkAPI.delete(`/${id}/`).then((res) => {
@@ -45,10 +55,11 @@ export default function ToolBoxTalkList() {
               <tr>
                 {/* <th scope="col">#</th> */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                <th scope="col" className="col-3">ID</th>
-                <th scope="col" className="col-3">Date</th>
+                <th scope="col" className="col-1">ID</th>
+                <th scope="col" className="col-2">Date</th>
                 <th scope="col" className="col-3">Topic</th>
                 <th scope="col" className="col-3">Project</th>
+                <th scope="col" className="col-2">Presenter</th>
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
                 <th>Edit</th>
                 <th>Delete</th>
@@ -63,6 +74,7 @@ export default function ToolBoxTalkList() {
                     <td>{toolBoxTalk.toolbox_date}</td>
                     <td>{toolBoxTalk.topic}</td>
                     <td>{toolBoxTalk.project}</td>
+                    <td>{staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name}</td>
                     <td>
                         <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
                     </td>

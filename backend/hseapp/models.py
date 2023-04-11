@@ -55,9 +55,9 @@ class Attendence(models.Model):
 class ToolBoxTalk(models.Model):
     toolbox_date = models.DateField(null=True , blank= True)
     topic = models.CharField(max_length= 100 , null=True , blank= True)
-    # presenter = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_presenter')
+    presenter = models.ForeignKey(Staff, on_delete=models.CASCADE , null=True , blank= True, related_name='toolbox_talks_presenter')
     project = models.CharField(max_length= 100 , null=True , blank= True)
-    # supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_supervissor')
+    supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE , null=True , blank= True, related_name='toolbox_talks_supervissor')
     time = models.TimeField(null=True , blank= True)
     crew_number = models.IntegerField(null=True , blank= True)
     attendees = models.IntegerField(null=True , blank= True)
