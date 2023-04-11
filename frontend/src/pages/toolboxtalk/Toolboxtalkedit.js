@@ -13,6 +13,9 @@ export default function ToolBoxTalkEdit() {
     const [project , setProject] = useState('')
     const [presenter , setPresenter] = useState('')
     const [supervisor , setSupervisor] = useState('')
+    const [time , setTime] = useState('')
+    const [crew_number , setCrewNumber] = useState('')
+    const [address , setAddress] = useState('')
     const [staffs , setStaffs] = useState([])
     const [toolBoxTalks , setToolBoxTalks] = useState([])
     const [id, setId] = useState(null)
@@ -42,24 +45,30 @@ export default function ToolBoxTalkEdit() {
             setProject(res.data.project)
             setPresenter(res.data.presenter)
             setSupervisor(res.data.supervisor)
+            setTime(res.data.time)
+            setCrewNumber(res.data.crew_number)
+            setAddress(res.data.address)
         })
         .catch(console.log)
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {toolbox_date , topic , project , presenter , supervisor}
+        let item = {toolbox_date , topic , project , presenter , supervisor, time , crew_number ,address}
         ToolBoxTalkAPI.post('/', item).then(() => fetchToolBoxTalk());
     }
 
     const onUpdate = (id) => {
-        let item = {toolbox_date , topic, project ,presenter ,supervisor};
+        let item = {toolbox_date , topic, project ,presenter ,supervisor, time, crew_number , address};
         ToolBoxTalkAPI.patch(`/${id}/`, item).then(() => { 
             setToolBoxDate('')
             setTopic('')
             setProject('')
             setPresenter('')
             setSupervisor('')
+            setTime('')
+            setCrewNumber('')
+            setAddress('')
             fetchToolBoxTalk()
           }
         )
@@ -132,6 +141,33 @@ export default function ToolBoxTalkEdit() {
                 })}
 
                   </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    placeholder="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Crew Present</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="crew present"
+                    value={crew_number}
+                    onChange={(e) => setCrewNumber(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </Form.Group>
      
             <div className="mt-3 float-right">
