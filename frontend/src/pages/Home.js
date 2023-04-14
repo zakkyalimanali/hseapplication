@@ -1,4 +1,5 @@
-import {useState , useEffect } from 'react'
+import {useState , useEffect , useContext} from 'react'
+import AuthContext from "../context/AuthContext";
 import StaffAPI from '../API/StaffAPI'
 import IncidentAPI from '../API/IncidentAPI'
 import GenderChart from './charts/GenderChart'
@@ -7,9 +8,11 @@ import NumIncidents from './charts/NumIncidents'
 import SmartCardColorChart from './charts/SmartCardColorChart'
 
 
+
 export default function Home() {
     const [staffs , setStaff] = useState([])
     const [incidents , setIncidents] = useState([])
+    const {authTokens , logoutUser} = useContext(AuthContext);
 
     useEffect(() => {
         StaffAPI.get('/')
@@ -38,7 +41,7 @@ export default function Home() {
         <h3>Total Number of Incidents: {incidents.length}</h3>
         <h3>(A) Head Protection not worn: {incidents.filter(incident => incident.what_happened === "(A) Head Protection not worn").length}</h3>
         <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3> */}
-
+        
         <div className=" mt-3 row justify-content-around">
             <div className="display-box col-2 text-center"><h4><b>Staff: {staffs.length}</b></h4></div>
             <div className="display-box col-2 text-center"><h4><b>Incidents: {incidents.length}</b></h4></div>

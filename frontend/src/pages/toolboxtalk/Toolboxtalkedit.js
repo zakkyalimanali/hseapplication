@@ -21,8 +21,8 @@ export default function ToolBoxTalkEdit() {
     const [id, setId] = useState(null)
 
     useEffect(() => {
-        setId(params.id)
         fetchToolBoxTalk()
+        setId(params.id)
     },[params.id])
 
     useEffect(() => {
@@ -81,7 +81,7 @@ export default function ToolBoxTalkEdit() {
         <div className="row">
           <div className= "col-md-4"></div>
           <div className="col-md-4 ">
-            <h3 className="float-left">Create a new Staff</h3>
+            <h3 className="float-left">Toolbox Talk Edit</h3>
             
             <Form onSubmit={onSubmit} className="mt-4">
               <Form.Group className="mb-3" controlId="formName">
