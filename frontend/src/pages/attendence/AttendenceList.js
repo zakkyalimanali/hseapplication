@@ -54,8 +54,9 @@ export default function AttendenceList() {
 
     return(
         <div>
-            <h1>Attendence List</h1>
+            
             <div className="row justify-content-center"> 
+            <h1 className="row justify-content-center mt-3">Attendence List</h1>
         {/* <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
                         Add Incident
         </Button> */}

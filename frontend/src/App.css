@@ -50,6 +50,7 @@
 
 .sideNav {
     min-height: calc(100vh - 80px);
+    min-width: calc(20vh);
 }
 
 .update {

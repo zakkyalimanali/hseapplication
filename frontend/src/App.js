@@ -35,6 +35,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
+            <Route element={<LoginPage/>} path="/loginpage"/>
             <Route element={<PrivateRoutes/>}>
               <Route path='/' element={<Home/>} exact/>
               <Route path='stafflist' element={<StaffList/>} />

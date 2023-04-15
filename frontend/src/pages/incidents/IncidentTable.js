@@ -52,6 +52,7 @@ export default function IncidentTable() {
 
     return (
       <div className="row justify-content-center"> 
+      <h1 className="row justify-content-center mt-3">Incidents List</h1>
         {/* <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
                         Add Incident
         </Button> */}
