@@ -43,15 +43,14 @@ export default function StaffList() {
           <Table striped bordered hover>
           <thead>
               <tr>
-                {/* <th scope="col">#</th> */}
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
+    
                 <th scope="col" className="col-3">Name</th>
                 <th scope="col" className="col-3">Position</th>
                 <th scope="col" className="col-1">Staff Id Number</th>
                 <th scope="col" className="col-1">Gender</th>
                 <th scope="col" className="col-1">Edit</th>
                 <th scope="col" className="col-1">Delete</th>
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
+    
               </tr>
             </thead>
             <tbody>

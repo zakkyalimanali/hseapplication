@@ -27,10 +27,15 @@ import ToolBoxTalkEdit from './pages/toolboxtalk/Toolboxtalkedit';
 import {AuthProvider} from './context/AuthContext'
 import PrivateRoutes from './utils/PrivateRoutes';
 import LoginPage from './pages/LoginPage';
+import 'bootstrap/dist/css/bootstrap.css';
+
+
 
 
 function App() {
+  
   return (
+    
     <div className="App" style={{backgroundColor: 'beige'}}>
       <BrowserRouter>
         <Routes>
@@ -67,5 +72,9 @@ function App() {
     </div>
   );
 }
+
+
+
+
 
 export default App;

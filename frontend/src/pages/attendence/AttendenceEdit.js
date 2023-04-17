@@ -156,7 +156,7 @@ function selectAttendence(id) {
             <div className= "col-md-2"></div>
                 <div className="col-md-8 ">
                     <h3 className="float-center">Update Attendence</h3>
-                <Form onSubmit={onSubmit} className="update mt-4">
+                <Form onSubmit={onSubmit} className="mb-4 mt-4">
                     <Form.Group className="mb-3" controlId="formStaffName">
                         <Form.Label>Staff</Form.Label>
                         <Form.Control
