@@ -18,6 +18,10 @@ class Staff(models.Model):
     email_address = models.EmailField(max_length=200, blank=True, null=True)
     passport_number = models.CharField(max_length=30 , null=True, blank=True)
     passport_expiry_date = models.DateField(null=True, blank=True)
+    # yearly_leave_days = models.IntegerField(null=True, blank=True)
+    # yearly_leave_taken = models.IntegerField(null=True, blank=True)
+    # yearly_leave_left = models.IntegerField(null=True , blank=True)
+
 
 
     def __str__(self):

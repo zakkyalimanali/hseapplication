@@ -12,8 +12,17 @@ export default function EditStaff() {
     const [position , setPosition] = useState('')
     const [staff_id_number , setStaffIdNumber] = useState('') 
     const [date_of_birth , setDateOfBirth] = useState('')
+    const [joining_date , setJoiningDate] = useState('')
+    const [smart_card_number , setSmartCardNumber] = useState('')
     const [gender , setGender] = useState('')
     const [smart_card_colour , setSmartCardColour] = useState('')
+    const [home_address , setHomeAddress] = useState('')
+    const [nationality , setNationality] = useState('')
+    const [citizenship , setCitizenship] = useState('')
+    const [telephone_number , setTelephoneNumber] = useState('')
+    const [email_address , setEmailAddress] = useState('')
+    const [passport_number , setPassportNumber] = useState('')
+    const [passport_expiry_date , setPassportExpiryDate] = useState('')
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
 
@@ -31,8 +40,17 @@ export default function EditStaff() {
             setPosition(res.data.position)
             setStaffIdNumber(res.data.staff_id_number)
             setDateOfBirth(res.data.date_of_birth)
+            setJoiningDate(res.data.joining_date)
+            setSmartCardNumber(res.data.smart_card_number)
             setGender(res.data.gender)
             setSmartCardColour(res.data.smart_card_colour)
+            setHomeAddress(res.data.home_address)
+            setNationality(res.data.nationality)
+            setCitizenship(res.data.citizenship)
+            setTelephoneNumber(res.data.telephone_number)
+            setEmailAddress(res.data.email_address)
+            setPassportNumber(res.data.passport_number)
+            setPassportExpiryDate(res.data.passport_expiry_date)
         })
         .catch(console.log)
     }
@@ -44,7 +62,7 @@ export default function EditStaff() {
     // }
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {name ,position, staff_id_number, date_of_birth ,gender, smart_card_colour}
+        let item = {name ,position, staff_id_number, date_of_birth , joining_date,gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date}
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
@@ -53,14 +71,23 @@ export default function EditStaff() {
     //     StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
     //   }
     const onUpdate = (id) => {
-        let item = {name ,position, staff_id_number, date_of_birth, gender, smart_card_colour};
+        let item = {name ,position, staff_id_number, date_of_birth, joining_date, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address , passport_number, passport_expiry_date};
         StaffAPI.patch(`/${id}/`, item).then(() => { 
           setPosition('')
           setStaffIdNumber('')
           setName('')
           setDateOfBirth('')
+          setJoiningDate('')
+          setSmartCardNumber('')
           setGender('')
           setSmartCardColour('')
+          setHomeAddress('')
+          setNationality('')
+          setCitizenship('')
+          setTelephoneNumber('')
+          setEmailAddress('')
+          setPassportNumber('')
+          setPassportExpiryDate('')
           dataStaff()
           }
         )
@@ -113,6 +140,52 @@ export default function EditStaff() {
                 onChange={(e) => setPosition(e.target.value)}
               />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Smart Card Number</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter Smart Card Number"
+                value={smart_card_number}
+                onChange={(e) => setSmartCardNumber(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Telephone Number</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter Telephone Number"
+                value={telephone_number}
+                onChange={(e) => setTelephoneNumber(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Email Address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter Email Address"
+                value={email_address}
+                onChange={(e) => setEmailAddress(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Passport Number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Passport Number"
+                value={passport_number}
+                onChange={(e) => setPassportNumber(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Passport Expiry Date</Form.Label>
+              <Form.Control
+                type="date"
+                placeholder="Enter Passport Expiry Date"
+                value={passport_expiry_date}
+                onChange={(e) => setPassportExpiryDate(e.target.value)}
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
               <Form.Label>Staff Id Number</Form.Label>
               <Form.Control
@@ -123,12 +196,54 @@ export default function EditStaff() {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Home Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Home Address"
+                value={home_address}
+                onChange={(e) => setHomeAddress(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Citizenship</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Citizenship"
+                value={citizenship}
+                onChange={(e) => setCitizenship(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Nationality</Form.Label>
+              <Form.Control
+                as="select"
+                placeholder="Home Address"
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+              >
+              <option value=''>-------</option>
+              <option value='Brunei'>Brunei</option>
+              <option value='Malaysia'>Malaysia</option>
+              <option value='UK'>UK</option>
+              <option value='Australia'>Australia</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
               <Form.Label>Date Of Birth</Form.Label>
               <Form.Control
                 type="date"
                 placeholder="Enter Staff Id Number"
                 value={date_of_birth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+              <Form.Label>Joining Date</Form.Label>
+              <Form.Control
+                type="date"
+                placeholder="Joining Date"
+                value={joining_date}
+                onChange={(e) => setJoiningDate(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
@@ -163,7 +278,7 @@ export default function EditStaff() {
             
       
 
-            <div className="mt-3 float-right">
+            <div className="mt-3 mb-3 float-right">
               <Link to="/stafflist/">
                 <Button
                   variant="success"
