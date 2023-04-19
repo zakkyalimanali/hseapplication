@@ -18,9 +18,24 @@ class Staff(models.Model):
     email_address = models.EmailField(max_length=200, blank=True, null=True)
     passport_number = models.CharField(max_length=30 , null=True, blank=True)
     passport_expiry_date = models.DateField(null=True, blank=True)
-    # yearly_leave_days = models.IntegerField(null=True, blank=True)
-    # yearly_leave_taken = models.IntegerField(null=True, blank=True)
-    # yearly_leave_left = models.IntegerField(null=True , blank=True)
+    yearly_leave_days = models.IntegerField(null=True, blank=True)
+    yearly_leave_taken = models.IntegerField(null=True, blank=True)
+    yearly_leave_left = models.IntegerField(null=True , blank=True)
+
+    # def leave_left(self, *args , **kwargs):
+    #     if self.yearly_leave_days != None:
+    #         self.yearly_leave_left = self.yearly_leave_days - self.yearly_leave_taken
+    #     super().save(*args , **kwargs)
+
+    # @property
+    # def yearly_leave_left(self):
+    #     if self.yearly_leave_days is not None:
+    #         return self.yearly_leave_days - self.yearly_leave_taken
+    #     return None
+
+    def save(self, *args, **kwargs):
+        self.yearly_leave_left = self.yearly_leave_days - self.yearly_leave_taken
+        super().save(*args, **kwargs)
 
 
 

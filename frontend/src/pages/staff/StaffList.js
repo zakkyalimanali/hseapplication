@@ -46,9 +46,10 @@ export default function StaffList() {
                 {/* <th scope="col">#</th> */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
                 <th scope="col" className="col-3">Name</th>
-                <th scope="col" className="col-3">Position</th>
+                <th scope="col" className="col-2">Position</th>
                 <th scope="col" className="col-1">Staff Id Number</th>
                 <th scope="col" className="col-1">Gender</th>
+                <th scope="col" className="col-1">Leave Left</th>
                 <th scope="col" className="col-1">Edit</th>
                 <th scope="col" className="col-1">Delete</th>
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
@@ -63,6 +64,7 @@ export default function StaffList() {
                     <td>{staff.position}</td>
                     <td>{staff.staff_id_number}</td>
                     <td>{staff.gender}</td>
+                    <td>{staff.yearly_leave_left}</td>
                     <td>
                         <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
                     </td>

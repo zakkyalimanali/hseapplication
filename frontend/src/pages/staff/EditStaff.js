@@ -23,6 +23,8 @@ export default function EditStaff() {
     const [email_address , setEmailAddress] = useState('')
     const [passport_number , setPassportNumber] = useState('')
     const [passport_expiry_date , setPassportExpiryDate] = useState('')
+    const [yearly_leave_days, setYearlyLeaveDays] = useState('')
+    const [yearly_leave_taken , setYearlyLeaveTaken] = useState('')
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
 
@@ -51,6 +53,8 @@ export default function EditStaff() {
             setEmailAddress(res.data.email_address)
             setPassportNumber(res.data.passport_number)
             setPassportExpiryDate(res.data.passport_expiry_date)
+            setYearlyLeaveDays(res.data.yearly_leave_days)
+            setYearlyLeaveTaken(res.data.yearly_leave_taken)
         })
         .catch(console.log)
     }
@@ -62,7 +66,7 @@ export default function EditStaff() {
     // }
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {name ,position, staff_id_number, date_of_birth , joining_date,gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date}
+        let item = {name ,position, staff_id_number, date_of_birth , joining_date,gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date, yearly_leave_days, yearly_leave_taken}
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
@@ -71,7 +75,7 @@ export default function EditStaff() {
     //     StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
     //   }
     const onUpdate = (id) => {
-        let item = {name ,position, staff_id_number, date_of_birth, joining_date, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address , passport_number, passport_expiry_date};
+        let item = {name ,position, staff_id_number, date_of_birth, joining_date, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address , passport_number, passport_expiry_date, yearly_leave_days, yearly_leave_taken};
         StaffAPI.patch(`/${id}/`, item).then(() => { 
           setPosition('')
           setStaffIdNumber('')
@@ -88,6 +92,8 @@ export default function EditStaff() {
           setEmailAddress('')
           setPassportNumber('')
           setPassportExpiryDate('')
+          setYearlyLeaveDays('')
+          setYearlyLeaveTaken('')
           dataStaff()
           }
         )
@@ -165,6 +171,24 @@ export default function EditStaff() {
                 placeholder="Enter Email Address"
                 value={email_address}
                 onChange={(e) => setEmailAddress(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Yearly Leave Days</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter Yearly Leave Days"
+                value={yearly_leave_days}
+                onChange={(e) => setYearlyLeaveDays(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPosition">
+              <Form.Label>Yearly Leave Taken</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter Yearly Leave Taken"
+                value={yearly_leave_taken}
+                onChange={(e) => setYearlyLeaveTaken(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formPosition">
