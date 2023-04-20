@@ -34,7 +34,8 @@ class Staff(models.Model):
     #     return None
 
     def save(self, *args, **kwargs):
-        self.yearly_leave_left = self.yearly_leave_days - self.yearly_leave_taken
+        if self.yearly_leave_days is not None:
+            self.yearly_leave_left = self.yearly_leave_days - self.yearly_leave_taken
         super().save(*args, **kwargs)
 
 
