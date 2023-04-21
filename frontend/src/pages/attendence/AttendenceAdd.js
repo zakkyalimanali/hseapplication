@@ -8,7 +8,7 @@ import { Link , useNavigate } from 'react-router-dom';
 export default function AttendenceAdd() {
     const [attendences ,setAttendences] = useState([])
     const [dates , setDates] = useState([])
-    const [attendence_date , setAttenceDate] = useState('')
+    const [attendence_date , setAttendenceDate] = useState('')
     const [staff_name , setStaffName] = useState('')
     const [attendence_status , setAttendenceStatus] = useState('')
     const [selectAttendence , setSelectAttendence] = useState(null)
@@ -85,16 +85,15 @@ export default function AttendenceAdd() {
                                         type="date"
                                         placeholder="Date"
                                         value={attendence_date}
-                                        onChange={(e) => setAttenceDate(e.target.value)}
+                                        onChange={(e) => setAttendenceDate(e.target.value)}
                                         />
                                     </Form.Group>
                                     {/* <Form.Group className="mb-3" controlId="formName">
                                         <Form.Label>Attendence Date</Form.Label>
                                         <Form.Control
                                         as="select"
-                                        placeholder="Date"
                                         value={attendence_date}
-                                        onChange={(e) => setAttenceDate(e.target.value)}
+                                        onChange={(e) => setAttendenceDate(e.target.value)}
                                         >
                                         <option value=''>------</option>
                                         {dates.map(date => {

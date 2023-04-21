@@ -171,7 +171,7 @@ function selectAttendence(id) {
                         })}
                         </Form.Control>
                     </Form.Group>
-                    {/* <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                         <Form.Label>Attendence Date</Form.Label>
                         <Form.Control
                         as ="select"
@@ -184,8 +184,8 @@ function selectAttendence(id) {
                         return <option key={date.id} value={date.id}>{date.date_attendence}</option>
                         })}
                         </Form.Control>
-                    </Form.Group> */}
-                    <Form.Group className="mb-3" controlId="formName">
+                    </Form.Group>
+                    {/* <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Attendence Date</Form.Label>
                         <Form.Control
                         type="date"
@@ -193,7 +193,7 @@ function selectAttendence(id) {
                         value={attendence_date}
                         onChange={(e) => setAttendenceDate(e.target.value)}
                         />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group className="mb-3" controlId="formPosition">
                         <Form.Label>Attendence Status</Form.Label>
                         <Form.Control

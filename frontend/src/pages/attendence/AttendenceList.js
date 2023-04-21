@@ -63,6 +63,8 @@ export default function AttendenceList() {
         <div className="mt-4 col-md-10 m row justify-content-center">
         
         <Button href="/attendenceadd" variant="secondary" className="middle col-2 mb-4">Add Attedence</Button>
+        <Button href="/attendencetable" variant="primary" className="ms-3 middle col-2 mb-4">Attendence Table</Button>
+        <Button href="/datelist" variant="primary" className="ms-3 middle col-2 mb-4">Date List</Button>
         
 
               <Table striped bordered hover>
@@ -83,8 +85,8 @@ export default function AttendenceList() {
                         <td>{attendence.id}</td>
                         <td>{staffs.find((staff) => staff.id === attendence.staff_name)?.name}</td>
                         {/* <td>{dates.find((date) => date.id === attendence.attendence_date)?.date_attendence}</td> */}
-                        <td>{attendence.attendence_date}</td>
-                        {/* <td>{dates.date_attendence}</td> */}
+                        {/* <td>{attendence.attendence_date}</td> */}
+                        <td>{dates.date_attendence}</td>
                         <td>{attendence.attendence_status}</td>
                         <td>
                             <Link to={`/attendenceedit/${attendence.id}`}>

@@ -65,6 +65,8 @@ class Incident(models.Model):
 
 class DateList(models.Model):
     date_attendence = models.DateField(null=True , blank=True)
+    staff_name = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    attendence_status = models.CharField(max_length= 100 , null=True , blank= True)
 
 class Attendence(models.Model):
     # attendence_date = models.ForeignKey(DateList, on_delete=models.CASCADE)
