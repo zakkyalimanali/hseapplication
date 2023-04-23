@@ -1,5 +1,5 @@
 import {Outlet} from 'react-router-dom'
-import Navtop from './Navtop'
+import Navtop from './Navtop_copy'
 import Sidebar from './Sidebar'
 
 
