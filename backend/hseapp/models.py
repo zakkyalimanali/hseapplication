@@ -45,11 +45,11 @@ class Staff(models.Model):
     
 class Incident(models.Model):
     short_desc = models.CharField(max_length=100, null=True , blank=True)
-    what_happened = models.CharField(max_length= 500 , choices = what, null=True , blank= True)
-    why_happened = models.CharField(max_length= 500 , choices = why, null=True , blank= True)
+    what_happened = models.CharField(max_length= 500 , null=True , blank= True)
+    why_happened = models.CharField(max_length= 500 , null=True , blank= True)
     date_raised = models.DateField(null=True , blank= True)
     raised_by  = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    life_saving_rule = models.CharField(max_length= 500 , choices = lsr, null=True , blank= True)
+    life_saving_rule = models.CharField(max_length= 500 , null=True , blank= True)
     findings = models.CharField(max_length= 100 , null=True , blank= True)
     incident_date = models.DateField(null=True , blank= True)
     location = models.CharField(max_length= 100 , null=True , blank= True)

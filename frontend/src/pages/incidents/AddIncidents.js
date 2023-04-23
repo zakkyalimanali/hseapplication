@@ -89,6 +89,57 @@ export default function AddIncidents() {
                    <option value=''>------</option>
                    <option value='(A) Head Protection not worn'>(A) Head Protection not worn</option>
                    <option value='(B) Eye protection not worn'>(B) Eye protection not worn</option>
+                   <option value='(C) Face protection not worn'>(C) Face protection not worn</option>
+                   <option value='(D) Ear protection not worn'>(D) Ear protection not worn</option>
+                   <option value='(E) Protective clothing not worn'>(E) Protective clothing not worn</option>
+                   <option value='(F) Leg/Feet protection not worn'>(F) Leg/Feet protection not worn</option>
+                   <option value='(G) Hand protection not worn'>(G) Hand protection not worn</option>
+                   <option value='(H) PPE in bad condition'>(H) PPE in bad condition</option>
+                   <option value='(I) Wrong PPE for the job'>(I) Wrong PPE for the job</option>
+                   <option value='(J) Substandard PPE'>(J) Substandard PPE</option>
+                   <option value='(K) PPE not worn properly'>(K) PPE not worn properly</option>
+                   <option value='(L) Respiration protection not worn'>(L) Respiration protection not worn</option>
+                   <option value='(M) Body Protection not worn'>(M) Body Protection not worn</option>
+                   <option value='(N) Wrong tool for the job'>(N) Wrong tool for the job</option>
+                   <option value='(O) Tools in bad condition'>(O) Tools in bad condition</option>
+                   <option value='(P) Tools not inpected'>(P) Tools not inpected</option>
+                   <option value='(Q) Misuse'>(Q) Misuse</option>
+                   <option value='(R) Uncertified tools'>(R) Uncertified tools</option>
+                   <option value='(S) Too heaving for manual lifting'>(S) Too heaving for manual lifting</option>
+                   <option value='(T) Wrong mechanical manual lifting'>(T) Wrong mechanical manual lifting</option>
+                   <option value='(U) Lifting tool not inspected'>(U) Lifting tool not inspected</option>
+                   <option value='(V) Chemical not properly handled'>(V) Chemical not properly handled</option>
+                   <option value='(W) Waste not properly disposed'>(W) Waste not properly disposed</option>
+                   <option value='(X) In danger of struck'>(X) In danger of struck</option>
+                   <option value='(Y) In danger of striking against'>(Y) In danger of striking against</option>
+                   <option value='(Z) In danger of caught by'>(Z) In danger of caught by</option>
+                   <option value='(AA) In danger of fall/slip/trip'>(AA) In danger of fall/slip/trip</option>
+                   <option value='(BB) In danger of electrocution'>(BB) In danger of electrocution</option>
+                   <option value='(CC) In danger of burnt'>(CC) In danger of burnt</option>
+                   <option value='(DD) Access obstructed'>(DD) Access obstructed</option>
+                   <option value='(EE) Tools/materials disorganized'>(EE) Tools/materials disorganized</option>
+                   <option value='(FF) Poor/Improper roping of'>(FF) Poor/Improper roping of</option>
+                   <option value='(GG) Accumulation of rubbish'>(GG) Accumulation of rubbish</option>
+                   <option value='(HH) Water is being polluted'>(HH) Water is being polluted</option>
+                   <option value='(II) Air being polluted'>(II) Air being polluted</option>
+                   <option value='(JJ) Too much noise'>(JJ) Too much noise</option>
+                   <option value='(KK) Soil being polluted'>(KK) Soil being polluted</option>
+                   <option value='(LL) Poor illumination'>(LL) Poor illumination</option>
+                   <option value='(MM) Work without permission'>(MM) Work without permission</option>
+                   <option value='(NN) Wrong permit'>(NN) Wrong permit</option>
+                   <option value='(OO) Procedures / Standard not followed'>(OO) Procedures / Standard not followed</option>
+                   <option value='(PP) Wrong instruction on permit'>(PP) Wrong instruction on permit</option>
+                   <option value='(QQ) Permit procedure not follow'>(QQ) Permit procedure not follow</option>
+                   <option value='(RR) Inadequate HIP'>(RR) Inadequate HIP</option>
+                   <option value='(SS) Toolbox talk not given'>(SS) Toolbox talk not given</option>
+                   <option value='(TT) Driving recklessly'>(TT) Driving recklessly</option>
+                   <option value='(UU) Not wearing seat belt'>(UU) Not wearing seat belt</option>
+                   <option value='(VV) Road traffic violation '>(VV) Road traffic violation - eg. Speeding, no entry & ect</option>
+                   <option value='(WW) Vehicles / Transportation abuse'>(WW) Vehicles / Transportation abuse</option>
+                   <option value='(XX) Not inspected for compliance'>(XX) Not inspected for compliance</option>
+                   <option value='(YY) Vehicle defects'>(YY) Vehicle defects</option>
+                   <option value='(ZZ) Compliance'>(ZZ) Compliance</option>
+                   <option value='(AAA) Behavior & Attitude'>(AAA) Behavior & Attitude</option>
                  </Form.Control>
               </Form.Group>
               <Form.Group>
@@ -102,6 +153,24 @@ export default function AddIncidents() {
                   <option value=''>------</option>
                   <option value='(1) Not Informed'>(1) Not Informed</option>
                   <option value='(2) Languague Problem'>(2) Languague Problem</option>
+                  <option value='(3) Not reasing permit'>(3) Not reasing permit</option>
+                  <option value='(4) Wrong interpretation of risk'>(4) Wrong interpretation of risk</option>
+                  <option value='(5) Wrong instruction'>(5) Wrong instruction</option>
+                  <option value='(6) No procedure'>(6) No procedure</option>
+                  <option value='(7) Lack of HSE Coaching / training'>(7) Lack of HSE Coaching / training</option>
+                  <option value='(8) Behavior & Attitude (intentionally)'>(8) Behavior & Attitude (intentionally)</option>
+                  <option value='(9) Negligence'>(9) Negligence</option>
+                  <option value='(10) Working condition'>(10) Working condition</option>
+                  <option value='(11) Working layout'>(11) Working layout</option>
+                  <option value='(12) The design of equipment / tools'>(12) The design of equipment / tools</option>
+                  <option value='(13) Work habits'>(13) Work habits</option>
+                  <option value='(14) Lack of skill'>(14) Lack of skill</option>
+                  <option value='(15) Time pressure'>(15) Time pressure</option>
+                  <option value='(16) Not requested'>(16) Not requested</option>
+                  <option value='(17) Physical limitations'>(17) Physical limitations</option>
+                  <option value='(18) Not supplied/available'>(18) Not supplied/available</option>
+                  <option value='(19) Lack of ownership'>(19) Lack of ownership</option>
+                  <option value='(20) Behavior & Attitude (not intentionally)'>(20) Behavior & Attitude (not intentionally)</option>
                 </Form.Control>
 
               </Form.Group>
@@ -155,6 +224,16 @@ export default function AddIncidents() {
                    <option value=''>------</option>
                    <option value='(1) Work with a valid work permit when required'>(1) Work with a valid work permit when required</option>
                    <option value='(2) Conduct gas test when required'>(2) Conduct gas test when required</option>
+                   <option value='(3) Verify isolation before work begins and use the specific life protecting equipment'>(3) Verify isolation before work begins and use the specific life protecting equipment</option>
+                   <option value='(4) Obtain authorization before entering a confined space'>(4) Obtain authorization before entering a confined space</option>
+                   <option value='(5) Obatin authorization before overriding or disabiling safety critical equipment'>(5) Obatin authorization before overriding or disabiling safety critical equipment</option>
+                   <option value='(6) Protect yourself against a fall when working at height'>(6) Protect yourself against a fall when working at height</option>
+                   <option value='(7) Do not walk under a suspended load'>(7) Do not walk under a suspended load</option>
+                   <option value='(8) Do not smoke outside designated smoking area'>(8) Do not smoke outside designated smoking area</option>
+                   <option value='(9) No alcohol or drugs while working or driving'>(9) No alcohol or drugs while working or driving</option>
+                   <option value='(10) While driving , do not use your phone and do not exceed limit'>(10) While driving , do not use your phone and do not exceed limit</option>
+                   <option value='(11) Wear your seat belts'>(11) Wear your seat belts</option>
+                   <option value='(12) Follow prescribed Journey Management Plan'>(12) Follow prescribed Journey Management Plan</option>
                  </Form.Control>
                </Form.Group>
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">

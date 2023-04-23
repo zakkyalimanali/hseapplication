@@ -8,9 +8,11 @@ import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import DataTable from 'react-data-table-component'
 
 
 export default function ToolBoxTalkList() {
+    const [records, setRecords] = useState([]);
     const [toolBoxTalks , setToolBoxTalks] = useState([])
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
@@ -42,6 +44,87 @@ export default function ToolBoxTalkList() {
         }).catch(console.log)
     }
 
+    const columns = [
+      {
+        name: 'id',
+        selector: (row) => row.id,
+        sortable: true,
+      },
+      {
+        name: 'date',
+        selector: (row) => row.date,
+        sortable: true,
+      },
+      {
+        name: 'topic',
+        selector: (row) => row.topic,
+        sortable: true,
+      },
+      {
+        name: 'project',
+        selector: (row) => row.project,
+        sortable: true,
+      },
+      {
+        name: 'presenter',
+        selector: (row) => row.presenter,
+        sortable: true,
+      },
+      {
+        name: 'edit',
+        selector: (row) => row.edit,
+      },
+      {
+        name: 'delete',
+        selector: (row) => row.delete,
+      },
+    ];
+
+    useEffect(() => {
+      const data = toolBoxTalks.map((toolBoxTalk) => {
+        // const staff = staffs.find((staff) => staff.id === attendence.staff_id);
+        // const staff_name = staff ? staff.name : '';
+        // {staffs.find((staff) => staff.id === attendence.staff_name)?.name}
+        const person_name = staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name  
+        return {
+          id: toolBoxTalk.id,
+          date: toolBoxTalk.toolbox_date,
+          topic: toolBoxTalk.topic,
+          project:toolBoxTalk.project,
+          presenter: person_name,
+          // attendencestatus: attendence.attendence_status,
+          // edit: <FontAwesomeIcon icon={faPen} />,
+          edit : 
+          // <Link to={`/editincident/${incident.id}`}>
+          // <FontAwesomeIcon icon={faPen } />
+          // </Link>,
+          <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
+          delete: (
+            <FontAwesomeIcon
+              icon={faTrash}
+              onClick={() => onDelete(toolBoxTalk.id)}
+            />
+          ),
+        };
+      });
+      setRecords(data);
+    }, [toolBoxTalks, staffs]);
+
+    const handleFilter = (e) => {
+      const newData = toolBoxTalks.map((toolBoxTalk) => {
+        const person_name = staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name;
+        return {
+          ...toolBoxTalk,
+          person_name,
+        };
+      }).filter((attendence) => {
+        return attendence.person_name
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase());
+      });
+      setToolBoxTalks(newData);
+    };
+
     return(
         <div className="row justify-content-center"> 
           <h1 className="row justify-content-center mt-3">Toolbox Talk List</h1>
@@ -51,18 +134,18 @@ export default function ToolBoxTalkList() {
             Add ToolBox Talk
         </Button>
             
-          <Table striped bordered hover>
+          {/* <Table striped bordered hover>
           <thead>
-              <tr>
+              <tr> */}
                 {/* <th scope="col">#</th> */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                <th scope="col" className="col-1">ID</th>
+                {/* <th scope="col" className="col-1">ID</th>
                 <th scope="col" className="col-2">Date</th>
                 <th scope="col" className="col-3">Topic</th>
                 <th scope="col" className="col-3">Project</th>
-                <th scope="col" className="col-2">Presenter</th>
+                <th scope="col" className="col-2">Presenter</th> */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                <th>Edit</th>
+                {/* <th>Edit</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -87,7 +170,21 @@ export default function ToolBoxTalkList() {
                 );
               })}
             </tbody>
-          </Table>
+          </Table> */}
+
+          <div className="text-end"><input type="text" onChange={handleFilter}/></div>
+
+              <DataTable 
+                 columns={columns}
+                 data={records}
+                 selectableRows
+                 fixedHeader
+                 pagination
+              >
+
+              </DataTable>
+
+
         </div>
     </div>
 

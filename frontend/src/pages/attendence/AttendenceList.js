@@ -540,7 +540,11 @@ export default function AttendenceList() {
   // };
   
     return(
-      <div>
+      <div className="row justify-content-center"> 
+          <h1 className="row justify-content-center mt-3">Attendence List</h1>
+            <div className="mt-4 col-md-10 m row justify-content-center">
+
+  
         <Button href="/attendenceadd" variant="secondary" className="middle col-2 mb-4">Add Attedence</Button>
               <div className="text-end"><input type="text" onChange={handleFilter}/></div>
               <DataTable
@@ -552,5 +556,7 @@ export default function AttendenceList() {
               >             
               </DataTable>
         </div>
+
+      </div>
     )
 }

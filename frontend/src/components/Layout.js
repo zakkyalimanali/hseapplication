@@ -7,8 +7,8 @@ export default function Layout() {
     return (
         <div>
             <Navtop/>
-            <Sidebar/>
-            {/* <Outlet/> */}
+            {/* <Sidebar/> */}
+            <Outlet/>
         </div>
     )
 }
