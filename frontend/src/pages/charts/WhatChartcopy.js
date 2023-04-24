@@ -1,62 +1,3 @@
-// import {useEffect , useState} from 'react'
-// import IncidentAPI from '../../API/IncidentAPI';
-// import { Bar } from 'react-chartjs-2';
-
-// export default function WhatChat() {
-//     const [incidents , setIncidents] = useState([])
-
-//     useEffect(() => {
-//         IncidentAPI.get('/')
-//         .then((res) => {
-//             setIncidents(res.data)
-//             console.log(res.data)
-//         })
-//         .catch(console.log)
-//     },[])
-
-//     const data = {
-//         labels: ["A", "B", 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' , 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', "X", 'Y', 'Z', 'AA', 'BB', 'CC', 'DD', 'EE', 'FF', 'GG', 'HH', 'II', 'JJ', 'KK', 'LL', 'MM', 'NN', 'OO', 'PP', 'QQ', 'RR', 'SS', 'TT', 'UU', 'VV', 'WW', 'XX', 'YY', 'ZZ', 'AAA'],
-
-//             datasets: [
-//                 {
-//                 data: incidents.map(incident => incident.what_happened.length),
-//                 backgroundColor: ['rgba(255, 99, 132, 0.2)',
-//                 'rgba(54, 162, 235, 0.2)',
-//                 'rgba(255, 206, 86, 0.2)',
-//                 'rgba(75, 192, 192, 0.2)',
-//                 'rgba(153, 102, 255, 0.2)',
-//                 'rgba(255, 159, 64, 0.2)'],
-//                 borderColor: ['rgba(255, 99, 132, 1)',
-//                 'rgba(54, 162, 235, 1)',
-//                 'rgba(255, 206, 86, 1)',
-//                 'rgba(75, 192, 192, 1)',
-//                 'rgba(153, 102, 255, 1)',
-//                 'rgba(255, 159, 64, 1)'],
-//                 borderWidth: 1,
-//             },
-//         ],
-//     };
-
-//     const options = {
-//         plugins: {
-//           title: {
-//             display: true,
-//             text: 'Incident Status Chart'
-//           },
-//           legend: {
-//             display: false,
-//           }
-//         }
-//       };
-    
-//     return(
-//         <div className=" row justify-content-center" style={{height:'300px'}}>
-//             <Bar data={data} options={options}/>
-//         </div>
-
-//     )
-// }
-
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import IncidentAPI from '../../API/IncidentAPI';
@@ -64,13 +5,7 @@ import IncidentAPI from '../../API/IncidentAPI';
 export default function WhatChat() {
   const [incidents, setIncidents] = useState([]);
 
-  // const customLabels = {
-  //   1: '(A) Head Protection not worn',
-  //   2: '(B) Eye protection not worn',
-  //   3: '(C) Face protection not worn',
-  // };
-
-  useEffect(() => {
+   useEffect(() => {
     IncidentAPI.get('/')
       .then((res) => {
         setIncidents(res.data);
@@ -79,69 +14,6 @@ export default function WhatChat() {
   }, []);
 
   const data = {
-    // labels: [
-    //   'A',
-    //   'B',
-    //   'C',
-    // ],
-    //   'D',
-    //   'E',
-    //   'F',
-    //   'G',
-    //   'H',
-    //   'I',
-    //   'J',
-    //   'K',
-    //   'L',
-    //   'M',
-    //   'N',
-    //   'O',
-    //   'P',
-    //   'Q',
-    //   'R',
-    //   'S',
-    //   'T',
-    //   'U',
-    //   'V',
-    //   'W',
-    //   'X',
-    //   'Y',
-    //   'Z',
-    //   'AA',
-    //   'BB',
-    //   'CC',
-    //   'DD',
-    //   'EE',
-    //   'FF',
-    //   'GG',
-    //   'HH',
-    //   'II',
-    //   'JJ',
-    //   'KK',
-    //   'LL',
-    //   'MM',
-    //   'NN',
-    //   'OO',
-    //   'PP',
-    //   'QQ',
-    //   'RR',
-    //   'SS',
-    //   'TT',
-    //   'UU',
-    //   'VV',
-    //   'WW',
-    //   'XX',
-    //   'YY',
-    //   'ZZ',
-    //   'AAA',
-    // ],
-    // labels: [
-    //   '(A) Head Protection not worn',
-    //   '(B) Eye protection not worn',
-    //   '(C) Face protection not worn',
-     
-    // ],
-
     labels: [
             '(A) Head Protection not worn',
             '(B) Eye protection not worn',
@@ -196,20 +68,12 @@ export default function WhatChat() {
             '(YY) Vehicle defects',
             '(ZZ) Compliance',
             '(AAA) Behavior & Attitude',
-
-
-           
+                      
           ],
     
     datasets: [
       {
-        // data: incidents.map((incident) => incident.what_happened.length),
-        // data: incidents.length > 0 ? incidents.map(incident => incident.what_happened.length) : [],
-        // data: incidents.length > 0 ? incidents.map(incident => incident.what_happened.length) : [],
-        //data: [incidents.map((incident) => incident.what_happened)],
-        // data: [incidents.map((incident) => incident.what_happened === '(A) Head Protection not worn'),
         
-        //     incidents.map((incident) => incident.what_happened === '(B) Eye protection not worn' )], 
         data: [
             incidents.filter(incident => incident.what_happened === '(A) Head Protection not worn').length, 
             incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length, 
@@ -264,16 +128,10 @@ export default function WhatChat() {
             incidents.filter(incident => incident.what_happened === '(YY) Vehicle defects').length,
             incidents.filter(incident => incident.what_happened === '(ZZ) Compliance').length,
             incidents.filter(incident => incident.what_happened === '(AAA) Behavior & Attitude').length,
-
-        ],
-        indexAxis: 'y',
-
-        // labels: [
-        //     '(A) Head Protection not worn',
-        //     '(B) Eye protection not worn',
-        //     '(C) Face protection not worn',
            
-        //   ],
+        ],
+        // indexAxis: 'y',
+
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -304,82 +162,23 @@ export default function WhatChat() {
       legend: {
         display: false,
       },
-      // scales: {
-      //   yAxes: [
-      //     {
-      //       ticks: {
-      //         beginAtZero: true,
-      //       },
-      //       display: false, // hide Y axis labels
-      //     },
-      //   ],
-      // },
+    },
       scales: {
-        y: {
+        x: {
           ticks: {
             display: false,
           },
         },
       },
-      // scales: {
-      //   y: {
-      //     ticks: {
-      //       display: false,
-      //     },
-      //   },
-      // },
-
-
-      // yAxes: [{
-      //   scaleLabel: {
-      //     display: false,
-      //   },
-      // }],
-
-
-      // tooltip: {
-        
-        // display: '(A) Head Protection not worn' , '(B) Eye protection not worn' , '(C) Face protection not worn'
-        // callbacks: {
-        //     label: function (tooltipItem, data) {
-        //       const label = data.labels[tooltipItem.index];
-        //       const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-        //       return `${label}: ${value}`;
-    //     label: function (tooltipItem, data) {
-    //         const customLabel = '(A) Head Protection not worn'; 
-    //         const value = data.datasets[0].data[tooltipItem.index];
-    //         return `${customLabel}: ${value}`;
-  
-    //   }
-
-    // label: function(tooltipItem, data) {
-    //     const value = data.datasets[0].data[tooltipItem.index];
-    //     return `${customLabels[value]}: ${value}`;
-    //   }
-    // },
-}
-  
-    
 }
 
   return (
-    <div className=" row justify-content-center" style={{ height: '800px'}}>
-      <Bar 
-      // type="horizontalBar'"
+    <div className=" row justify-content-center" style={{ height: '400px'}}>
+      {/* <Bar 
       data={data}
       options={options}
-
-      
-    //   data={data} options={options} 
-      
-      />
+      /> */}
+      <Bar data={data} options={options} />
     </div>
-    // <div className=" row justify-content-center" style={{ height: '300px' }}>
-    // {incidents.length > 0 ? (
-    //   <Bar data={data} options={options} />
-    // ) : (
-    //   <p>Loading chart...</p>
-    // )}
-//   </div>
   );
 }

@@ -2,7 +2,7 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import StaffAPI from "../API/StaffAPI";
 import {useState , useEffect} from 'react'
-import WhatChat from "./charts/WhatChart";
+import WhatChat from "./charts/WhatChartcopy";
 export default function About() {
     const [staffs , setStaff] = useState([])
 
