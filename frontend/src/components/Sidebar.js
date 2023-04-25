@@ -12,6 +12,18 @@ export default function Sidebar() {
               <li className="mt-5 me-5">
                 <NavLink className="white" to="stats">Stats</NavLink>
               </li>
+              <li className="mt-5 me-5">
+                <NavLink className="white" to="attendencelist">Attendence</NavLink>
+              </li>
+              <li className="mt-5 me-5">
+                <NavLink className="white" to="toolboxtalklist">Toolbox</NavLink>
+              </li>
+              {/* <li className="mt-5 me-5">
+                <NavLink className="white" to="attendencetable">At Table</NavLink>
+              </li> */}
+              {/* <li className="mt-5 me-5">
+                <NavLink className="white" to="datelist">Date</NavLink>
+              </li> */}
               <li className="mt-5 me-5" >
                 <NavLink className="white" to="stafflist">Staff</NavLink>
               </li>

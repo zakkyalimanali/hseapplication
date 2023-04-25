@@ -1,6 +1,7 @@
 import {useEffect , useState} from 'react'
 import IncidentAPI from '../API/IncidentAPI'
 import StaffAPI from '../API/StaffAPI'
+import { Table } from 'react-bootstrap'
 
 export default function Stats() {
     const [staffs , setStaff] = useState([])
@@ -30,14 +31,33 @@ export default function Stats() {
 
 
     return(
-        <div>
-            <h1>Stats Page</h1>
+        <div className="col-8 mx-auto mt-4">
+            {/* <
             <h3>Total Number of Staff: {staffs.length}</h3>
             <h3>Total Number of Incidents: {incidents.length}</h3>
             <h3>(A) Head Protection not worn: {incidents.filter(incident => incident.what_happened === "(A) Head Protection not worn").length}</h3>
             <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3>
-            <h3>Zakky Ali Safety Cards: {incidents.filter(incident => incident.name === 'Zakky Ali').length}</h3>        
+            <h3>Zakky Ali Safety Cards: {incidents.filter(incident => incident.name === 'Zakky Ali').length}</h3>         */}
             
-            </div>
+            <h1 className="row justify-content-center mt-3">Statistics Page</h1>
+            <Table className="mt-3" striped bordered hover>
+                <thead>
+                <tr>
+                    <th scope="col" className="col-4">Stat</th>
+                    <th scope="col" className="col-4">Numbers</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th className="col-4" scope="row">Total Number of Staff:</th>
+                        <td className="col-4">{staffs.length}</td>
+                    </tr>
+                    <tr>
+                        <th className="col-4" scope="row">Total Number of Incidents:</th>
+                        <td className="col-4">{incidents.length}</td>
+                    </tr>
+                </tbody>
+            </Table>
+        </div>
     ) 
 }
