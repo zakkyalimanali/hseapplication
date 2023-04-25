@@ -56,29 +56,47 @@ export default function IncidentTable() {
         name: 'id',
         selector: (row) => row.id,
         sortable: true,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
       {
         name: 'description',
         selector: (row) => row.description,
         sortable: true,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
       {
         name: 'date',
         selector: (row) => row.date,
         sortable: true,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
       {
         name: 'raised',
         selector: (row) => row.raised,
         sortable: true,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
       {
         name: 'more_info',
         selector: (row) => row.more_info,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
       {
         name: 'delete',
         selector: (row) => row.delete,
+        // style: {
+        //   background: 'rgba(251,212,124, 0.5)',
+        // },
       },
     ];
 
@@ -177,16 +195,18 @@ export default function IncidentTable() {
 
               </Table> */}
               <div className="text-end"><input type="text" onChange={handleFilter}/></div>
-
-              <DataTable 
-                 columns={columns}
-                 data={records}
-                 selectableRows
-                 fixedHeader
-                 pagination
-              >
-
-              </DataTable>
+              <div >
+                <DataTable 
+                  //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
+                  //  className='stripe'
+                  columns={columns}
+                  data={records}
+                  selectableRows
+                  fixedHeader
+                  pagination
+                >
+                </DataTable>
+              </div>
 
          
             </div>

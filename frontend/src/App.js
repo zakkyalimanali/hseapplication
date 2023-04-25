@@ -31,7 +31,8 @@ import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
-    <div className="App" style={{backgroundColor: 'beige', height: '100vh', overflow: 'hidden'}}>
+    <div className="App" style={{backgroundColor: 'rgb( 251, 248 ,251)'
+      , height: '100vh'}}>
       <BrowserRouter>
         <Routes>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>

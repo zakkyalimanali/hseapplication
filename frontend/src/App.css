@@ -101,14 +101,16 @@ li {
     border: 1px solid black;
     padding: 1em;
     border-radius: 10px;
-    background-color: lightgoldenrodyellow;
+    /* background-color: lightgoldenrodyellow; */
+    background-color: rgba(251,212,124, 0.5);
 }
 
 .display-box {
     border: 1px solid black;
     padding: 0.5em;
     border-radius: 10px;
-    background-color: lightgoldenrodyellow;
+    /* background-color: lightgoldenrodyellow; */
+    background-color: rgba(251,212,124, 0.5);
 }
 
 .thick {
@@ -133,4 +135,10 @@ li {
     color: orange;
     font-weight: bold;
     
+}
+
+.black {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
 }

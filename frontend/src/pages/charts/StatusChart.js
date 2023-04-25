@@ -56,8 +56,10 @@ export default function StatusChart() {
     };
     
     return(
-        <div>
-            <Pie data={data} options={options} />
+        <div style={{ width: '300px', height: '300px' , marginLeft: 'auto', marginRight: 'auto'}}>
+            <Pie
+            
+            data={data} options={options} />
         </div>
         
     )

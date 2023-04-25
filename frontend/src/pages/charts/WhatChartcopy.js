@@ -15,6 +15,7 @@ export default function WhatChat() {
 
   const data = {
     labels: [
+            'Not Stated',
             '(A) Head Protection not worn',
             '(B) Eye protection not worn',
             '(C) Face protection not worn',
@@ -75,6 +76,7 @@ export default function WhatChat() {
       {
         
         data: [
+            incidents.filter(incident => incident.what_happened === '').length, 
             incidents.filter(incident => incident.what_happened === '(A) Head Protection not worn').length, 
             incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length, 
             incidents.filter(incident => incident.what_happened === '(C) Face protection not worn').length,
@@ -157,7 +159,7 @@ export default function WhatChat() {
     plugins: {
       title: {
         display: true,
-        text: 'Incident Status Chart',
+        text: 'What Incident Chart',
       },
       legend: {
         display: false,
@@ -173,7 +175,7 @@ export default function WhatChat() {
 }
 
   return (
-    <div className=" row justify-content-center" style={{ height: '400px'}}>
+    <div className=" row justify-content-center" style={{ height: '250px'}}>
       {/* <Bar 
       data={data}
       options={options}

@@ -2,7 +2,9 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import StaffAPI from "../API/StaffAPI";
 import {useState , useEffect} from 'react'
-import WhatChat from "./charts/WhatChartcopy";
+// import WhatChat from "./charts/WhatChartcopy";
+// import WhyChart from "./charts/WhyChart";
+import LSRChart from "./charts/LSRChart";
 export default function About() {
     const [staffs , setStaff] = useState([])
 
@@ -49,7 +51,7 @@ export default function About() {
            <Pie data={data} options={options} />
         </div> */}
         <div className="display-border  col-12">
-        <WhatChat/>
+        <LSRChart/>
         </div>
         </>
     )
