@@ -81,18 +81,20 @@ export default function Navtop() {
             {/* <Navbar style={{backgroundColor: 'skyblue'}}> */}
             <Navbar style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}>
                 <Nav>
-                    <Nav.Item><NavLink className="black" to="/">HSE Industries</NavLink></Nav.Item>
+                    <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
                     <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item>
                    
                     <Nav>
-                        <Dropdown className="black" title="Features">
+                        <Dropdown className="black" title="HSE">
                             <Dropdown.Item><NavLink  to="stats">Stats</NavLink></Dropdown.Item>
-                            <Dropdown.Item><NavLink to="attendencelist">Attendence</NavLink></Dropdown.Item>
                             <Dropdown.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Dropdown.Item>
-                            <Dropdown.Item><NavLink  to="stafflist">Staff</NavLink></Dropdown.Item>
                             <Dropdown.Item><NavLink  to="incidenttable">Incident</NavLink></Dropdown.Item>
-                            
-                            
+                        </Dropdown>
+                    </Nav>
+                    <Nav>
+                        <Dropdown className="black" title="Staff">
+                            <Dropdown.Item><NavLink to="attendencelist">Attendence</NavLink></Dropdown.Item>
+                            <Dropdown.Item><NavLink  to="stafflist">Staff</NavLink></Dropdown.Item>
                         </Dropdown>
                     </Nav>
                 </Nav>
