@@ -1,6 +1,7 @@
 import React , {useEffect , useState} from 'react'
 import StaffAPI from '../../API/StaffAPI'
 import SiteVisitAPI from '../../API/SiteVisitAPI'
+import SiteHazardAPI from '../../API/SiteHazardAPI'
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link} from 'react-router-dom';
@@ -11,8 +12,10 @@ import DataTable from 'react-data-table-component'
 
 
 function SiteVisitEdit() {
+    const [records, setRecords] = useState([]);
     const [siteVisits , setSiteVisits] = useState([])
     const [staffs , setStaffs] = useState([])
+    const [siteHazards, setSiteHazards] = useState([])
     const params = useParams()
     const [id , setId] = useState(null)
     const [inspector, setInspector] = useState('')
@@ -26,12 +29,21 @@ function SiteVisitEdit() {
 
     useEffect(() => {
         fetchStaff()
+        fetchSiteHazard() 
     },[])
 
     const fetchStaff = () => {
         StaffAPI.get('/')
         .then((res) => {
             setStaffs(res.data)
+        })
+        .catch(console.log)
+    }
+
+    const fetchSiteHazard = () => {
+        SiteHazardAPI.get('/')
+        .then((res) => {
+            setSiteHazards(res.data)
         })
         .catch(console.log)
     }
@@ -64,6 +76,66 @@ function SiteVisitEdit() {
           }
         )
       }
+
+      const columns = [
+        {
+          name: 'id',
+          selector: (row) => row.id,
+          sortable: true,
+        },
+        {
+          name: 'hazard',
+          selector: (row) => row.hazard,
+          sortable: true,
+        },
+        {
+          name: 'status',
+          selector: (row) => row.status,
+          sortable: true,
+        },
+        {
+          name: 'notes',
+          selector: (row) => row.notes,
+          sortable: true,
+        },
+        {
+          name: 'edit',
+          selector: (row) => row.edit,
+        },
+        {
+          name: 'delete',
+          selector: (row) => row.delete,
+        },
+      ];
+
+      const onDelete = (id) => {
+        SiteHazardAPI.delete(`/${id}/`).then((res) => {
+            fetchSiteHazard();
+        }).catch(console.log)
+    }
+
+    useEffect(() => {
+        const data = siteHazards.map((siteHazard) => {
+          return {
+            id: siteHazard.id,
+            hazard: siteHazard.hazard,
+            status: siteHazard.status,
+            notes:siteHazard.notes,
+     
+            edit : 
+
+            // <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
+            <Link to={`#`}><FontAwesomeIcon icon={faPen } /></Link>   ,
+            delete: (
+              <FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => onDelete(siteHazard.id)}
+              />
+            ),
+          };
+        });
+        setRecords(data);
+      }, [siteHazards]);
 
 
 
@@ -129,7 +201,7 @@ function SiteVisitEdit() {
                     onChange={(e) => setCrewNumber(e.target.value)}
                   />
                 </Form.Group> */}
-                
+               
      
             <div className="mt-3 float-right">
               <Link to="/sitevisitlist/">
@@ -151,6 +223,19 @@ function SiteVisitEdit() {
         </div>
 
       </div>
+      <Button className="middle col-2 mb-4" variant="secondary" href="#">
+                 Add Hazard
+                </Button>
+
+                <DataTable 
+                    columns={columns}
+                    data={records}
+                    selectableRows
+                    fixedHeader
+                    pagination
+                    >
+
+                </DataTable>   
     </div>
   )
 }
