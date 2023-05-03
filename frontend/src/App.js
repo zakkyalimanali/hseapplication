@@ -31,6 +31,7 @@ import {AuthProvider} from './context/AuthContext'
 import PrivateRoutes from './utils/PrivateRoutes';
 import LoginPage from './pages/LoginPage';
 import Sitevisitlist from './pages/sitevisit/Sitevisitlist';
+import SiteVisitAdd from './pages/sitevisit/SiteVisitAdd';
 
 
 
@@ -69,6 +70,7 @@ function App() {
               <Route path='trainingadd' element={<Trainingadd/>}/>
               <Route path='trainingedit/:id' element={<Trainingedit/>}/>
               <Route path="sitevisitlist" element={<Sitevisitlist/>} />
+              <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>
