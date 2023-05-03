@@ -82,7 +82,7 @@ export default function Home() {
                 {/* <div className="display-border col-3">
                     <GenderChart/>
                 </div> */}
-                <div className="display-border col-3">
+                <div className="display-border col-4">
                     <WhatChat/>
                 </div>
                 {/* <div className="col-1">
@@ -90,7 +90,7 @@ export default function Home() {
                 {/* <div className="display-border col-3">
                     <StatusChart/>
                 </div> */}
-                <div className="display-border col-3">
+                <div className="display-border col-4">
                     <WhyChart/>
                 </div>
                 {/* <div className="col-1">

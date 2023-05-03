@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -25,6 +25,18 @@ class DateListViewSet(viewsets.ModelViewSet):
 class ToolBoxTalkViewSet(viewsets.ModelViewSet):
     serializer_class = ToolBoxTalkSeriallizer
     queryset = ToolBoxTalk.objects.all()
+
+class TrainingViewSet(viewsets.ModelViewSet):
+    serializer_class = TrainingSerializer
+    queryset = Training.objects.all()
+
+class SiteVisitViewSet(viewsets.ModelViewSet):
+    serializer_class = SiteVisitSerializer
+    queryset = SiteVisit.objects.all()
+
+class SiteHazardsViewSet(viewsets.ModelViewSet):
+    serializer_class = SiteHazardsSerializer
+    queryset = SiteHazards.objects.all()
 
 class IncidentListView(View):
     def get(self, request):

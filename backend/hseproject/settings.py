@@ -139,6 +139,76 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'django_db',
+#         'USER': 'LAPTOP-677V7M9Q\Owner',
+#         'PASSWORD': 'password',
+#         'HOST': '192.168.2.17',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 13 for SQL Server',
+#         },
+#     },
+# }  
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql+pyodbc',
+#         'NAME':'LAPTOP-677V7M9Q\Owner',
+#         'PASSWORD': 'password',
+#         'HOST' : '192.168.2.17',
+#         'PORT': 'django_db?driver',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 13 for SQL Server',
+#         }
+#     },
+# },
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'test',
+#         'USER': 'LAPTOP-677V7M9Q\Owner',
+#         'PASSWORD': 'password',
+#         'HOST': '192.168.2.17',
+#         'HOST': 'myserver.database.windows.net',
+#         'HOST' : '192.168.2.17',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#         },
+#     },
+# }
+
+# DATABASES =  {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'mydb',
+#         'USER': 'django_db',
+#         'PASSWORD': 'password',
+#         'HOST': '192.168.2.17',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'dsn': 'my_sql_server_datasource_name',
+#         },
+#     },
+# },
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'mydb',
+#         'USER': 'django_db',
+#         'PASSWORD': 'password',
+#         'HOST': '192.168.2.17',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'dsn': 'my_sql_server_datasource_name',
+#         },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

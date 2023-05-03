@@ -24,9 +24,14 @@ import EditDate from './pages/date/EditDate';
 import ToolBoxTalkList from './pages/toolboxtalk/ToolboxTalkList';
 import ToolBoxTalkAdd from './pages/toolboxtalk/ToolboxTalkAdd';
 import ToolBoxTalkEdit from './pages/toolboxtalk/Toolboxtalkedit';
+import Traininglist from './pages/training/Traininglist';
+import Trainingadd from './pages/training/Trainingadd';
+import Trainingedit from './pages/training/Trainingedit';
 import {AuthProvider} from './context/AuthContext'
 import PrivateRoutes from './utils/PrivateRoutes';
 import LoginPage from './pages/LoginPage';
+import Sitevisitlist from './pages/sitevisit/Sitevisitlist';
+
 
 
 function App() {
@@ -60,6 +65,10 @@ function App() {
               <Route path='incident' element={<Incident/>} />
               <Route path='editincident/:id' element={<EditIncident/>}/>
               <Route path='incidenttable' element={<IncidentTable/>}/>
+              <Route path='traininglist' element={<Traininglist/>}/>
+              <Route path='trainingadd' element={<Trainingadd/>}/>
+              <Route path='trainingedit/:id' element={<Trainingedit/>}/>
+              <Route path="sitevisitlist" element={<Sitevisitlist/>} />
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>

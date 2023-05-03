@@ -89,6 +89,8 @@ export default function Navtop() {
                             <Dropdown.Item><NavLink  to="stats">Stats</NavLink></Dropdown.Item>
                             <Dropdown.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Dropdown.Item>
                             <Dropdown.Item><NavLink  to="incidenttable">Incident</NavLink></Dropdown.Item>
+                            <Dropdown.Item><NavLink  to="traininglist">Training</NavLink></Dropdown.Item>
+                            <Dropdown.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Dropdown.Item>
                         </Dropdown>
                     </Nav>
                     <Nav>
