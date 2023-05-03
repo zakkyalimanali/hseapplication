@@ -89,7 +89,7 @@ function Sitevisitlist() {
             edit : 
 
             // <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
-            <Link to={`#`}><FontAwesomeIcon icon={faPen } /></Link>   ,
+            <Link to={`/sitevisitedit/${siteVisit.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
             delete: (
               <FontAwesomeIcon
                 icon={faTrash}
