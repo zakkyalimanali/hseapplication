@@ -33,6 +33,7 @@ import LoginPage from './pages/LoginPage';
 import Sitevisitlist from './pages/sitevisit/Sitevisitlist';
 import SiteVisitAdd from './pages/sitevisit/SiteVisitAdd';
 import SiteVisitEdit from './pages/sitevisit/SiteVisitEdit';
+import SiteHazardAdd from './pages/sitevisit/sitehazard/SiteHazardAdd';
 
 
 
@@ -73,6 +74,7 @@ function App() {
               <Route path="sitevisitlist" element={<Sitevisitlist/>} />
               <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
               <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}/>
+              <Route path="sitehazardadd" element={<SiteHazardAdd/>}/>
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>

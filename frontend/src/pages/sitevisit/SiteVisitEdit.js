@@ -83,6 +83,11 @@ function SiteVisitEdit() {
           selector: (row) => row.id,
           sortable: true,
         },
+        // {
+        //   name: 'visit',
+        //   selector: (row) => row.visit,
+        //   sortable: true,
+        // },
         {
           name: 'hazard',
           selector: (row) => row.hazard,
@@ -115,10 +120,15 @@ function SiteVisitEdit() {
     }
 
     useEffect(() => {
-        const data = siteHazards.map((siteHazard) => {
+        
+        // const data = siteHazards.map((siteHazard) => {
+        const data = siteHazards
+          .filter((siteHazard) => siteHazard.visit === Number(params.id))
+          .map((siteHazard) => {
           return {
             id: siteHazard.id,
             hazard: siteHazard.hazard,
+            visit : siteHazard.visit,
             status: siteHazard.status,
             notes:siteHazard.notes,
      
@@ -133,9 +143,10 @@ function SiteVisitEdit() {
               />
             ),
           };
+        
         });
         setRecords(data);
-      }, [siteHazards]);
+      }, [params.id, siteHazards]);
 
 
 
@@ -223,7 +234,7 @@ function SiteVisitEdit() {
         </div>
 
       </div>
-      <Button className="middle col-2 mb-4" variant="secondary" href="#">
+      <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button>
 

@@ -116,6 +116,7 @@ class SiteVisit(models.Model):
     location = models.CharField(max_length=100 , blank=True , null=True)
 
 class SiteHazards(models.Model):
+    visit = models.ForeignKey(SiteVisit, on_delete=models.CASCADE, null=True, blank=True)
     hazard = models.CharField(max_length=200, null=True, blank=True)
     status = models.CharField(max_length=20, null=True, blank=True)
     notes = models.CharField(max_length=20, null=True, blank=True)
