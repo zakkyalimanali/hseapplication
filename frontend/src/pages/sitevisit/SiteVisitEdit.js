@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
 import Table from 'react-bootstrap/Table';
+import { Outlet } from 'react-router-dom'
 
 
 function SiteVisitEdit() {
@@ -22,6 +23,7 @@ function SiteVisitEdit() {
     const [inspector, setInspector] = useState('')
     const [inspection_date , setInspectionDate] = useState('')
     const [location , setLocation] = useState('') 
+    const [elhaz, setElhaz] = useState([])
 
     useEffect(() => {
         fetchSiteVisit()
@@ -291,7 +293,15 @@ function SiteVisitEdit() {
               
             </tbody>
           </Table> 
-          <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
+
+          <Outlet/>
+
+
+
+          {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
+                 Add Hazard
+                </Button> */}
+          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd`}>
                  Add Hazard
                 </Button>
     </div>

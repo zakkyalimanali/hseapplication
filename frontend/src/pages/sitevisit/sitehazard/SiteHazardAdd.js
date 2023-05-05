@@ -4,6 +4,7 @@ import SiteVisitAPI from '../../../API/SiteVisitAPI'
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link , useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 
 function SiteHazardAdd() {
@@ -15,6 +16,7 @@ function SiteHazardAdd() {
     const [notes , setNotes] = useState('')
     const [id , setId] = useState(null)
     const navigate = useNavigate()
+    // const [elhaz] = useOutletContext    
 
     useEffect(() => {
         fetchHazard()
@@ -47,7 +49,9 @@ function SiteHazardAdd() {
 
 
   return (
+
     <div className="container mt-5">
+        {/* {elhaz} */}
           <div className="row">
             <div className= "col-md-4"></div>
             <div className="col-md-4 ">

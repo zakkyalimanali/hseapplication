@@ -74,8 +74,10 @@ function App() {
               <Route path='trainingedit/:id' element={<Trainingedit/>}/>
               <Route path="sitevisitlist" element={<Sitevisitlist/>} />
               <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
-              <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}/>
-              <Route path="sitehazardadd" element={<SiteHazardAdd/>}/>
+              <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}>
+                <Route path="sitehazardadd" element={<SiteHazardAdd />}/>
+              </Route>
+              {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
               <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
