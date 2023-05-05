@@ -249,7 +249,7 @@ function SiteVisitEdit() {
 
                 </DataTable>    */}
 
-        <Table striped bordered hover>
+        <Table striped bordered hover className='mt-3'>
           <thead>
               <tr>
                 {/* <th scope="col">#</th>  */}
