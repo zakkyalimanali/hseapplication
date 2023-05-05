@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
+import Table from 'react-bootstrap/Table';
 
 
 function SiteVisitEdit() {
@@ -234,11 +235,11 @@ function SiteVisitEdit() {
         </div>
 
       </div>
-      <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
+      {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
-                </Button>
+                </Button> */}
 
-                <DataTable 
+                {/* <DataTable 
                     columns={columns}
                     data={records}
                     selectableRows
@@ -246,7 +247,53 @@ function SiteVisitEdit() {
                     pagination
                     >
 
-                </DataTable>   
+                </DataTable>    */}
+
+        <Table striped bordered hover>
+          <thead>
+              <tr>
+                {/* <th scope="col">#</th>  */}
+                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th>  */}
+                <th scope="col" className="col-1">ID</th>
+                <th scope="col" className="col-5">Hazard</th>
+                {/* <th scope="col" className="col-3">Visit</th> */}
+                <th scope="col" className="col-1">Status</th>
+                <th scope="col" className="col-5">Notes</th> 
+                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {siteHazards.map((siteHazard, index) => { */}
+
+              {siteHazards.filter ((siteHazard) => siteHazard.visit === Number(params.id))
+              .map((siteHazard) => {
+                return (
+                  <tr key={siteHazard.id}>
+                    
+                
+                    <td>{siteHazard.id}</td>
+                    <td>{siteHazard.hazard}</td>
+                    {/* <td>{siteHazard.visit}</td> */}
+                    <td>{siteHazard.status}</td>
+                    <td>{siteHazard.notes}</td>
+                    <td>
+                        <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
+                    </td>
+                    <td className="delete" onClick={() => onDelete(siteHazard.id)}>
+                      <FontAwesomeIcon icon={faTrash } />
+                    </td>
+              
+                  </tr>
+                );
+              })}
+              
+            </tbody>
+          </Table> 
+          <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
+                 Add Hazard
+                </Button>
     </div>
   )
 }
