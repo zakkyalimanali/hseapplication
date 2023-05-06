@@ -226,26 +226,28 @@ function SiteVisitEdit() {
                 </Form.Group> */}
                
      
-            <div className="mt-3 float-right">
-              <Link to="/sitevisitlist/">
-                <Button
-                  variant="success"
-                  type="button"
-                  onClick={(e) => onUpdate(id)}
-                  className="mx-2"
-                >
-                  Update
-                </Button>
-              </Link>
-            </div>
+              <div className="mt-3 float-right">
+                <Link to="/sitevisitlist/">
+                  <Button
+                    variant="success"
+                    type="button"
+                    onClick={(e) => onUpdate(id)}
+                    className="mx-2"
+                  >
+                    Update
+                  </Button>
+                </Link>
+              </div>
 
-          </Form>
+            </Form>
           
               
             
-        </div>
+          </div>
 
       </div>
+
+      
       {/* {isShown ? <SiteHazardAdd sitevisit = {params.id}/> : <SiteHazardEdit sitevisit = {params.id}/>} */}
       <SiteHazardAdd sitevisit = {params.id}/>
 
