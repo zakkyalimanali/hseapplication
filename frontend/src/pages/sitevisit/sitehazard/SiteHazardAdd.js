@@ -7,16 +7,18 @@ import { Link , useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
 
-function SiteHazardAdd() {
+function SiteHazardAdd(props) {
     const [siteHazards , setSiteHazards] = useState([])
     const [siteVisits , setSiteVisits] = useState([])
-    const [visit , setVisit] = useState('')
+    // const [visit , setVisit] = useState('')
     const [hazard , setHazard] = useState('')
     const [status , setStatus] = useState('')
     const [notes , setNotes] = useState('')
     const [id , setId] = useState(null)
     const navigate = useNavigate()
     // const [elhaz] = useOutletContext    
+    console.log(props)
+    const visit = props.sitevisit
 
     useEffect(() => {
         fetchHazard()
@@ -42,7 +44,8 @@ function SiteHazardAdd() {
     const onSubmit = (e) => {
         e.preventDefault();
         let item = {visit, hazard , status , notes }
-        navigate(-1);
+        // navigate(-1);
+        navigate(0);
         SiteHazardAPI.post('/', item).then(() => fetchHazard());
     }
 
@@ -58,7 +61,7 @@ function SiteHazardAdd() {
               <h3 className="float-left">Create new Site Hazard</h3>
               
               <Form onSubmit={onSubmit} className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
+                {/* <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Visit</Form.Label>
                   <Form.Control
                     as="select"
@@ -73,7 +76,7 @@ function SiteHazardAdd() {
 
 
                   </Form.Control>
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Hazard</Form.Label>
                   <Form.Control

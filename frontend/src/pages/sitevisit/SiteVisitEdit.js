@@ -11,6 +11,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
 import Table from 'react-bootstrap/Table';
 import { Outlet } from 'react-router-dom'
+import SiteHazardAdd from './sitehazard/SiteHazardAdd';
 
 
 function SiteVisitEdit() {
@@ -237,6 +238,8 @@ function SiteVisitEdit() {
         </div>
 
       </div>
+
+      <SiteHazardAdd sitevisit = {params.id}/>
       {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button> */}
@@ -294,7 +297,7 @@ function SiteVisitEdit() {
             </tbody>
           </Table> 
 
-          <Outlet/>
+          {/* <Outlet/> */}
 
 
 
