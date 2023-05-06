@@ -12,6 +12,7 @@ import DataTable from 'react-data-table-component'
 import Table from 'react-bootstrap/Table';
 import { Outlet } from 'react-router-dom'
 import SiteHazardAdd from './sitehazard/SiteHazardAdd';
+import SiteHazardEdit from './sitehazard/SiteHazardEdit'
 
 
 function SiteVisitEdit() {
@@ -25,6 +26,13 @@ function SiteVisitEdit() {
     const [inspection_date , setInspectionDate] = useState('')
     const [location , setLocation] = useState('') 
     const [elhaz, setElhaz] = useState([])
+    const [isShown , setIsShown] = useState(true)
+
+    const toogleShown = () => {
+      return(
+        setIsShown(prevShown => !prevShown)
+      )
+    }
 
     useEffect(() => {
         fetchSiteVisit()
@@ -238,8 +246,9 @@ function SiteVisitEdit() {
         </div>
 
       </div>
-
+      {/* {isShown ? <SiteHazardAdd sitevisit = {params.id}/> : <SiteHazardEdit sitevisit = {params.id}/>} */}
       <SiteHazardAdd sitevisit = {params.id}/>
+
       {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button> */}
@@ -284,7 +293,8 @@ function SiteVisitEdit() {
                     <td>{siteHazard.status}</td>
                     <td>{siteHazard.notes}</td>
                     <td>
-                        <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
+                        <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
+                        {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
                     </td>
                     <td className="delete" onClick={() => onDelete(siteHazard.id)}>
                       <FontAwesomeIcon icon={faTrash } />

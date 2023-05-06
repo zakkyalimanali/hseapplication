@@ -5,16 +5,19 @@ import axios from 'axios'
 import { useParams } from 'react-router'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router'
 
-function SiteHazardEdit() {
+function SiteHazardEdit(props) {
   const params = useParams()
   const [siteHazards , setSiteHazards] = useState([])
   const [siteVisits, setSiteVisits] = useState([])
   const [id, setId] = useState(null)
-  const [visit , setVisit] = useState('')
+  // const [visit , setVisit] = useState('')
+  const visit = props.sitevisit
   const [hazard , setHazard] = useState('')
   const [status , setStatus] = useState('')
   const [notes , setNotes] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchHazards()
@@ -29,7 +32,7 @@ function SiteHazardEdit() {
     axios.get(`http://127.0.0.1:8000/hseapp/sitehazard/${params.id}/`)
     .then((res) => {
       setSiteHazards(res.data)
-      setVisit(res.data.visit)
+      // setVisit(res.data.visit)
       setHazard(res.data.hazard)
       setStatus(res.data.status)
       setNotes(res.data.notes)
@@ -54,13 +57,14 @@ function SiteHazardEdit() {
 const onUpdate = (id) => {
     let item = {visit , hazard , status, notes}
     SiteHazardAPI.patch(`/${id}/`, item).then(() => { 
-        setVisit('')
+        // setVisit('')
         setHazard('')
         setStatus('')
         setNotes('')
         fetchHazards()
       }
     )
+    navigate(-1)
   }
 
   const onDelete = (id) => {
@@ -77,7 +81,7 @@ const onUpdate = (id) => {
               <h3 className="float-left">Create new Site Visit</h3>
               
               <Form onSubmit={onSubmit} className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
+                {/* <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Visit</Form.Label>
                   <Form.Control
                     as="select"
@@ -92,7 +96,7 @@ const onUpdate = (id) => {
 
 
                   </Form.Control>
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Hazard</Form.Label>
                   <Form.Control
@@ -134,7 +138,7 @@ const onUpdate = (id) => {
                     Save
                   </Button> */}
                   {/* <Link to="/sitevisitlist/"> */}
-                  <Link to={`/sitevisitedit/${visit}`}>
+                  {/* <Link to={`/sitevisitedit/${visit}/`}> */}
                 <Button
                   variant="success"
                   type="button"
@@ -143,7 +147,7 @@ const onUpdate = (id) => {
                 >
                   Update
                 </Button>
-              </Link>
+              {/* </Link> */}
                 </div>
               </Form>    
             </div>            
