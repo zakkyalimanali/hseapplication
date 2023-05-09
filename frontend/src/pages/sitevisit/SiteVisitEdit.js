@@ -2,6 +2,7 @@ import React , {useEffect , useState} from 'react'
 import StaffAPI from '../../API/StaffAPI'
 import SiteVisitAPI from '../../API/SiteVisitAPI'
 import SiteHazardAPI from '../../API/SiteHazardAPI'
+import AttendeesAPI from '../../API/AttendeesAPI'
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link} from 'react-router-dom';
@@ -13,12 +14,14 @@ import Table from 'react-bootstrap/Table';
 import { Outlet } from 'react-router-dom'
 import SiteHazardAdd from './sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './sitehazard/SiteHazardEdit'
+import AttendeesAdd from './attendees/AttendeesAdd'
 
 
 function SiteVisitEdit() {
     const [records, setRecords] = useState([]);
     const [siteVisits , setSiteVisits] = useState([])
     const [staffs , setStaffs] = useState([])
+    const [staffNames , setStaffNames] = useState([])
     const [siteHazards, setSiteHazards] = useState([])
     const params = useParams()
     const [id , setId] = useState(null)
@@ -42,6 +45,8 @@ function SiteVisitEdit() {
     useEffect(() => {
         fetchStaff()
         fetchSiteHazard() 
+        fetchStaffName()
+        
     },[])
 
     const fetchStaff = () => {
@@ -50,6 +55,14 @@ function SiteVisitEdit() {
             setStaffs(res.data)
         })
         .catch(console.log)
+    }
+
+    const fetchStaffName = () => {
+      AttendeesAPI.get('/')
+      .then((res) =>{
+          setStaffNames(res.data)
+      })
+      .catch(console.log)
     }
 
     const fetchSiteHazard = () => {
@@ -249,6 +262,8 @@ function SiteVisitEdit() {
 
       
       {/* {isShown ? <SiteHazardAdd sitevisit = {params.id}/> : <SiteHazardEdit sitevisit = {params.id}/>} */}
+
+      <AttendeesAdd sitevisit = {params.id}/>
       <SiteHazardAdd sitevisit = {params.id}/>
 
       {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
@@ -264,6 +279,48 @@ function SiteVisitEdit() {
                     >
 
                 </DataTable>    */}
+
+<Table striped bordered hover className='mt-3'>
+          <thead>
+              <tr>
+                <th scope="col" className="col-1">ID</th>
+                <th scope="col" className="col-5">Staff Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {siteHazards.map((siteHazard, index) => { */}
+
+              {staffNames.filter ((staffName) => staffName.visit === Number(params.id))
+              .map((staffName) => {
+                return (
+                  <tr key={staffName.id}>
+                    
+                
+                    <td>{staffName.id}</td>
+                    {/* <td>{staffName.staff_name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === staffName.staff_name)?.name}</td>
+                    {/* <td>CAt</td>
+                    <td>Meow</td> */}
+                    {/* <td>{siteHazard.visit}</td> */}
+                    <td>
+                        {/* <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
+                        {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
+                    </td>
+                    <td className="delete" onClick={() => onDelete(staffName.id)}>
+                      <FontAwesomeIcon icon={faTrash } />
+                    </td>
+              
+                  </tr>
+                );
+              })}
+              
+            </tbody>
+          </Table> 
+
+          <br/>
+
 
         <Table striped bordered hover className='mt-3'>
           <thead>

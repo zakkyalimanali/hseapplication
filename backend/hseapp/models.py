@@ -121,3 +121,7 @@ class SiteHazards(models.Model):
     status = models.CharField(max_length=20, null=True, blank=True)
     notes = models.CharField(max_length=1000, null=True, blank=True)
     # images
+
+class StaffAdd(models.Model):
+    visit = models.ForeignKey(SiteVisit, on_delete=models.CASCADE, null=True, blank=True)
+    staff_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
