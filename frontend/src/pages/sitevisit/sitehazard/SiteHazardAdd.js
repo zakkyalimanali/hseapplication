@@ -80,7 +80,8 @@ function SiteHazardAdd(props) {
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Hazard</Form.Label>
                   <Form.Control
-                    type="text"
+                    as="textarea"
+                    rows={3}
                     placeholder="Hazard"
                     value={hazard}
                     onChange={(e) => setHazard(e.target.value)}
@@ -102,8 +103,9 @@ function SiteHazardAdd(props) {
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Notes</Form.Label>
                   <Form.Control
-                    type="text"
+                    as="textarea"
                     placeholder="Notes"
+                    rows={5}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                   />
