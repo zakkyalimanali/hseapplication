@@ -91,7 +91,33 @@ class ToolBoxTalk(models.Model):
     # attendeesfour = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesfour')
     # attendeesfive = models.ForeignKey(Staff, on_delete=models.CASCADE , related_name='toolbox_talks_attendeesfive')
 
-    
-
+# class Training(models.Model):
+#     staff_name = models.ForeignKey(Staff, related_name='trainings_as_staff_name', on_delete=models.CASCADE , null=True , blank= True, )
+#     training_date = models.DateField(null=True , blank= True)
+#     training_expiry = models.DateField(null=True , blank= True)
+#     training = models.CharField(max_length=200, null=True , blank= True)
+#     training_provider = models.CharField(max_length=200, null=True , blank= True)
+#     position = models.ForeignKey(Staff, related_name='trainings_as_staff_position', on_delete=models.CASCADE , null=True , blank= True, )
+       
+class Training(models.Model):
+    staff_name = models.ForeignKey(Staff, related_name='trainings_staff_name', on_delete=models.CASCADE, null=True, blank=True)
+    training_date = models.DateField(null=True, blank=True)
+    training_expiry = models.DateField(null=True, blank=True)
+    training = models.CharField(max_length=200, null=True, blank=True)
+    training_provider = models.CharField(max_length=200, null=True, blank=True)
+    # staff_position = models.ForeignKey(Staff, related_name='trainings_staff_position', on_delete=models.CASCADE, null=True, blank=True)
 
 # Create your models here.
+
+class SiteVisit(models.Model):
+    inspector = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True) 
+    inspection_date = models.DateField(null=True, blank=True)
+    # inspection_time = models.TimeField(null=True , blank=True)
+    location = models.CharField(max_length=100 , blank=True , null=True)
+
+class SiteHazards(models.Model):
+    visit = models.ForeignKey(SiteVisit, on_delete=models.CASCADE, null=True, blank=True)
+    hazard = models.CharField(max_length=1000, null=True, blank=True)
+    status = models.CharField(max_length=20, null=True, blank=True)
+    notes = models.CharField(max_length=1000, null=True, blank=True)
+    # images

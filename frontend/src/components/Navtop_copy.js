@@ -85,17 +85,19 @@ export default function Navtop() {
                     <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item>
                    
                     <Nav>
-                        <Dropdown className="black" title="HSE">
-                            <Dropdown.Item><NavLink  to="stats">Stats</NavLink></Dropdown.Item>
-                            <Dropdown.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Dropdown.Item>
-                            <Dropdown.Item><NavLink  to="incidenttable">Incident</NavLink></Dropdown.Item>
-                        </Dropdown>
+                        <Nav.Menu className="black" title="HSE">
+                            <Nav.Item><NavLink  to="stats">Stats</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="incidenttable">Incident</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
+                        </Nav.Menu>
                     </Nav>
                     <Nav>
-                        <Dropdown className="black" title="Staff">
-                            <Dropdown.Item><NavLink to="attendencelist">Attendence</NavLink></Dropdown.Item>
-                            <Dropdown.Item><NavLink  to="stafflist">Staff</NavLink></Dropdown.Item>
-                        </Dropdown>
+                        <Nav.Menu className="black" title="Staff">
+                            <Nav.Item><NavLink to="attendencelist">Attendence</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="stafflist">Staff</NavLink></Nav.Item>
+                        </Nav.Menu>
                     </Nav>
                 </Nav>
                 <div className="me-5" style={{float : "right"}}>
