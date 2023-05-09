@@ -10,6 +10,7 @@ function SiteVisitAdd() {
     const [staffs , setStaffs] = useState([])
     const [inspector, setInspector] = useState('')
     const [inspection_date , setInspectionDate] = useState('')
+    const [inspection_time , setInspectionTime] = useState('')
     const [location , setLocation] = useState('') 
     const [id , setId] = useState(null)
     let navigate = useNavigate()
@@ -37,7 +38,7 @@ function SiteVisitAdd() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {inspector , inspection_date , location }
+        let item = {inspector , inspection_date , location ,inspection_time}
         navigate("/sitevisitlist");
         SiteVisitAPI.post('/', item).then(() => fetchSiteVisit());
     }
@@ -84,6 +85,16 @@ function SiteVisitAdd() {
 
                   </Form.Control>
                 </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Inspection Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    placeholder="time"
+                    value={inspection_time}
+                    onChange={(e) => setInspectionTime(e.target.value)}
+                  />
+                </Form.Group>
+
                 <div className="mt-3 float-right">
                   <Button
                     variant="primary"

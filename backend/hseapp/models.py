@@ -112,7 +112,7 @@ class Training(models.Model):
 class SiteVisit(models.Model):
     inspector = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True) 
     inspection_date = models.DateField(null=True, blank=True)
-    # inspection_time = models.TimeField(null=True , blank=True)
+    inspection_time = models.TimeField(null=True , blank=True)
     location = models.CharField(max_length=100 , blank=True , null=True)
 
 class SiteHazards(models.Model):

@@ -27,6 +27,7 @@ function SiteVisitEdit() {
     const [id , setId] = useState(null)
     const [inspector, setInspector] = useState('')
     const [inspection_date , setInspectionDate] = useState('')
+    const [inspection_time , setInspectionTime] = useState('')
     const [location , setLocation] = useState('') 
     const [elhaz, setElhaz] = useState([])
     const [isShown , setIsShown] = useState(true)
@@ -79,6 +80,7 @@ function SiteVisitEdit() {
             setSiteVisits(res.data)
             setInspector(res.data.inspector)
             setInspectionDate(res.data.inspection_date)
+            setInspectionTime(res.data.inspection_time)
             setLocation(res.data.location)
 
         })
@@ -87,16 +89,17 @@ function SiteVisitEdit() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {inspector , inspection_date , location}
+        let item = {inspector , inspection_date , location , inspection_time}
         SiteVisitAPI.post('/', item).then(() => fetchSiteVisit());
     }
 
     const onUpdate = (id) => {
-        let item = {inspector , inspection_date , location}
+        let item = {inspector , inspection_date , location ,inspection_time}
         SiteVisitAPI.patch(`/${id}/`, item).then(() => { 
             setInspector('')
             setInspectionDate('')
             setLocation('')
+            setInspectionTime('')
             fetchSiteVisit()
           }
         )
@@ -217,6 +220,15 @@ function SiteVisitEdit() {
 
                   </Form.Control>
                 </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Inspection Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    placeholder="time"
+                    value={inspection_time}
+                    onChange={(e) => setInspectionTime(e.target.value)}
+                  />
+                </Form.Group>
      
                 
                 {/* <Form.Group className="mb-3" controlId="formName">
@@ -305,7 +317,7 @@ function SiteVisitEdit() {
                     <td>Meow</td> */}
                     {/* <td>{siteHazard.visit}</td> */}
                     <td>
-                        {/* <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
+                        <Link to={`/attendeeedit/${staffName.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
                         {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
                     </td>
                     <td className="delete" onClick={() => onDelete(staffName.id)}>

@@ -35,12 +35,15 @@ import SiteVisitAdd from './pages/sitevisit/SiteVisitAdd';
 import SiteVisitEdit from './pages/sitevisit/SiteVisitEdit';
 import SiteHazardAdd from './pages/sitevisit/sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './pages/sitevisit/sitehazard/SiteHazardEdit';
+import AttendeesEdit from './pages/sitevisit/attendees/AttendeesEdit';
 
 
 
 function App() {
   return (
-    <div className="App" style={{backgroundColor: 'rgb( 251, 248 ,251)'
+    // <div className="App" style={{backgroundColor: 'rgb( 251, 248 ,251)'
+    //   , height: '100vh'}}>
+    <div className="App" style={{backgroundColor: 'white'
       , height: '100vh'}}>
       <BrowserRouter>
         <Routes>
@@ -79,6 +82,7 @@ function App() {
               </Route>
               {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
               <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
+              <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>
