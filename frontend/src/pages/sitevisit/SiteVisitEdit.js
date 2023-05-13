@@ -15,6 +15,7 @@ import { Outlet } from 'react-router-dom'
 import SiteHazardAdd from './sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './sitehazard/SiteHazardEdit'
 import AttendeesAdd from './attendees/AttendeesAdd'
+import SiteHazardList from './sitehazard/SiteHazardList'
 
 
 function SiteVisitEdit() {
@@ -31,6 +32,8 @@ function SiteVisitEdit() {
     const [location , setLocation] = useState('') 
     const [elhaz, setElhaz] = useState([])
     const [isShown , setIsShown] = useState(true)
+    const [isHidden, setIsHidden] = useState(false);
+    const [isHide , setIsHide] = useState(true)
 
     const toogleShown = () => {
       return(
@@ -72,6 +75,11 @@ function SiteVisitEdit() {
             setSiteHazards(res.data)
         })
         .catch(console.log)
+    }
+
+    function handleClick() {
+      setIsHidden(!isHidden);
+      setIsHide(!isHide);
     }
 
     const fetchSiteVisit = () => {
@@ -179,6 +187,16 @@ function SiteVisitEdit() {
 
 
   return (
+
+    <div className='mt-5'>
+    {isHide ? null : <div>
+    <SiteHazardAdd/>
+    <div>
+    <SiteHazardList/>
+    </div>
+    </div>
+}
+    {isHidden ? null : 
     <div className="container mt-5">
         <div className="row">
           <div className= "col-md-4"></div>
@@ -334,39 +352,39 @@ function SiteVisitEdit() {
           <br/>
 
 
-        <Table striped bordered hover className='mt-3'>
+        {/* <Table striped bordered hover className='mt-3'>
           <thead>
-              <tr>
+              <tr> */}
                 {/* <th scope="col">#</th>  */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th>  */}
-                <th scope="col" className="col-1">ID</th>
-                <th scope="col" className="col-5">Hazard</th>
+                {/* <th scope="col" className="col-1">ID</th>
+                <th scope="col" className="col-5">Hazard</th> */}
                 {/* <th scope="col" className="col-3">Visit</th> */}
-                <th scope="col" className="col-1">Status</th>
-                <th scope="col" className="col-5">Notes</th> 
+                {/* <th scope="col" className="col-1">Status</th>
+                <th scope="col" className="col-5">Notes</th>  */}
                 {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                <th>Edit</th>
+                {/* <th>Edit</th>
                 <th>Delete</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody> */}
               {/* {siteHazards.map((siteHazard, index) => { */}
 
-              {siteHazards.filter ((siteHazard) => siteHazard.visit === Number(params.id))
+              {/* {siteHazards.filter ((siteHazard) => siteHazard.visit === Number(params.id))
               .map((siteHazard) => {
                 return (
                   <tr key={siteHazard.id}>
                     
                 
                     <td>{siteHazard.id}</td>
-                    <td>{siteHazard.hazard}</td>
+                    <td>{siteHazard.hazard}</td> */}
                     {/* <td>{siteHazard.visit}</td> */}
-                    <td>{siteHazard.status}</td>
+                    {/* <td>{siteHazard.status}</td>
                     <td>{siteHazard.notes}</td>
                     <td>
-                        <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
+                        <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
                         {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
-                    </td>
+                    {/* </td>
                     <td className="delete" onClick={() => onDelete(siteHazard.id)}>
                       <FontAwesomeIcon icon={faTrash } />
                     </td>
@@ -376,19 +394,25 @@ function SiteVisitEdit() {
               })}
               
             </tbody>
-          </Table> 
-
-          {/* <Outlet/> */}
+          </Table>  */}
+{/* 
+          <Outlet/> */}
 
 
 
           {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button> */}
-          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd`}>
-                 Add Hazard
+          {/* <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardlist`} onClick={handleClick}>
+                  Site Hazards
+                </Button> */}
+          <Button className="middle col-2 mb-4" variant="secondary"  onClick={handleClick}>
+                  Site Hazards
                 </Button>
     </div>
+  }
+  
+  </div>
   )
 }
 
