@@ -46,14 +46,14 @@ export default function Home() {
         <h3>(B) Eye protection not worn: {incidents.filter(incident => incident.what_happened === '(B) Eye protection not worn').length}</h3> */}
         
         
-        <div className="mt-3 row justify-content-around">
+        <div className="row justify-content-around">
 
             {/* <div className=" mt-3 column justify-content-around">
                 <div className="display-box col-2 text-center"><h4><b>Staff: {staffs.length}</b></h4></div>
                 <div className="display-box col-2 text-center"><h4><b>Incidents: {incidents.length}</b></h4></div>
                 <div className="display-box col-2 text-center"><h4><b> {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</b></h4></div>
             </div> */}
-                <div className="display-box col-2 text-center">
+                <div className="display-box col-md-2 mt-3 text-center">
                     <br/>
                     <br/>
                     <h4><b> {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</b></h4>
@@ -65,10 +65,10 @@ export default function Home() {
                     <h4><b>Staff: {staffs.length}</b></h4>
 
                 </div>
-                <div className="display-border col-6">
+                <div className="display-border col-md-6 mt-3">
                         <NumIncidents/>
                 </div>
-                <div className="display-border col-3">
+                <div className="display-border col-md-3 mt-3">
                         <StatusChart/>
                 </div>
             
@@ -77,12 +77,12 @@ export default function Home() {
 
 
 
-        <div className="row mt-3 justify-content-around">
+        <div className="row justify-content-around">
 
                 {/* <div className="display-border col-3">
                     <GenderChart/>
                 </div> */}
-                <div className="display-border col-4">
+                <div className="display-border col-md-4 mt-3">
                     <WhatChat/>
                 </div>
                 {/* <div className="col-1">
@@ -90,7 +90,7 @@ export default function Home() {
                 {/* <div className="display-border col-3">
                     <StatusChart/>
                 </div> */}
-                <div className="display-border col-4">
+                <div className="display-border col-md-4 mt-3">
                     <WhyChart/>
                 </div>
                 {/* <div className="col-1">
@@ -98,7 +98,7 @@ export default function Home() {
                 {/* <div className="display-border col-3">
                     <SmartCardColorChart/>
                 </div> */}
-                <div className="display-border col-3">
+                <div className="display-border col-md-3 mt-3">
                     <LSRChart/>
                 </div>
             </div>
