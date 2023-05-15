@@ -13,27 +13,36 @@ function SiteHazardList(props) {
     const  [siteHazards , setSiteHazards] = useState([])
     const  [siteVisits , setSiteVisits] = useState([])
     // const visit = props.sitevisit
-    const params = useParams()
+    // const params = useParams()
     // const visits = 
     const [id , setId] = useState(null)
 
     useEffect(() => {
-        // fetchHazard()
+        fetchHazard()
         fetchVisit()
     },[]) 
 
-    useEffect(() => {
-        fetchHazard()
-        setId(params.id)
-    },[params.id])
+    // useEffect(() => {
+    //     fetchHazard()
+    //     setId(params.id)
+    // },[params.id])
 
+    // const fetchHazard = () => {
+    //     axios.get(`http://127.0.0.1:8000/hseapp/sitehazard/${params.id}/`)
+    //     .then((res) => {
+    //         setSiteHazards(res.data)
+    //     })
+    //     .catch(console.log)
+    // }
     const fetchHazard = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/sitehazard/${params.id}/`)
+        SiteHazardAPI.get('/')
         .then((res) => {
             setSiteHazards(res.data)
         })
         .catch(console.log)
     }
+
+    
 
     const fetchVisit = () => {
         SiteVisitAPI.get('/')

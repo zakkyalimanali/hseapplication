@@ -184,10 +184,10 @@ function SiteVisitEdit() {
 
 
   return (
-    // <div>
-    //   <Outlet/>
-    //    {isHidden ? null :
-    <div className="container mt-5">
+    <div>
+      <Outlet/>
+ {isHidden ? null :
+    (<div className="container mt-5">
       
         <div className="row">
           <div className= "col-md-4"></div>
@@ -397,15 +397,19 @@ function SiteVisitEdit() {
                 </Button> */}
           {/* <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardlist` } onClick={hiddenDiv}>Hazards 
               </Button> */}
-          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitehazardlist/${params.id}` } onClick={hiddenDiv}>Hazards 
+          {/* <Button className="middle col-2 mb-4" variant="secondary" href={`/sitehazardlist/${params.id}` } onClick={hiddenDiv}>Hazards 
+              </Button> */}
+          {/* <Button className="middle col-2 mb-4" variant="secondary" onClick={hiddenDiv}>Hazards 
+              </Button> */}
+          <Button className="middle col-2 mb-4" variant="secondary" href={`sitehazardlist/${params.id}` } onClick={hiddenDiv}>Hazards 
               </Button>
 
           {/* <Button className="middle col-2 mb-4" variant="secondary" onClick={hiddenDiv}>
                  Add Hazard
                 </Button> */}
     </div>
-    //           }
-    // </div>
+              )}
+    </div>
   )
 }
 

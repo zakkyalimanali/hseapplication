@@ -80,9 +80,9 @@ function App() {
               <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
               <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}>
                 <Route path="sitehazardadd" element={<SiteHazardAdd />}/>
-                {/* <Route path="sitehazardlist" element={<SiteHazardList/>}/> */}
+                <Route path="sitehazardlist/:id" element={<SiteHazardList/>}/>
               </Route>
-              <Route path="sitehazardlist/:id" element={<SiteHazardList/>}/>
+              {/* <Route path="sitehazardlist/:id" element={<SiteHazardList/>}/> */}
               {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
               <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
               <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
