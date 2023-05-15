@@ -31,7 +31,6 @@ function SiteVisitEdit() {
     const [location , setLocation] = useState('') 
     const [elhaz, setElhaz] = useState([])
     const [isShown , setIsShown] = useState(true)
-    const [isHidden , setIsHidden] = useState(false)
 
     const toogleShown = () => {
       return(
@@ -177,18 +176,9 @@ function SiteVisitEdit() {
         setRecords(data);
       }, [params.id, siteHazards]);
 
-      const hideDiv = () => {
-          setIsHidden(!isHidden)
-        }
-        
-
 
 
   return (
-    <div>
-      <Outlet/>
-   {isHidden ? null : (
-    
     <div className="container mt-5">
         <div className="row">
           <div className= "col-md-4"></div>
@@ -395,40 +385,11 @@ function SiteVisitEdit() {
           {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button> */}
-          {/* <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd`}>
+          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd`}>
                  Add Hazard
-                </Button> */}
-          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazarlist`}>
-                 Site Hazard
                 </Button>
-    </div>
-      )}
     </div>
   )
 }
 
 export default SiteVisitEdit
-
-
-
-// const [isHidden , setIsHidden] = useState(false)
-
-// const hideDiv = () => {
-//   setIsHidden(!isHidden)
-// }
-
-// <div>
-//   <Outlet/>
-//   {isHidden ? null
-//   (<div className="meow">
-//     I am a cat
-//   </div>
-//   )}
-
-// </div>
-
-
-
-// <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd` onClick={hideDiv}}>
-// Add Hazard
-// </Button>
