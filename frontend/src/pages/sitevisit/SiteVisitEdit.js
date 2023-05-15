@@ -31,6 +31,7 @@ function SiteVisitEdit() {
     const [location , setLocation] = useState('') 
     const [elhaz, setElhaz] = useState([])
     const [isShown , setIsShown] = useState(true)
+    const [isHidden , setIsHidden] = useState(false)
 
     const toogleShown = () => {
       return(
@@ -85,6 +86,10 @@ function SiteVisitEdit() {
 
         })
         .catch(console.log)
+    }
+
+    const hiddenDiv = () => {
+      setIsHidden(!isHidden)
     }
 
     const onSubmit = (e) => {
@@ -179,7 +184,11 @@ function SiteVisitEdit() {
 
 
   return (
+    // <div>
+    //   <Outlet/>
+    //    {isHidden ? null :
     <div className="container mt-5">
+      
         <div className="row">
           <div className= "col-md-4"></div>
           <div className="col-md-4 ">
@@ -271,6 +280,7 @@ function SiteVisitEdit() {
           </div>
 
       </div>
+
 
       
       {/* {isShown ? <SiteHazardAdd sitevisit = {params.id}/> : <SiteHazardEdit sitevisit = {params.id}/>} */}
@@ -385,10 +395,17 @@ function SiteVisitEdit() {
           {/* <Button className="middle col-2 mb-4" variant="secondary" href="/sitehazardadd">
                  Add Hazard
                 </Button> */}
-          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardadd`}>
+          {/* <Button className="middle col-2 mb-4" variant="secondary" href={`/sitevisitedit/${params.id}/sitehazardlist` } onClick={hiddenDiv}>Hazards 
+              </Button> */}
+          <Button className="middle col-2 mb-4" variant="secondary" href={`/sitehazardlist/${params.id}` } onClick={hiddenDiv}>Hazards 
+              </Button>
+
+          {/* <Button className="middle col-2 mb-4" variant="secondary" onClick={hiddenDiv}>
                  Add Hazard
-                </Button>
+                </Button> */}
     </div>
+    //           }
+    // </div>
   )
 }
 

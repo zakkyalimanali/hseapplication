@@ -36,6 +36,7 @@ import SiteVisitEdit from './pages/sitevisit/SiteVisitEdit';
 import SiteHazardAdd from './pages/sitevisit/sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './pages/sitevisit/sitehazard/SiteHazardEdit';
 import AttendeesEdit from './pages/sitevisit/attendees/AttendeesEdit';
+import SiteHazardList from './pages/sitevisit/sitehazard/SiteHazardList';
 
 
 
@@ -79,7 +80,9 @@ function App() {
               <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
               <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}>
                 <Route path="sitehazardadd" element={<SiteHazardAdd />}/>
+                {/* <Route path="sitehazardlist" element={<SiteHazardList/>}/> */}
               </Route>
+              <Route path="sitehazardlist/:id" element={<SiteHazardList/>}/>
               {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
               <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
               <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
