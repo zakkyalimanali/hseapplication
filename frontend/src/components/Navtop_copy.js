@@ -91,6 +91,7 @@ export default function Navtop() {
                             <Nav.Item><NavLink  to="incidenttable">Incident</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
                     <Nav>

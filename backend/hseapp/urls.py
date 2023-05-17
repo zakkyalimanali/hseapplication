@@ -16,6 +16,8 @@ router.register(r'training', views.TrainingViewSet, basename="training")
 router.register(r'sitevisit', views.SiteVisitViewSet, basename="sitevisit")
 router.register(r'sitehazard', views.SiteHazardsViewSet, basename="sitehazard")
 router.register(r'staffadd', views.StaffAddViewSet, basename="staffadd")
+router.register(r'incidentinvestigation', views.IncidentInvestigationViewSet, basename='incidentinvestigation'),
+router.register(r'incidentfactors', views.IncidentFactorsViewSet, basename='incidentfactors'),
 # router.register(r'about', views.IncidentViewSet, basename="about")
 
 # router.register(r'incidenttable/oneincident', views.IncidentViewSet, basename="incidenttable/oneincident")

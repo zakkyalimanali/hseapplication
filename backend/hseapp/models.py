@@ -125,3 +125,27 @@ class SiteHazards(models.Model):
 class StaffAdd(models.Model):
     visit = models.ForeignKey(SiteVisit, on_delete=models.CASCADE, null=True, blank=True)
     staff_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
+
+class IncidentInvestigation(models.Model):
+    investigator = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='incidentinvestigation_investigator', null=True, blank = True)
+    date_of_incident = models.DateField(null=True, blank=True)
+    location_of_incident = models.CharField(max_length=100 , null=True, blank=True)
+    team_member_one = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='incidentinvestigation_team_member_one',null=True, blank = True)
+    team_member_two = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='incidentinvestigation_team_member_two',null=True, blank = True)
+    team_member_three = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='incidentinvestigation_team_member_three',null=True, blank = True)
+    team_member_four = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='incidentinvestigation_team_member_four',null=True, blank = True)
+    task_performed = models.CharField(max_length=1000 , null=True, blank=True)
+    what_happened = models.CharField(max_length=1000 , null=True, blank=True)
+    summary_of_remedial_action = models.CharField(max_length=2000 , null=True, blank=True)
+    summary_of_incident_investigation = models.CharField(max_length=2000 , null=True, blank=True)
+
+
+class IncidentFactors(models.Model): 
+    factor = models.CharField(max_length=200 , null=True, blank=True)
+    type_of_factor = models.CharField(max_length=200 , null=True, blank=True)
+    action_taken = models.CharField(max_length=200 , null=True, blank=True)
+    who_will_fix = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
+    when_will_fix = models.DateField(null=True, blank = True)
+    planned_completion_date = models.DateField(null=True, blank=True)
+    incidentinvestigation = models.ForeignKey(IncidentInvestigation, on_delete=models.CASCADE, null=True, blank = True)
+
