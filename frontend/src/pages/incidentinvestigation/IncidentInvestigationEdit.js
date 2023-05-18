@@ -7,6 +7,7 @@ import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import Incidentfactorsadd from './incidentfactors/Incidentfactorsadd';
 
 
 function IncidentInvestigationEdit() {
@@ -210,7 +211,13 @@ function IncidentInvestigationEdit() {
                   />
                 </Form.Group>
 
+                <Incidentfactorsadd incidentinvestigation = {params.id}/>
 
+                
+
+
+
+                
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Summary of Remedial Action</Form.Label>
                   <Form.Control
