@@ -37,6 +37,8 @@ import SiteHazardAdd from './pages/sitevisit/sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './pages/sitevisit/sitehazard/SiteHazardEdit';
 import AttendeesEdit from './pages/sitevisit/attendees/AttendeesEdit';
 import IncidentInvestigationList from './pages/incidentinvestigation/IncidentInvestigationList';
+import IncidentInvestigationAdd from './pages/incidentinvestigation/IncidentInvestigationAdd';
+import IncidentInvestigationEdit from './pages/incidentinvestigation/IncidentInvestigationEdit';
 
 
 
@@ -53,6 +55,8 @@ function App() {
             <Route element={<PrivateRoutes/>}>
               <Route path='/' element={<Home/>} exact/>
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
+              <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
+              <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
               <Route path='stafflist' element={<StaffList/>} />
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />

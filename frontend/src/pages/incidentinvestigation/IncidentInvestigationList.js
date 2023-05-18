@@ -1,5 +1,6 @@
 import React , {useState , useEffect} from 'react'
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
+import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 // import { Link , useNavigate } from 'react-router-dom';
@@ -11,10 +12,12 @@ import DataTable from 'react-data-table-component'
 
 function IncidentInvestigationList() {
     const [incidentinvestigations , setIncidentInvestigations] = useState([])
+    const [staffs , setStaffs] = useState([])
     const[id , setId] = useState(null)
 
     useEffect(() => {
         fetchIncidentInvestigation()
+        fetchStaff()
     },[]) 
 
     const fetchIncidentInvestigation = () => {
@@ -24,6 +27,14 @@ function IncidentInvestigationList() {
         })
         .catch(console.log)
     }
+
+    const fetchStaff =() => {
+      StaffAPI.get('/')
+      .then((res) => {
+          setStaffs(res.data)
+      })
+      .catch(console.log)
+  }
 
     const onDelete = (id) => {
        IncidentInvestigationAPI.delete(`/${id}/`).then((res) => {
@@ -42,13 +53,13 @@ function IncidentInvestigationList() {
           <thead>
               <tr>
                 <th scope="col" className="col-1">ID</th>
-                <th scope="col" className="col-4">What Happened</th>
-                <th scope="col" className="col-4">Task Performed</th>
+                <th scope="col" className="col-2">What Happened</th>
+                <th scope="col" className="col-2">Task Performed</th>
                 <th scope="col" className="col-2">Investigator</th>
-                <th scope="col" className="col-2">Location</th>
-                <th scope="col" className="col-1">Date of Incident</th> 
-                <th className="col-1">Edit</th>
-                <th className="col-1">Delete</th>
+                <th scope="col" className="col-3">Location</th>
+                <th scope="col" className="col-3">Date of Incident</th> 
+                <th scope="col" className="col-1">Edit</th>
+                <th scope="col" className="col-1">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -63,7 +74,8 @@ function IncidentInvestigationList() {
                     <td>{incidentinvestigation.id}</td>
                     <td>{incidentinvestigation.what_happened}</td>
                     <td>{incidentinvestigation.task_performed}</td>
-                    <td>{incidentinvestigation.investigator}</td>
+                    <td>{staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.name} ({staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.position} ) </td>
+                    {/* <td>{incidentinvestigation.investigator}</td> */}
                     <td>{incidentinvestigation.location_of_incident}</td>
                     <td>{incidentinvestigation.date_of_incident}</td>
                
@@ -72,7 +84,7 @@ function IncidentInvestigationList() {
 
 
                     <td>
-                        {/* <Link to={`/sitehazardedit/${siteHazard.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
+                        <Link to={`/incidentinvestigationedit/${incidentinvestigation.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
                         {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
                     </td>
                     <td className="delete" onClick={() => onDelete(incidentinvestigation.id)}>

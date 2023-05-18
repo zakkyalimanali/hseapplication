@@ -1,11 +1,13 @@
 import React ,{useState , useEffect} from 'react'
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
+import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link , useNavigate } from 'react-router-dom';
 
 function IncidentInvestigationAdd() {
     const [incidentinvestigations , setIncidentInvestigations] = useState([])
+    const [staffs , setStaffs] = useState([])
     const [investigator , setInvestigator] = useState('')
     const [date_of_incident , setDateOfIncident] = useState('')
     const [location_of_incident , setLocationOfIncident] = useState('')
@@ -16,9 +18,11 @@ function IncidentInvestigationAdd() {
     const [team_member_three, setTeamMemberThree] = useState('')
     const [team_member_four, setTeamMemberFour] = useState('')
     const[id , setId] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetchIncidentInvestigation()
+        fetchStaff()
     },[]) 
 
     const fetchIncidentInvestigation = () => {
@@ -28,6 +32,14 @@ function IncidentInvestigationAdd() {
         })
         .catch(console.log)
     }
+
+    const fetchStaff =() => {
+      StaffAPI.get('/')
+      .then((res) => {
+          setStaffs(res.data)
+      })
+      .catch(console.log)
+  }
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -45,12 +57,72 @@ function IncidentInvestigationAdd() {
               
               <Form onSubmit={onSubmit} className="mt-4">
               <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Staff Name</Form.Label>
+                  <Form.Label>Investigator</Form.Label>
                   <Form.Control
                     as="select"
-                    placeholder="Staff Name"
-                    value={staff_name}
-                    onChange={(e) => setStaffName(e.target.value)}
+                    placeholder="Investigator"
+                    value={investigator}
+                    onChange={(e) => setInvestigator(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+                  </Form.Control>
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Team Member One</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Team Member One"
+                    value={team_member_one}
+                    onChange={(e) => setTeamMemberOne(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+                  </Form.Control>
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Team Member Two</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Team Member Two"
+                    value={team_member_two}
+                    onChange={(e) => setTeamMemberTwo(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+                  </Form.Control>
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Team Member Three</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Team Member Three"
+                    value={team_member_three}
+                    onChange={(e) => setTeamMemberThree(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+                  </Form.Control>
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Team Member Four</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Team Member Four"
+                    value={team_member_four}
+                    onChange={(e) => setTeamMemberFour(e.target.value)}
                   >
                     <option value=''>Select An Option</option>
                 {staffs.map(staff => {
@@ -60,34 +132,45 @@ function IncidentInvestigationAdd() {
                   </Form.Control>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training</Form.Label>
+                  <Form.Label>Location of Incident</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Training"
-                    value={training}
-                    onChange={(e) => setTraining(e.target.value)}
+                    placeholder="Location of Incident"
+                    value={location_of_incident}
+                    onChange={(e) => setLocationOfIncident(e.target.value)}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training Provider</Form.Label>
+                  <Form.Label>Task Performed</Form.Label>
                   <Form.Control
-                    type="text"
-                    placeholder="Training Provider"
-                    value={training_provider}
-                    onChange={(e) => setTrainingProvider(e.target.value)}
+                    as="textarea"
+                    rows={5}
+                    placeholder="Task Performed"
+                    value={task_performed}
+                    onChange={(e) => setTaskPerformed(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>What Happened</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={5}
+                    placeholder="What Happened"
+                    value={what_happened}
+                    onChange={(e) => setWhatHappened(e.target.value)}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training Date</Form.Label>
+                  <Form.Label>Date of Incident</Form.Label>
                   <Form.Control
                     type="date"
-                    placeholder="Training Date"
-                    value={training_date}
-                    onChange={(e) => setTrainingDate(e.target.value)}
+                    placeholder="Date of Incident"
+                    value={date_of_incident}
+                    onChange={(e) => setDateOfIncident(e.target.value)}
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
+                {/* <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Training Expiry</Form.Label>
                   <Form.Control
                     type="date"
@@ -95,7 +178,7 @@ function IncidentInvestigationAdd() {
                     value={training_expiry}
                     onChange={(e) => setTrainingExpiry(e.target.value)}
                   />
-                </Form.Group>
+                </Form.Group> */}
                 
                 
                 <div className="mt-3 float-right">
