@@ -1,7 +1,9 @@
 import React , {useEffect , useState} from 'react'
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
+import IncidentFactorsAPI from '../../API/IncidentFactorsAPI';
 import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
+import Table from 'react-bootstrap/Table';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -12,6 +14,7 @@ import Incidentfactorsadd from './incidentfactors/Incidentfactorsadd';
 
 function IncidentInvestigationEdit() {
   const [incidentinvestigations , setIncidentInvestigations] = useState([])
+  const [incidentfactors , setIncidentFactors] = useState([])
   const [staffs , setStaffs] = useState([])
   const params = useParams()
   const [investigator , setInvestigator] = useState('')
@@ -34,6 +37,7 @@ function IncidentInvestigationEdit() {
 
   useEffect(() => {
     fetchStaff()
+    fetchIncidentFactor()
   },[])
 
   const fetchIncidentInvestigation = () => {
@@ -61,7 +65,15 @@ function IncidentInvestigationEdit() {
         setStaffs(res.data)
     })
     .catch(console.log)
-}
+  }
+
+  const fetchIncidentFactor = () => {
+    IncidentFactorsAPI.get('/')
+    .then((res) => {
+        setIncidentFactors(res.data)
+    })
+    .catch(console.log)
+  }
 
   const onSubmit = (e) => {
         e.preventDefault();
@@ -87,6 +99,12 @@ function IncidentInvestigationEdit() {
         }
       )
     }
+
+    const onDelete = (id) => {
+      IncidentFactorsAPI.delete(`/${id}/`).then((res) => {
+       fetchIncidentFactor();
+       }).catch(console.log)
+   }
 
   return (
     <div className="container mt-5">
@@ -217,7 +235,7 @@ function IncidentInvestigationEdit() {
 
 
 
-                
+
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Summary of Remedial Action</Form.Label>
                   <Form.Control
@@ -273,10 +291,59 @@ function IncidentInvestigationEdit() {
                     Update
                   </Button>
                 </Link>
+                
               </div>
               </Form>    
+              
             </div>            
           </div>
+          <Table striped bordered hover className='mt-3'>
+                <thead>
+                    <tr>
+
+                      <th scope="col" className="col-1">ID</th>
+                      <th scope="col" className="col-2">Factor</th>
+                      <th scope="col" className="col-2">Type </th>
+                      <th scope="col" className="col-3">Action Taken</th> 
+                      <th scope="col" className="col-2">Who fix</th> 
+                      <th scope="col" className="col-1">When fix</th> 
+                      <th scope="col" className="col-1">Complete By</th> 
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {siteHazards.map((siteHazard, index) => { */}
+
+                    {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
+                    .map((incidentfactor) => {
+                      return (
+                        <tr key={incidentfactor.id}>
+                          
+                      
+                          <td>{incidentfactor.id}</td>
+                          <td>{incidentfactor.factor}</td>
+                          <td>{incidentfactor.type_of_factor}</td>
+                          <td>{incidentfactor.action_taken}</td>
+                          <td>{incidentfactor.who_will_fix}</td>
+                          <td>{incidentfactor.when_will_fix}</td>
+                          <td>{incidentfactor.planned_completion_date}</td>
+                          {/* <td>{incidentfactor.factor}</td> */}
+                         
+                          <td>
+                              {/* <Link to={`/sitehazardedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
+                              {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
+                          </td>
+                          <td className="delete" onClick={() => onDelete(incidentfactor.id)}>
+                            <FontAwesomeIcon icon={faTrash } />
+                          </td>
+                    
+                        </tr>
+                      );
+                    })}
+                    
+                  </tbody>
+                </Table> 
         </div>
   )
 }
