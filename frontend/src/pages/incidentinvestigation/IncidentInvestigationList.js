@@ -1,25 +1,39 @@
+// React dependences
 import React , {useState , useEffect} from 'react'
+// API from backend
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
 import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-// import { Link , useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+
+// react-router-dom items
+import { Link , useNavigate} from 'react-router-dom';
+
+// bootstrap itms
 import Table from 'react-bootstrap/Table';
+import { ListGroup, Card, Button, Form } from "react-bootstrap";
+
+// fontawesome items
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+
+// DataTable items
 import DataTable from 'react-data-table-component'
 
+// This function's main role is to show a table of incident investigations and to lead to links for adding and editing incident investigations
 function IncidentInvestigationList() {
+    // setting up the useStates which allow you to change state and allow functionality
+    // The 'useState([])' is used to initiate for the API
     const [incidentinvestigations , setIncidentInvestigations] = useState([])
     const [staffs , setStaffs] = useState([])
     const[id , setId] = useState(null)
 
+    // The useEffect() here allows for the functions inside them to be called once
     useEffect(() => {
         fetchIncidentInvestigation()
         fetchStaff()
     },[]) 
 
+    // the function get the url from the backend which allows its data to be used in the frontend
     const fetchIncidentInvestigation = () => {
         IncidentInvestigationAPI.get('/')
         .then((res) => {
@@ -28,6 +42,7 @@ function IncidentInvestigationList() {
         .catch(console.log)
     }
 
+    // The fetchStaff is so that staff names can be called
     const fetchStaff =() => {
       StaffAPI.get('/')
       .then((res) => {
@@ -36,20 +51,22 @@ function IncidentInvestigationList() {
       .catch(console.log)
   }
 
-    const onDelete = (id) => {
+    const forDeletingIncidentInvestigationEntries = (id) => {
        IncidentInvestigationAPI.delete(`/${id}/`).then((res) => {
         fetchIncidentInvestigation();
         }).catch(console.log)
     }
-
+    // the return function is for the html stuff
   return (
+    //  fix this below 
     <div className="container mt-5">
-        <div className="row">\
+        <div className="row">
+        {/* This is for the title */}
         <h1 className="row justify-content-center mt-3">Incident Investigation</h1>
           <div className= "col-md-4"></div>
           <div className="col-md-4 "></div>
-      
       <Table striped bordered hover className='mt-3'>
+        {/* This is for the table heading */}
           <thead>
               <tr>
                 <th scope="col" className="col-1">ID</th>
@@ -62,9 +79,8 @@ function IncidentInvestigationList() {
                 <th scope="col" className="col-1">Delete</th>
               </tr>
             </thead>
+            {/* This is for the table body, this takes the incidentinvestigation from above and then uses maps so that each entry can be displayed */}
             <tbody>
-              {/* {siteHazards.map((siteHazard, index) => { */}
-
 
               {incidentinvestigations.map((incidentinvestigation) => {
                 return (
@@ -85,9 +101,9 @@ function IncidentInvestigationList() {
 
                     <td>
                         <Link to={`/incidentinvestigationedit/${incidentinvestigation.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-                        {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
+
                     </td>
-                    <td className="delete" onClick={() => onDelete(incidentinvestigation.id)}>
+                    <td className="delete" onClick={() => forDeletingIncidentInvestigationEntries(incidentinvestigation.id)}>
                       <FontAwesomeIcon icon={faTrash } />
                     </td>
               

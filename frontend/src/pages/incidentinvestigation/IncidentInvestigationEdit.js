@@ -331,7 +331,7 @@ function IncidentInvestigationEdit() {
                           {/* <td>{incidentfactor.factor}</td> */}
                          
                           <td>
-                              {/* <Link to={`/sitehazardedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>   */}
+                              <Link to={`/incidentfactorsedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
                               {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
                           </td>
                           <td className="delete" onClick={() => onDelete(incidentfactor.id)}>

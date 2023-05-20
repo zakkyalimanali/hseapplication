@@ -39,6 +39,7 @@ import AttendeesEdit from './pages/sitevisit/attendees/AttendeesEdit';
 import IncidentInvestigationList from './pages/incidentinvestigation/IncidentInvestigationList';
 import IncidentInvestigationAdd from './pages/incidentinvestigation/IncidentInvestigationAdd';
 import IncidentInvestigationEdit from './pages/incidentinvestigation/IncidentInvestigationEdit';
+import Incidentfactorsedit from './pages/incidentinvestigation/incidentfactors/Incidentfactorsedit';
 
 
 
@@ -57,6 +58,7 @@ function App() {
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
+              <Route path='Incidentfactorsedit/:id' element={<Incidentfactorsedit/>}/>
               <Route path='stafflist' element={<StaffList/>} />
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
