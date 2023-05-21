@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import Incidentfactorsadd from './incidentfactors/Incidentfactorsadd';
+// Others 
+import { useNavigate } from 'react-router'
 
 
 function IncidentInvestigationEdit() {
@@ -28,6 +30,7 @@ function IncidentInvestigationEdit() {
   const [team_member_four, setTeamMemberFour] = useState('')
   const [summary_of_remedial_action , setSummaryOfRemedialAction] = useState('')
   const [summary_of_incident_investigation , setSummaryOfIncidentInvestigation] = useState('')
+  const navigate = useNavigate()
   const[id , setId] = useState(null)
 
   useEffect(() => {
@@ -105,6 +108,11 @@ function IncidentInvestigationEdit() {
        fetchIncidentFactor();
        }).catch(console.log)
    }
+
+   const returnToPreviousIncidentInvestigationListPage = () => {
+    navigate(-1)
+  }
+  
 
   return (
     <div className="container mt-5">
@@ -256,8 +264,59 @@ function IncidentInvestigationEdit() {
       <div className="col-md-12">
         <div className="row">
 
-      <Incidentfactorsadd incidentinvestigation = {params.id}/>    
-      <Form.Group className="mb-3" controlId="formName">
+      <Incidentfactorsadd incidentinvestigation = {params.id}/>   
+
+      <Table striped bordered hover className='mt-3'>
+                <thead>
+                    <tr>
+
+                      <th scope="col" className="col-1">ID</th>
+                      <th scope="col" className="col-2">Factor</th>
+                      <th scope="col" className="col-2">Type </th>
+                      <th scope="col" className="col-3">Action Taken</th> 
+                      <th scope="col" className="col-2">Who fix</th> 
+                      <th scope="col" className="col-1">When fix</th> 
+                      <th scope="col" className="col-1">Complete By</th> 
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {siteHazards.map((siteHazard, index) => { */}
+
+                    {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
+                    .map((incidentfactor) => {
+                      return (
+                        <tr key={incidentfactor.id}>
+                          
+                      
+                          <td>{incidentfactor.id}</td>
+                          <td>{incidentfactor.factor}</td>
+                          <td>{incidentfactor.type_of_factor}</td>
+                          <td>{incidentfactor.action_taken}</td>
+                          <td>{incidentfactor.who_will_fix}</td>
+                          <td>{incidentfactor.when_will_fix}</td>
+                          <td>{incidentfactor.planned_completion_date}</td>
+                          {/* <td>{incidentfactor.factor}</td> */}
+                         
+                          <td>
+                              <Link to={`/incidentfactorsedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
+                              {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
+                          </td>
+                          <td className="delete" onClick={() => onDelete(incidentfactor.id)}>
+                            <FontAwesomeIcon icon={faTrash } />
+                          </td>
+                    
+                        </tr>
+                      );
+                    })}
+                    
+                  </tbody>
+                </Table> 
+
+
+
+      <Form.Group className="mb-3 mt-3" controlId="formName">
                   <Form.Label>Summary of Remedial Action</Form.Label>
                   <Form.Control
                     as="textarea"
@@ -281,17 +340,25 @@ function IncidentInvestigationEdit() {
       </div>
       </div>
     
-      <div className="mt-3 float-right">
-                <Link to="/incidentinvestigationlist/">
+      <div className="col mt-3 mb-3">
+                {/* <Link to="/incidentinvestigationlist/"> */}
                   <Button
-                    variant="success"
+                    variant="warning"
                     type="button"
                     onClick={(e) => onUpdate(id)}
-                    className="mx-2"
+                    className="mx-2 mb-3"
                   >
                     Update
                   </Button>
-                </Link>
+                  <Button
+                  variant="success"
+                  type="button"       
+                  className="mx-2 mb-3"
+                  onClick={(e) => returnToPreviousIncidentInvestigationListPage()}
+                >
+                  Go Back
+                </Button>
+                {/* </Link> */}
                 
               </div>
         </Form>
@@ -464,7 +531,7 @@ function IncidentInvestigationEdit() {
               
             </div>            
           </div> */}
-          <Table striped bordered hover className='mt-3'>
+          {/* <Table striped bordered hover className='mt-3'>
                 <thead>
                     <tr>
 
@@ -480,7 +547,7 @@ function IncidentInvestigationEdit() {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {siteHazards.map((siteHazard, index) => { */}
+           
 
                     {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
                     .map((incidentfactor) => {
@@ -495,11 +562,11 @@ function IncidentInvestigationEdit() {
                           <td>{incidentfactor.who_will_fix}</td>
                           <td>{incidentfactor.when_will_fix}</td>
                           <td>{incidentfactor.planned_completion_date}</td>
-                          {/* <td>{incidentfactor.factor}</td> */}
+       
                          
                           <td>
                               <Link to={`/incidentfactorsedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-                              {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
+               
                           </td>
                           <td className="delete" onClick={() => onDelete(incidentfactor.id)}>
                             <FontAwesomeIcon icon={faTrash } />
@@ -510,7 +577,7 @@ function IncidentInvestigationEdit() {
                     })}
                     
                   </tbody>
-                </Table> 
+                </Table>  */}
         </div>
   )
 }

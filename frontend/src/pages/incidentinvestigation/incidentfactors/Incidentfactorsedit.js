@@ -114,6 +114,7 @@ const updateButtonIsClickToUpdateFactorEntry = (id) => {
   navigate(-1)
 }
 
+
   
   return (
     <div className="container mt-5">
@@ -185,15 +186,16 @@ const updateButtonIsClickToUpdateFactorEntry = (id) => {
           />
         </Form.Group>
 
-          <div className="mt-3 mb-3 float-right">
-          <Button
+          <div className="mt-3 mb-3">
+            <Button
                   variant="success"
                   type="button"
                   onClick={(e) => updateButtonIsClickToUpdateFactorEntry (id)}
                   className="mx-2"
                 >
                   Update
-                </Button>
+            </Button>
+            
           </div>
         </Form>    
       </div>            
