@@ -66,7 +66,7 @@ export default function EditStaff() {
     // }
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {name ,position, staff_id_number, date_of_birth , joining_date,gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date, yearly_leave_days, yearly_leave_taken}
+        let item = {name ,position, staff_id_number, date_of_birth: date_of_birth || null , joining_date: joining_date || null, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date: passport_expiry_date || null, yearly_leave_days, yearly_leave_taken}
         StaffAPI.post('/', item).then(() => dataStaff());
     }
 
@@ -75,7 +75,7 @@ export default function EditStaff() {
     //     StaffAPI.patch(`/${id}/`, item).then((res) => dataStaff())
     //   }
     const onUpdate = (id) => {
-        let item = {name ,position, staff_id_number, date_of_birth, joining_date, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address , passport_number, passport_expiry_date, yearly_leave_days, yearly_leave_taken};
+        let item = {name ,position, staff_id_number, date_of_birth: date_of_birth || null, joining_date: joining_date || null, gender, smart_card_colour, smart_card_number, home_address, nationality, citizenship, telephone_number, email_address , passport_number, passport_expiry_date: passport_expiry_date || null, yearly_leave_days, yearly_leave_taken};
         StaffAPI.patch(`/${id}/`, item).then(() => { 
           setPosition('')
           setStaffIdNumber('')
@@ -206,7 +206,12 @@ export default function EditStaff() {
                 type="date"
                 placeholder="Enter Passport Expiry Date"
                 value={passport_expiry_date}
-                onChange={(e) => setPassportExpiryDate(e.target.value)}
+                // onChange={(e) => setPassportExpiryDate(e.target.value)}
+                onChange={(e) => {
+                  const selectedDate = e.target.value;
+                  const formattedDate = selectedDate !== "" ? selectedDate : null;
+                  setPassportExpiryDate(formattedDate);
+                }}
               />
             </Form.Group>
 
@@ -231,11 +236,15 @@ export default function EditStaff() {
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
               <Form.Label>Citizenship</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 placeholder="Citizenship"
                 value={citizenship}
-                onChange={(e) => setCitizenship(e.target.value)}
-              />
+                onChange={(e) => setCitizenship(e.target.value)}>
+                  <option value=''>-------</option>
+                  <option value='Citizen'>Citizen</option>
+                  <option value='PR'>PR</option>
+                  <option value='Other'>Other</option>
+                </Form.Control>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
               <Form.Label>Nationality</Form.Label>
@@ -258,7 +267,12 @@ export default function EditStaff() {
                 type="date"
                 placeholder="Enter Staff Id Number"
                 value={date_of_birth}
-                onChange={(e) => setDateOfBirth(e.target.value)}
+                // onChange={(e) => setDateOfBirth(e.target.value)}
+                onChange={(e) => {
+                  const selectedDate = e.target.value;
+                  const formattedDate = selectedDate !== "" ? selectedDate : null;
+                  setDateOfBirth(formattedDate);
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">
@@ -267,7 +281,12 @@ export default function EditStaff() {
                 type="date"
                 placeholder="Joining Date"
                 value={joining_date}
-                onChange={(e) => setJoiningDate(e.target.value)}
+                // onChange={(e) => setJoiningDate(e.target.value)}
+                onChange={(e) => {
+                  const selectedDate = e.target.value;
+                  const formattedDate = selectedDate !== "" ? selectedDate : null;
+                  setJoiningDate(formattedDate);
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formStaffIdNumber=">

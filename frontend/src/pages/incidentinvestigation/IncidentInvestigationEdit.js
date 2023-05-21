@@ -266,6 +266,7 @@ function IncidentInvestigationEdit() {
 
       <Incidentfactorsadd incidentinvestigation = {params.id}/>   
 
+      <h3 className="float-left">Incident Factors</h3>
       <Table striped bordered hover className='mt-3'>
                 <thead>
                     <tr>
