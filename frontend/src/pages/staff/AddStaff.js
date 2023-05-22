@@ -42,7 +42,13 @@ export default function AddStaff() {
         e.preventDefault();
         let item = {name, position, staff_id_number ,date_of_birth: date_of_birth || null  ,joining_date: joining_date || null, smart_card_number, gender , smart_card_colour, home_address, nationality, citizenship, telephone_number, email_address, passport_number, passport_expiry_date: passport_expiry_date || null, yearly_leave_days, yearly_leave_taken  }
         navigate("/stafflist");
-        StaffAPI.post('/', item).then(() => dataStaff());
+        StaffAPI.post('/', item).then(() => {dataStaff();})
+        .catch((error) => {
+          // Handle any errors that occurred during the request
+          console.error("Error submitting the form:", error);
+          alert("meow")
+          // Display an error message or perform other error handling tasks
+        });
     }
 
 
