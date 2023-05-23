@@ -46,7 +46,7 @@ export default function AddStaff() {
         .catch((error) => {
           // Handle any errors that occurred during the request
           console.error("Error submitting the form:", error);
-          alert("meow")
+          alert("There was an error in completing the submittion")
           // Display an error message or perform other error handling tasks
         });
     }
