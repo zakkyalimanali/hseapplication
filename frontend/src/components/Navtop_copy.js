@@ -86,11 +86,20 @@ export default function Navtop() {
                    
                     <Nav>
                         <Nav.Menu className="black" title="HSE">
-                            <Nav.Item><NavLink  to="stats">Stats</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="stats" className="inprogress">Statistics (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="incidenttable">Incident</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="hsereferenceslist" className="inprogress">HSE References (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="workplaceruleslist" className="inprogress">Work Place Rules (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="riskmitigationlist" className="inprogress">Risk Mitigation (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="hseauditlist" className="inprogress">HSE Audit (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="emergencyplanlist" className="inprogress">Emergency Plan (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="hsemanagement" className="inprogress">HSE Management (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
@@ -98,6 +107,11 @@ export default function Navtop() {
                         <Nav.Menu className="black" title="Staff">
                             <Nav.Item><NavLink to="attendencelist">Attendence</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="stafflist">Staff</NavLink></Nav.Item>
+                        </Nav.Menu>
+                    </Nav>
+                    <Nav>
+                        <Nav.Menu className="black" title="Equipment and Items">
+                            <Nav.Item><NavLink to="equipment" className="inprogress">Equipment and Items (In Progress)</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
                 </Nav>

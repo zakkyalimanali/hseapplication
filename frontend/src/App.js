@@ -40,6 +40,16 @@ import IncidentInvestigationList from './pages/incidentinvestigation/IncidentInv
 import IncidentInvestigationAdd from './pages/incidentinvestigation/IncidentInvestigationAdd';
 import IncidentInvestigationEdit from './pages/incidentinvestigation/IncidentInvestigationEdit';
 import Incidentfactorsedit from './pages/incidentinvestigation/incidentfactors/Incidentfactorsedit';
+import Hsereferenceslist from './pages/hsereferences/Hsereferenceslist';
+import Workplaceruleslist from './pages/workplacerules/Workplaceruleslist';
+import Safeworkpracticelist from './pages/safeworkpractice/Safeworkpracticelist';
+import Riskmitigationlist from './pages/riskmitigation/Riskmitigationlist';
+import Equipment from './pages/equipment/Equipment';
+import Hseaditlist from './pages/hseaudit/Hseaditlist';
+import Emergencyplanlist from './pages/emergencyplan/Emergencyplanlist';
+import Hsemanagement from './pages/hsemanagement/Hsemanagement';
+import Riskmanagementlist from './pages/riskmanagement/Riskmanagementlist';
+import Reportinglist from './pages/reporting/Reportinglist';
 
 
 
@@ -59,6 +69,16 @@ function App() {
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
               <Route path='Incidentfactorsedit/:id' element={<Incidentfactorsedit/>}/>
+              <Route path="hsereferenceslist" element={<Hsereferenceslist/>}/>
+              <Route path="workplaceruleslist" element={<Workplaceruleslist/>}/>
+              <Route path="safeworkpracticelist" element={<Safeworkpracticelist/>}/>
+              <Route path="riskmitigationlist" element={<Riskmitigationlist/>}/>
+              <Route path='equipment' element={<Equipment/>}/>
+              <Route path="hseauditlist" element={<Hseaditlist/>}/>
+              <Route path="emergencyplanlist" element={<Emergencyplanlist/>}/>
+              <Route path="hsemanagement" element={<Hsemanagement/>}/>
+              <Route path="riskmanagementlist" element={<Riskmanagementlist/>}/>
+              <Route path="reportinglist" element={<Reportinglist/>}/>
               <Route path='stafflist' element={<StaffList/>} />
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />

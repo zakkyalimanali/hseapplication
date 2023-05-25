@@ -142,3 +142,8 @@ li {
     text-decoration: none;
     font-weight: bold;
 }
+
+.inprogress {
+    color: red;
+    font-weight: bold;
+}
