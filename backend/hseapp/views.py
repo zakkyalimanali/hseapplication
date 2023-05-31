@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -55,7 +55,15 @@ class IncidentListView(View):
         incidents = Incident.objects.all()
         what_happened_list = list(incidents.values_list('what_happened', flat=True))
         return JsonResponse({'what_happened_list': what_happened_list})
-    
+
+class EquipmentAndItemsViewSet(viewsets.ModelViewSet):
+    serializer_class = EquipmentAndItemsSerializer
+    queryset = EquipmentAndItems.objects.all()
+
+class ItemsPerBoxViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemsPerBoxSerializer
+    queryset = ItemsPerBox.objects.all()
+
 
 
 

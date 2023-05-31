@@ -149,3 +149,16 @@ class IncidentFactors(models.Model):
     planned_completion_date = models.DateField(null=True, blank=True)
     incidentinvestigation = models.ForeignKey(IncidentInvestigation, on_delete=models.CASCADE, null=True, blank = True)
 
+class EquipmentAndItems(models.Model):
+    equipment_item = models.CharField(max_length=200 , null=True, blank=True)
+    type_of_equipment_item = models.CharField(max_length=200, null=True, blank=True)
+    category = models.CharField(max_length=200, null=True, blank=True)
+    quantity_in_item = models.IntegerField(null=True , blank=True)
+    dollar_value = models.IntegerField(null=True, blank=True)
+    condition = models.CharField(max_length=200 , null=True, blank=True)
+    storage_location = models.CharField(max_length=200 , null=True, blank=True)
+    identification_code = models.CharField(max_length=200 , null=True, blank=True)
+
+class ItemsPerBox(models.Model):
+    item = models.ForeignKey(EquipmentAndItems, on_delete=models.CASCADE , null=True, blank = True)
+    quantity_in_box = models.IntegerField(null=True, blank=True)

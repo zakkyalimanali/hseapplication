@@ -45,6 +45,9 @@ import Workplaceruleslist from './pages/workplacerules/Workplaceruleslist';
 import Safeworkpracticelist from './pages/safeworkpractice/Safeworkpracticelist';
 import Riskmitigationlist from './pages/riskmitigation/Riskmitigationlist';
 import Equipment from './pages/equipment/Equipment';
+import EquipmentAdd from './pages/equipment/EquipmentAdd';
+import EquipmentEdit from './pages/equipment/EquipmentEdit'
+import EquipmentTotals from './pages/equipment/EquipmentTotals';
 import Hseaditlist from './pages/hseaudit/Hseaditlist';
 import Emergencyplanlist from './pages/emergencyplan/Emergencyplanlist';
 import Hsemanagement from './pages/hsemanagement/Hsemanagement';
@@ -74,6 +77,9 @@ function App() {
               <Route path="safeworkpracticelist" element={<Safeworkpracticelist/>}/>
               <Route path="riskmitigationlist" element={<Riskmitigationlist/>}/>
               <Route path='equipment' element={<Equipment/>}/>
+              <Route path='equipmentadd' element={<EquipmentAdd/>}/>
+              <Route path='equipmentedit/:id' element={<EquipmentEdit/>}/>
+              <Route path="equipmenttotals" element={<EquipmentTotals/>}/>
               <Route path="hseauditlist" element={<Hseaditlist/>}/>
               <Route path="emergencyplanlist" element={<Emergencyplanlist/>}/>
               <Route path="hsemanagement" element={<Hsemanagement/>}/>
