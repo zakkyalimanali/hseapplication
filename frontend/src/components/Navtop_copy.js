@@ -111,7 +111,7 @@ export default function Navtop() {
                     </Nav>
                     <Nav>
                         <Nav.Menu className="black" title="Equipment and Items">
-                            <Nav.Item><NavLink to="equipment" className="inprogress">Equipment and Items (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink to="equipment" >Equipment and Items</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
                 </Nav>

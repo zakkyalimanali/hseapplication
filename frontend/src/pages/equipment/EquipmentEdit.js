@@ -113,7 +113,7 @@ function EquipmentEdit() {
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Quantity In Item</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="number"
                     placeholder="Quantity In Item"
                     value={quantity_in_item}
                     onChange={(e) => setQuantityInItem(e.target.value)}
@@ -122,7 +122,7 @@ function EquipmentEdit() {
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Dollar Value</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="number"
                     placeholder="Dollar Value"
                     value={dollar_value}
                     onChange={(e) => setDollarValue(e.target.value)}

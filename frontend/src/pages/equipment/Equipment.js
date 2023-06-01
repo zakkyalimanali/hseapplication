@@ -43,6 +43,12 @@ function Equipment() {
         <div className="row">
         {/* This is for the title */}
         <h1 className="row justify-content-center mt-3">Equipment and Items</h1>
+        <div className="text-center">
+          <Button className="middle col-2 mb-4 mt-3" variant="warning" href="/equipmenttotals">
+            Equipment / Items Totals
+        </Button>
+        </div>
+        
           <div className= "col-md-4"></div>
           <div className="col-md-4 "></div>
       <Table striped bordered hover className='mt-3'>
@@ -50,11 +56,11 @@ function Equipment() {
           <thead>
               <tr>
                 <th scope="col" className="col-1">ID</th>
-                <th scope="col" className="col-1">Item / Equipment</th>
-                <th scope="col" className="col-1">Type of equipment / item</th>
-                <th scope="col" className="col-1">Category</th>
-                <th scope="col" className="col-1">Dollar Value</th>
-                <th scope="col" className="col-2">Condition and Remarks</th>
+                <th scope="col" className="col-2">Item / Equipment</th>
+                <th scope="col" className="col-2">Type of equipment / item</th>
+                <th scope="col" className="col-2">Category</th>
+                {/* <th scope="col" className="col-1">Dollar Value</th> */}
+                {/* <th scope="col" className="col-2">Condition and Remarks</th> */}
                 <th scope="col" className="col-1">Quantity in item</th>
                 <th scope="col" className="col-2">Storage Location</th>
                 <th scope="col" className="col-1">Identification Code</th> 
@@ -74,8 +80,8 @@ function Equipment() {
                     <td>{equipment.equipment_item}</td>
                     <td>{equipment.type_of_equipment_item}</td>
                     <td>{equipment.category}</td>
-                    <td>{equipment.dollar_value}</td>
-                    <td>{equipment.condition}</td>
+                    {/* <td>{equipment.dollar_value}</td>
+                    <td>{equipment.condition}</td> */}
                     <td>{equipment.quantity_in_item}</td>
                     <td>{equipment.storage_location}</td>
                     <td>{equipment.identification_code}</td>
@@ -98,12 +104,11 @@ function Equipment() {
               
             </tbody>
           </Table> 
-          <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/equipmentadd">
-            Add Equipment / Item 
-        </Button>
-          <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/equipmenttotals">
-            Equipment / Items Total
-        </Button>
+          <div className="text-center">
+              <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/equipmentadd">
+                Add Equipment / Item 
+            </Button>
+          </div>
 
               </div>
     </div>

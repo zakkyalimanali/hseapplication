@@ -25,6 +25,32 @@ export default function Stats() {
         .catch(console.log)
     },[])
 
+    const whatIncidentCounts = {};
+    const whyIncidentCounts = {}
+
+    incidents.forEach(incident => {
+        const whats = incident.what_happened;
+        
+        if (whatIncidentCounts[whats]) {
+            whatIncidentCounts[whats] += 1;
+        } else {
+            whatIncidentCounts[whats] = 1;
+        } 
+
+        
+
+    })
+
+    incidents.forEach(incident => {
+        const whys = incident.why_happened
+        if (whyIncidentCounts[whys]) {
+            whyIncidentCounts[whys] += 1
+        }
+         else {
+            whyIncidentCounts[whys] = 1;
+        } 
+    })
+
     // const ZakkyPakat = () => {
     //     return incidents.filter(incident => incident.raised_by === 'Zakky Ali');
     //   }
@@ -56,6 +82,27 @@ export default function Stats() {
                         <th className="col-4" scope="row">Total Number of Incidents:</th>
                         <td className="col-4">{incidents.length}</td>
                     </tr>
+                    <tr>
+                        <th scope="col" className="col-4">What Incidents</th>
+                        <th scope="col" className="col-4"></th>
+                    </tr>
+                    {Object.keys(whatIncidentCounts).map(whats => (
+                        <tr key={whats}>
+                            <th className="col-4" scope="row">{whats}</th>
+                            <td className="col-4">{whatIncidentCounts[whats]}</td>
+                        </tr>
+                    ))}
+                    <tr>
+                        <th scope="col" className="col-4">Why Incidents</th>
+                        <th scope="col" className="col-4"></th>
+                    </tr>
+                    {Object.keys(whyIncidentCounts).map(whys => (
+                        <tr key={whys}>
+                            <th className="col-4" scope="row">{whys}</th>
+            <td className="col-4">{whyIncidentCounts[whys]}</td>
+                        </tr>
+                    ))}
+                    
                 </tbody>
             </Table>
         </div>
