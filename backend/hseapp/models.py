@@ -59,6 +59,7 @@ class Incident(models.Model):
     follow_up_remarks = models.CharField(max_length= 100 , null=True , blank= True)
     status = models.CharField(max_length= 100 , null=True , blank= True)
     responsible_party = models.CharField(max_length= 100 , null=True , blank= True)
+    # photo_image = models.ImageField(upload_to="photo_image/", height_field=None, width_field=None, max_length=100,null=True , blank= True)
     def __str__(self):
         return self.short_desc
 
@@ -158,6 +159,7 @@ class EquipmentAndItems(models.Model):
     condition = models.CharField(max_length=200 , null=True, blank=True)
     storage_location = models.CharField(max_length=200 , null=True, blank=True)
     identification_code = models.CharField(max_length=200 , null=True, blank=True)
+    size = models.CharField(max_length=200 , null=True, blank=True)
 
 class ItemsPerBox(models.Model):
     item = models.ForeignKey(EquipmentAndItems, on_delete=models.CASCADE , null=True, blank = True)

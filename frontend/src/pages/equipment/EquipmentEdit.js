@@ -15,6 +15,7 @@ function EquipmentEdit() {
     const [equipment_item , setEquipmentItem] = useState('')
     const [type_of_equipment_item , setTypeOfEquipmentItem] = useState('')
     const [category , setCategory] = useState('')
+    const [size , setSize] = useState('')
     const [quantity_in_item, setQuantityInItem] = useState('')
     const [dollar_value , setDollarValue] = useState('')
     const [condition, setCondition] = useState('')
@@ -36,6 +37,7 @@ function EquipmentEdit() {
             setEquipmentItem(res.data.equipment_item)
             setTypeOfEquipmentItem(res.data.type_of_equipment_item)
             setCategory(res.data.category)
+            setSize(res.data.size)
             setQuantityInItem(res.data.quantity_in_item)
             setDollarValue(res.data.dollar_value)
             setCondition(res.data.condition)
@@ -47,16 +49,17 @@ function EquipmentEdit() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {equipment_item , type_of_equipment_item, quantity_in_item , category, dollar_value , condition, storage_location, identification_code}
+        let item = {equipment_item , type_of_equipment_item, quantity_in_item , category, size, dollar_value , condition, storage_location, identification_code}
         EquipmentAndItemsAPI.post('/', item).then(() => fetchEquipment());
     }
 
     const onUpdate = (id) => {
-        let item = {equipment_item , type_of_equipment_item, quantity_in_item , category, dollar_value , condition, storage_location, identification_code}
+        let item = {equipment_item , type_of_equipment_item, quantity_in_item , category, size, dollar_value , condition, storage_location, identification_code}
         EquipmentAndItemsAPI.patch(`/${id}/`, item).then(() => { 
             setEquipmentItem('')
             setTypeOfEquipmentItem('')
             setCategory('')
+            setSize('')
             setQuantityInItem('')
             setDollarValue('')
             setCondition('')
@@ -108,6 +111,15 @@ function EquipmentEdit() {
                     placeholder="Category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Size</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Size"
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">

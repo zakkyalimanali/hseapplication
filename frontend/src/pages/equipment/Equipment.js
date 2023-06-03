@@ -58,12 +58,13 @@ function Equipment() {
                 <th scope="col" className="col-1">ID</th>
                 <th scope="col" className="col-2">Item / Equipment</th>
                 <th scope="col" className="col-2">Type of equipment / item</th>
-                <th scope="col" className="col-2">Category</th>
+                 <th scope="col" className="col-1">Identification Code</th> 
+                <th scope="col" className="col-1">Category</th>
                 {/* <th scope="col" className="col-1">Dollar Value</th> */}
                 {/* <th scope="col" className="col-2">Condition and Remarks</th> */}
+                <th scope="col" className="col-1">Size</th>
                 <th scope="col" className="col-1">Quantity in item</th>
                 <th scope="col" className="col-2">Storage Location</th>
-                <th scope="col" className="col-1">Identification Code</th> 
                 <th scope="col" className="col-1">Edit</th>
                 <th scope="col" className="col-1">Delete</th>
               </tr>
@@ -79,12 +80,14 @@ function Equipment() {
                     <td>{equipment.id}</td>
                     <td>{equipment.equipment_item}</td>
                     <td>{equipment.type_of_equipment_item}</td>
+                    <td>{equipment.identification_code}</td>
                     <td>{equipment.category}</td>
+                    <td>{equipment.size}</td>
                     {/* <td>{equipment.dollar_value}</td>
                     <td>{equipment.condition}</td> */}
                     <td>{equipment.quantity_in_item}</td>
                     <td>{equipment.storage_location}</td>
-                    <td>{equipment.identification_code}</td>
+                    
                
 
 

@@ -147,3 +147,19 @@ li {
     color: red;
     font-weight: bold;
 }
+
+.about_us {
+    /* background-color: lightblue; */
+    background-color: rgba(251,212,124, 0.5);
+    border-radius: 15px;
+}
+
+.zakky_image {
+    height: 20rem;
+    width: 18rem;
+}
+
+.zakky_intro{
+    background-color: rgba(251,212,124, 0.5);
+    border-radius: 15px;
+}
