@@ -16,6 +16,7 @@ export default function Home() {
     const [staffs , setStaff] = useState([])
     const [incidents , setIncidents] = useState([])
     const {authTokens , logoutUser} = useContext(AuthContext);
+    console.log(authTokens)
 
     useEffect(() => {
         StaffAPI.get('/')

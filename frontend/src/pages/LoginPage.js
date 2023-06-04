@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 
 const LoginPage = () => {
   let {loginUser} = useContext(AuthContext)
+  console.log(loginUser)
   return (
     <div className="container mt-5">
       <div className="row">

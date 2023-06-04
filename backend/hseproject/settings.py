@@ -11,9 +11,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# # Actual directory user files go to
+# MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+
+# # URL used to access the media
+# MEDIA_URL = '/media/'
+
+
 
 from datetime import timedelta
 
@@ -266,5 +276,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS HEADERS
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
-    'http://localhost:3000'
+    'http://localhost:3000',
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     '*',
+# ]
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

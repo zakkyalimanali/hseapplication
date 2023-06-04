@@ -164,3 +164,14 @@ class EquipmentAndItems(models.Model):
 class ItemsPerBox(models.Model):
     item = models.ForeignKey(EquipmentAndItems, on_delete=models.CASCADE , null=True, blank = True)
     quantity_in_box = models.IntegerField(null=True, blank=True)
+
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+class HSEManagement(models.Model): 
+    title = models.CharField(max_length=100, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
