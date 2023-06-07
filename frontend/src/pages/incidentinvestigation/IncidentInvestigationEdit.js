@@ -284,7 +284,7 @@ function IncidentInvestigationEdit() {
                   </thead>
                   <tbody>
                     {/* {siteHazards.map((siteHazard, index) => { */}
-
+                    {/* This is the get the invidual incident factors for that incident , this works by filtering the by the id of the incidentinvestigation*/}
                     {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
                     .map((incidentfactor) => {
                       return (

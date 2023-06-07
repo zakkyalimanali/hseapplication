@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'csp',
 ]
 
 SIMPLE_JWT = {
@@ -116,6 +117,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'hseproject.urls'
@@ -279,10 +281,14 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
+
+# CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
 #     '*',
 # ]
 
+CSP_DEFAULT_SRC = ("'self'", "data:",)  # Other default directives
+CSP_IMG_SRC = ("*",)  # Allow images from any source
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
