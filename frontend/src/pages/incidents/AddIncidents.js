@@ -1,8 +1,10 @@
-import {useState , useEffect} from 'react'
+import {useState ,useContext,  useEffect} from 'react'
 import IncidentAPI from '../../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import { Link , useNavigate } from 'react-router-dom';
+import AuthContext from "../../context/AuthContext";
+
 
 export default function AddIncidents() {
     // const [id , setId] = useState(null)
@@ -26,9 +28,11 @@ export default function AddIncidents() {
     const [follow_up_remarks , setFollowUpRemarks] = useState('')
     const [status , setStatus] = useState('')
     const [responsible_party , setResponsibleParty] = useState('')
+    const [photo_image , setPhotoImage] = useState(null)
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
+    const {authTokens} = useContext(AuthContext);
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -50,15 +54,81 @@ export default function AddIncidents() {
         }).catch(console.log)
     }
 
+    
+
+
     const onSubmit = (e) => {
-        e.preventDefault()
-        let item = {short_desc, raised_by , date_raised  ,findings ,what_happened , why_happened, life_saving_rule, incident_date, location, discussion, target_date, follow_up, follow_up_remarks, status, responsible_party}
-        navigate("/incidenttable");
-        IncidentAPI.post('/' , item).then(() => incidentData())
-    }
-    const onDelete = (id) => {
-      IncidentAPI.delete(`/${id}/`).then((res) => incidentData())
-    }
+      e.preventDefault();
+      // Create the 'item' object with the form data
+      // let item = {
+      //   short_desc,
+      //   raised_by,
+      //   date_raised,
+      //   findings,
+      //   what_happened,
+      //   why_happened,
+      //   life_saving_rule,
+      //   incident_date,
+      //   location,
+      //   discussion,
+      //   target_date,
+      //   follow_up,
+      //   follow_up_remarks,
+      //   status,
+      //   responsible_party,
+      // };  
+      // POST the 'item' object to the IncidentAPI
+        // IncidentAPI.post('/', item)
+        //   .then(() => incidentData())
+        //   .catch(err => console.log(err.response));
+    
+      // Check if photo_image is set before sending the photo
+        // if (photo_image) {
+          let form_data = new FormData();
+          form_data.append('short_desc', short_desc);
+          form_data.append('raised_by', raised_by);
+          form_data.append('date_raised', date_raised);
+          form_data.append('findings', findings);
+          form_data.append('what_happened', what_happened);
+          form_data.append('why_happened', why_happened);
+          form_data.append('life_saving_rule', life_saving_rule);
+          form_data.append('incident_date', incident_date);
+          form_data.append('location', location);
+          form_data.append('discussion', discussion);
+          form_data.append('target_date', target_date);
+          form_data.append('follow_up', follow_up);
+          form_data.append('follow_up_remarks', follow_up_remarks);
+          form_data.append('status', status);
+          form_data.append('responsible_party', responsible_party);
+          form_data.append('photo_image', photo_image);
+          
+          let url = 'http://127.0.0.1:8000/hseapp/incident/';
+          let token = authTokens.access;
+
+          axios
+            .post(url, form_data, {
+              headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+              },
+              responseType: 'blob'
+            })
+            .then(res => {
+              console.log(res.data);
+            })
+            .catch(err => console.log(err.response));
+            navigate('/incidenttable');
+        }
+      
+       
+    // };
+    
+    console.log(authTokens)
+
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      setPhotoImage(file);
+    };
 
     return(
 
@@ -331,16 +401,16 @@ export default function AddIncidents() {
                   onChange={(e) => setResponsibleParty(e.target.value)}
                 />
               </Form.Group>
-{/*               
-              <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={onSubmit}
-                  className="mx-2"
-                >
-                  <Link className="white" to="/incidenttable">Save</Link>
-                </Button> */}
-                {/* <Link  onClick={onSubmit} className="white" to="/incidenttable">Save</Link> */}
+                <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Photo Evidence</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept = "image/*"
+                  value={photo_image}
+                  onChange={handleFileChange}
+                />
+              </Form.Group>
+
                   <Button
                     variant="primary"
                     onClick={onSubmit}>
