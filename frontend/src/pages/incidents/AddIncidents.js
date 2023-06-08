@@ -52,7 +52,7 @@ export default function AddIncidents() {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        let item = {short_desc, raised_by , date_raised  ,findings ,what_happened , why_happened, life_saving_rule, incident_date, location, discussion, target_date, follow_up, follow_up_remarks, status, responsible_party}
+        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
         navigate("/incidenttable");
         IncidentAPI.post('/' , item).then(() => incidentData())
     }
@@ -195,7 +195,12 @@ export default function AddIncidents() {
                   type="date"
                   placeholder="Enter Staff Id Number"
                   value={date_raised}
-                  onChange={(e) => setDateRaised(e.target.value)}
+                  // onChange={(e) => setDateRaised(e.target.value)}
+                  onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setDateRaised(formattedDate);
+                  }}
                 />
               </Form.Group>
               
@@ -254,7 +259,12 @@ export default function AddIncidents() {
                    type="date"
                    placeholder="Incident Date"
                    value={incident_date}
-                   onChange={(e) => setIncidentDate(e.target.value)}
+                  //  onChange={(e) => setIncidentDate(e.target.value)}
+                   onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setIncidentDate(formattedDate);
+                  }}
                  />
                </Form.Group>
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
@@ -282,7 +292,12 @@ export default function AddIncidents() {
                    type="date"
                    placeholder="Target Date"
                    value={target_date}
-                   onChange={(e) => setTargetDate(e.target.value)}
+                  //  onChange={(e) => setTargetDate(e.target.value)}
+                   onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setTargetDate(formattedDate);
+                  }}
                  />
                </Form.Group>
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">

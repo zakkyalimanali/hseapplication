@@ -76,7 +76,8 @@ export default function EditIncident() {
     };
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {short_desc , what_happened, why_happened , raised_by , date_raised, life_saving_rule,findings ,incident_date , location, discussion , target_date, follow_up, follow_up_remarks , status, responsible_party}
+        // let item = {short_desc , what_happened, why_happened , raised_by , date_raised, life_saving_rule,findings ,incident_date , location, discussion , target_date, follow_up, follow_up_remarks , status, responsible_party}
+        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
         IncidentAPI.post('/', item).then(() => dataIncident());
     }
 
@@ -244,7 +245,12 @@ const onUpdate = (id) => {
                   type="date"
                   placeholder="Date it happened"
                   value={date_raised}
-                   onChange={(e) => setDateRaised(e.target.value)}
+                  //  onChange={(e) => setDateRaised(e.target.value)}
+                   onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setDateRaised(formattedDate);
+                  }}
                  />
                </Form.Group>
 
@@ -305,7 +311,12 @@ const onUpdate = (id) => {
                    type="date"
                    placeholder="Incident Date"
                    value={incident_date}
-                   onChange={(e) => setIncidentDate(e.target.value)}
+                  //  onChange={(e) => setIncidentDate(e.target.value)}
+                  onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setIncidentDate(formattedDate);
+                  }}
                  />
                </Form.Group>
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
@@ -333,7 +344,12 @@ const onUpdate = (id) => {
                    type="date"
                    placeholder="Target Date"
                    value={target_date}
-                   onChange={(e) => setTargetDate(e.target.value)}
+                  //  onChange={(e) => setTargetDate(e.target.value)}
+                   onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setTargetDate(formattedDate);
+                  }}
                  />
                </Form.Group>
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
