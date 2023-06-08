@@ -433,15 +433,19 @@ const onUpdate = (id) => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Responsible Party</Form.Label>
+                <Form.Label>Photo Evidence</Form.Label>
                 <Form.Control
                   type="file"
                   // placeholder="Enter Responsible Party"
                   onChange={handleImageChange}
                 />
               </Form.Group>
+              <div className="row justify-content-center">
+                <img className="col-md-10 mt-3" src={incidents.photo_image} alt={incidents.photo_image}/>
+              </div>
 
-              <div className="mt-3 float-right">
+              {/* <div className="row text-center mt-3"> */}
+              <div className="text-center mt-3">
                 {/* <Button
                   variant="primary"
                   type="submit"
@@ -450,16 +454,22 @@ const onUpdate = (id) => {
                 >
                   Save
                 </Button> */}
-                <Link to="/incidenttable/">
-                  <Button
-                    variant="success"
-                    type="button"
-                    onClick={(e) => onUpdate(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </Link>
+              
+                  
+              
+       
+                    <Button
+                      variant="success"
+                      type="button"
+                      onClick={(e) => onUpdate(id)}
+                      className="mx-2"
+                    >
+                      Update
+                    </Button>
+                    <Link  to="/incidenttable/">
+                      <Button>Return</Button>
+                    </Link>
+
               </div>
              </Form>
           </div>

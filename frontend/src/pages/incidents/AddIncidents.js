@@ -415,7 +415,7 @@ export default function AddIncidents() {
                 />
               </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Responsible Party</Form.Label>
+                <Form.Label>Photo Evidence</Form.Label>
                 <Form.Control
                   type="file"
                   // placeholder="Enter Responsible Party"

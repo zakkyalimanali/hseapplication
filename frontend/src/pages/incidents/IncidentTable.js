@@ -213,7 +213,10 @@ export default function IncidentTable() {
             <div>
             {incidents.map((incident, index) => {
                     return (
-                      <div>{incident.photo_image}</div>
+                      // <div>{incident.photo_image}</div>
+                      <div>
+                        {/* <img src={incident.photo_image} alt={incident.photo_image}/> */}
+                      </div>
                     )
                     })}
             </div>
