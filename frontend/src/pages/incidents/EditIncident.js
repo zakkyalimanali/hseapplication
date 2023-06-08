@@ -1,9 +1,10 @@
-import {useEffect , useState} from 'react'
+import {useEffect , useState , useContext} from 'react'
 import IncidentAPI from '../../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { useParams } from 'react-router';
+import AuthContext from "../../context/AuthContext";
 
 
 export default function EditIncident() {
@@ -23,10 +24,12 @@ export default function EditIncident() {
     const [follow_up , setFollowUp] = useState('')
     const [follow_up_remarks , setFollowUpRemarks] = useState('')
     const [status , setStatus] = useState('')
+    const [photo_image , setPhotoImage] = useState(null)
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
     const [responsible_party , setResponsibleParty] = useState('')
+    const {authTokens} = useContext(AuthContext);
     
 
     useEffect(() => {
@@ -69,6 +72,7 @@ export default function EditIncident() {
             setFollowUpRemarks(res.data.follow_up_remarks)
             setStatus(res.data.status)
             setResponsibleParty(res.data.responsible_party)
+            setPhotoImage(res.data.photo_image)
             console.log(incidents)
           })
           .catch(console.log);
@@ -77,15 +81,35 @@ export default function EditIncident() {
     const onSubmit = (e) => {
         e.preventDefault();
         // let item = {short_desc , what_happened, why_happened , raised_by , date_raised, life_saving_rule,findings ,incident_date , location, discussion , target_date, follow_up, follow_up_remarks , status, responsible_party}
-        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
-        IncidentAPI.post('/', item).then(() => dataIncident());
-    }
+        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
+        // IncidentAPI.post('/', item).then(() => dataIncident());
+        let token = authTokens.access
+        IncidentAPI.post('/' , item,  {
+                headers: {
+                  'content-type': 'multipart/form-data',
+                  'Authorization': `Bearer ${token}`
+                },
+                responseType: 'blob'
+              })
+              .then(() => dataIncident())  
+              
+              
 
+    }
+console.log(authTokens)
 
   
 const onUpdate = (id) => {
-  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
-  IncidentAPI.patch(`/${id}/`, item).then(() => {
+  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party,  photo_image};
+  let token = authTokens.access
+  IncidentAPI.patch(`/${id}/`, item , {
+    headers: {
+      'content-type': 'multipart/form-data',
+      'Authorization': `Bearer ${token}`
+    },
+    responseType: 'blob'
+  })
+  .then(() => {
     setWhatHappened('')
     setWhyHappened('')
     setRaisedBy('')
@@ -100,6 +124,7 @@ const onUpdate = (id) => {
     setFollowUpRemarks('')
     setStatus('')
     setResponsibleParty('')
+    setPhotoImage('')
     setShortDesc(''); // Reset the short_desc state value after update
     dataIncident();
   });
@@ -124,8 +149,16 @@ const onUpdate = (id) => {
         setFollowUpRemarks(item.follow_up_remarks)
         setStatus(item.status)
         setResponsibleParty(item.responsible_party)
+        setPhotoImage(item.photo_image)
         setId(item.id)
     }
+
+    
+    const handleImageChange = (e) => {
+      setPhotoImage(e.target.files[0]);
+    };
+  
+
     return( 
     <div className="container mt-5">
         <div className="row">
@@ -396,6 +429,15 @@ const onUpdate = (id) => {
                   placeholder="Enter Responsible Party"
                   value={responsible_party}
                   onChange={(e) => setResponsibleParty(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Responsible Party</Form.Label>
+                <Form.Control
+                  type="file"
+                  // placeholder="Enter Responsible Party"
+                  onChange={handleImageChange}
                 />
               </Form.Group>
 

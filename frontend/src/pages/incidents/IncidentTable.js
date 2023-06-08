@@ -210,6 +210,13 @@ export default function IncidentTable() {
 
          
             </div>
+            <div>
+            {incidents.map((incident, index) => {
+                    return (
+                      <div>{incident.photo_image}</div>
+                    )
+                    })}
+            </div>
           </div>
     )
 
