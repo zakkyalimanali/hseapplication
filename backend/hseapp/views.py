@@ -17,8 +17,28 @@ class StaffViewSet(viewsets.ModelViewSet):
     queryset = Staff.objects.all()
 
 class IncidentViewSet(viewsets.ModelViewSet):
-    serializer_class = IncidentSeriallizer
     queryset = Incident.objects.all()
+    serializer_class = IncidentSeriallizer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class Incident(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get(self, request, *args, **kwargs):
+        incidents = Incident.objects.all()
+        serializer = IncidentSeriallizer(incidents, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        posts_serializer = IncidentSeriallizer(data=request.data)
+        if posts_serializer.is_valid():
+            posts_serializer.save()
+            return Response(posts_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('error', posts_serializer.errors)
+            return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AttendenceViewSet(viewsets.ModelViewSet):
     serializer_class = AttendenceSeriallizer
