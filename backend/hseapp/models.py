@@ -172,7 +172,8 @@ def upload_to(instance, filename):
 class HSEManagement(models.Model): 
     title = models.CharField(max_length=100, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    # image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    management_commitment_document = models.FileField(upload_to='post_documents', null=True, blank=True)
     
     def __str__(self):
         return self.title
