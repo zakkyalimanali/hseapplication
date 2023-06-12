@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from hseapp import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
 
 router = DefaultRouter()
 router.register(r'staff', views.StaffViewSet, basename="staff")
@@ -23,10 +24,16 @@ router.register(r'incidentfactors', views.IncidentFactorsViewSet, basename='inci
 router.register(r'equipmentanditems', views.EquipmentAndItemsViewSet, basename='equipmentanditems')
 router.register(r'itemsperbox', views.ItemsPerBoxViewSet, basename='itemsperbox')
 router.register(r'hsemanagement', views.HSEManagementViewSet, basename='hsemanagement')
+router.register(r'riskregister', views. RiskRegisterViewSet, basename='riskregister')
+
 # router.register(r'about', views.IncidentViewSet, basename="about")
 
 # router.register(r'incidenttable/oneincident', views.IncidentViewSet, basename="incidenttable/oneincident")
 
 
-urlpatterns = router.urls
+# urlpatterns = router.urls
+urlpatterns = [
+    # Other URL patterns...
+    path('api/', include(router.urls)),
+]
 # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

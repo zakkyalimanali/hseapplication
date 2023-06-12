@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement,  RiskRegister
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, RiskRegisterSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -115,5 +115,16 @@ class HSEManagement(APIView):
             print('error', posts_serializer.errors)
             return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RiskRegisterViewSet(viewsets.ModelViewSet):
+    serializer_class = RiskRegisterSerializer
+    queryset = RiskRegister.objects.all()
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+    
 # Create your views here.

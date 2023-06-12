@@ -101,6 +101,7 @@ export default function Navtop() {
                             <Nav.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
                     <Nav>

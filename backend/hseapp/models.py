@@ -177,3 +177,16 @@ class HSEManagement(models.Model):
     
     def __str__(self):
         return self.title
+
+class RiskRegister(models.Model):
+    date_raised = models.DateField(null=True, blank=True)
+    risk_description = models.CharField(max_length=300, null=True, blank=True)
+    likelihood_of_risk = models.CharField(max_length=300, null=True, blank=True)
+    impact_of_risk = models.CharField(max_length=300, null=True, blank=True)
+    severity = models.CharField(max_length=300, null=True, blank=True)
+    owner = models.CharField(max_length=300, null=True, blank=True)
+    mitigating_action = models.CharField(max_length=300, null=True, blank=True)
+    contingency_action = models.CharField(max_length=300, null=True, blank=True)
+    progress_on_actions = models.CharField(max_length=300, null=True, blank=True)
+    status = models.CharField(max_length=300, null=True, blank=True)
+    # useful_resources = 
