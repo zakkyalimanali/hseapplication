@@ -54,6 +54,8 @@ import Hsemanagement from './pages/hsemanagement/Hsemanagement';
 import Riskmanagementlist from './pages/riskmanagement/Riskmanagementlist';
 import Reportinglist from './pages/reporting/Reportinglist';
 import RiskRegisterList from './pages/riskregister/RiskRegisterList';
+import RiskRegisterAdd from './pages/riskregister/RiskRegisterAdd';
+import RiskRegisterEdit from './pages/riskregister/RiskRegisterEdit';
 
 
 
@@ -81,6 +83,8 @@ function App() {
               <Route path='equipmentadd' element={<EquipmentAdd/>}/>
               <Route path='equipmentedit/:id' element={<EquipmentEdit/>}/>
               <Route path="riskregisterlist" element={<RiskRegisterList/>}/>
+              <Route path="riskregisteradd" element={<RiskRegisterAdd/>}/>
+              <Route path="riskregisteredit/:id" element={<RiskRegisterEdit/>}/>
               <Route path="equipmenttotals" element={<EquipmentTotals/>}/>
               <Route path="hseauditlist" element={<Hseaditlist/>}/>
               <Route path="emergencyplanlist" element={<Emergencyplanlist/>}/>
