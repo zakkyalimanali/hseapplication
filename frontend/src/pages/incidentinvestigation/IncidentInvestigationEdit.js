@@ -1,6 +1,7 @@
 import React , {useEffect , useState} from 'react'
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
 import IncidentFactorsAPI from '../../API/IncidentFactorsAPI';
+
 import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
@@ -10,13 +11,16 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import Incidentfactorsadd from './incidentfactors/Incidentfactorsadd';
+import IncidentPhotosAdd from './incidentphotos/IncidentPhotosAdd'
 // Others 
 import { useNavigate } from 'react-router'
+import IncidentPhotosAPI from '../../API/IncidentPhotosAPI';
 
 
 function IncidentInvestigationEdit() {
   const [incidentinvestigations , setIncidentInvestigations] = useState([])
   const [incidentfactors , setIncidentFactors] = useState([])
+  const [incidentphotos , setIncidentPhotos] = useState([])
   const [staffs , setStaffs] = useState([])
   const params = useParams()
   const [investigator , setInvestigator] = useState('')
@@ -41,7 +45,16 @@ function IncidentInvestigationEdit() {
   useEffect(() => {
     fetchStaff()
     fetchIncidentFactor()
+    fetchIncidentPhoto()
   },[])
+
+  const fetchIncidentPhoto = () => {
+    IncidentPhotosAPI.get('/')
+    .then((res) => {
+      setIncidentPhotos(res.data)
+    })
+    .catch(console.log)
+  }
 
   const fetchIncidentInvestigation = () => {
     axios.get(`http://127.0.0.1:8000/hseapp/incidentinvestigation/${params.id}/`)
@@ -108,6 +121,12 @@ function IncidentInvestigationEdit() {
        fetchIncidentFactor();
        }).catch(console.log)
    }
+   
+   const onDeleteIncidentPhotos = (id) => {
+    IncidentPhotosAPI.delete(`/${id}/`).then((res) => {
+     fetchIncidentPhoto();
+     }).catch(console.log)
+ }
 
    const returnToPreviousIncidentInvestigationListPage = () => {
     navigate(-1)
@@ -243,14 +262,6 @@ function IncidentInvestigationEdit() {
                   />
                 </Form.Group>
 
-                
-
-                
-
-
-
-
-                
           </div>
         </div>
         </div>
@@ -263,6 +274,44 @@ function IncidentInvestigationEdit() {
       </div> */}
       <div className="col-md-12">
         <div className="row">
+
+      <IncidentPhotosAdd  incidentinvestigation = {params.id}/>  
+
+      <h3 className="float-left">Incident Photos</h3>
+
+      <Table striped bordered hover className='mt-3'>
+                <thead>
+                    <tr>
+                        <th scope="col" className="col-1">ID</th>
+                        <th scope="col" className="col-1">Title</th>
+                        <th scope="col" className="col-1">Description</th>
+                        <th scope="col" className="col-3">Image</th>
+                        <th scope="col" className="col-1">Edit</th>
+                        <th scope="col" className="col-1">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {incidentphotos.filter ((incidentphoto) => incidentphoto.incidentinvestigation === Number(params.id))
+                      .map((incidentphoto) => {  
+                        return (
+                            <tr key={incidentphoto.id}>
+                                <td>{incidentphoto.id}</td>
+                                <td>{incidentphoto.title}</td>
+                                <td>{incidentphoto.description}</td>
+                                {/* <td>{hsemanagement.context}</td> */}
+                                <td><a href={`${incidentphoto.incident_photo}`} download={incidentphoto.incident_photo}><img className="col-12" src={incidentphoto.incident_photo} alt={incidentphoto.incident_photo}/></a> 
+                             
+                                  {/* <a href={`${incidentphoto.incident_photo}`} download={incidentphoto.incident_photo}>Download</a> */}
+                                </td>
+                                <td><Link to={`/incidentphotosedit/${incidentphoto.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+
+                                <td className='delete' onClick={() => onDeleteIncidentPhotos(incidentphoto.id)}><FontAwesomeIcon icon={faTrash } /></td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+        </Table>  
 
       <Incidentfactorsadd incidentinvestigation = {params.id}/>   
 

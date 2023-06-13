@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement,  RiskRegister
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, RiskRegisterSerializer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement,  RiskRegister, IncidentPhotos
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, RiskRegisterSerializer , IncidentPhotosSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -119,5 +119,8 @@ class RiskRegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RiskRegisterSerializer
     queryset = RiskRegister.objects.all()
     
+class IncidentPhotosViewSet(viewsets.ModelViewSet):
+    serializer_class = IncidentPhotosSerializer
+    queryset = IncidentPhotos.objects.all()    
 
 # Create your views here.

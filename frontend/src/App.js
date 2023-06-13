@@ -56,6 +56,7 @@ import Reportinglist from './pages/reporting/Reportinglist';
 import RiskRegisterList from './pages/riskregister/RiskRegisterList';
 import RiskRegisterAdd from './pages/riskregister/RiskRegisterAdd';
 import RiskRegisterEdit from './pages/riskregister/RiskRegisterEdit';
+import IncidentPhotosEdit from './pages/incidentinvestigation/incidentphotos/IncidentPhotosEdit';
 
 
 
@@ -75,6 +76,7 @@ function App() {
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
               <Route path='Incidentfactorsedit/:id' element={<Incidentfactorsedit/>}/>
+              <Route path="incidentphotosedit/:id" element ={<IncidentPhotosEdit/>}/>
               <Route path="hsereferenceslist" element={<Hsereferenceslist/>}/>
               <Route path="workplaceruleslist" element={<Workplaceruleslist/>}/>
               <Route path="safeworkpracticelist" element={<Safeworkpracticelist/>}/>
