@@ -75,7 +75,7 @@ function IncidentPhotosAdd(props) {
         <div className="row">
           <div className= "col-md-2"></div>
             <div className="col-md-8 ">
-                <h3 className="float-left">Create a new Incident</h3>
+                <h3 className="float-left">Insert New Photo</h3>
             
             <Form onSubmit={willSubmitTheEntryIntoDatabase} className="update mt-4">
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
