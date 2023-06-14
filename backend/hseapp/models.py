@@ -1,6 +1,34 @@
 from django.db import models
 from .modelsMisc import why , what, lsr
+from django.contrib.auth.models import AbstractUser , Group, Permission
 import uuid
+
+class CustomUser(AbstractUser):
+    is_management = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
+    
+    class Meta:
+        # Add a unique related_name for groups field
+        default_related_name = 'custom_users'
+
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        related_query_name='custom_users'
+    )
+
+    # Set related_query_name for user_permissions field
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_query_name='custom_users'
+    )
 
 class Staff(models.Model):
     name = models.CharField(max_length= 100 , null=True , blank= True)
