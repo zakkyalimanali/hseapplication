@@ -57,6 +57,8 @@ import RiskRegisterList from './pages/riskregister/RiskRegisterList';
 import RiskRegisterAdd from './pages/riskregister/RiskRegisterAdd';
 import RiskRegisterEdit from './pages/riskregister/RiskRegisterEdit';
 import IncidentPhotosEdit from './pages/incidentinvestigation/incidentphotos/IncidentPhotosEdit';
+import PermitToWorkList from './pages/permittowork/PermitToWorkList';
+import JobSafetyAnalysis from './pages/jobsafetyanalysis/JobSafetyAnalysis';
 
 
 
@@ -94,6 +96,8 @@ function App() {
               <Route path="riskmanagementlist" element={<Riskmanagementlist/>}/>
               <Route path="reportinglist" element={<Reportinglist/>}/>
               <Route path='stafflist' element={<StaffList/>} />
+              <Route path="permittowork" element={<PermitToWorkList/>}/>
+              <Route path="jobsafetyanalysis" element={<JobSafetyAnalysis/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
               <Route path='stats' element={<Stats/>}/>
