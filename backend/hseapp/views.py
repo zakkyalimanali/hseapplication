@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement,  RiskRegister, IncidentPhotos
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, RiskRegisterSerializer , IncidentPhotosSerializer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement,  RiskRegister, IncidentPhotos,JobSafetyAnalysis , JobSafetyEquipment
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, RiskRegisterSerializer , IncidentPhotosSerializer, JobSafetyAnalysisSerializer , JobSafetyEquipmentSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -124,3 +124,11 @@ class IncidentPhotosViewSet(viewsets.ModelViewSet):
     queryset = IncidentPhotos.objects.all()    
 
 # Create your views here.
+
+class JobSafetyAnalysisViewSet(viewsets.ModelViewSet):
+    serializer_class = JobSafetyAnalysisSerializer
+    queryset = JobSafetyAnalysis.objects.all() 
+
+class JobSafetyEquipmentViewSet(viewsets.ModelViewSet):
+    serializer_class = JobSafetyEquipmentSerializer
+    queryset = JobSafetyEquipment.objects.all() 

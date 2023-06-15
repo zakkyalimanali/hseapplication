@@ -201,3 +201,21 @@ class IncidentPhotos(models.Model):
     
     def __str__(self):
         return self.title
+
+class JobSafetyAnalysis(models.Model):
+    job_title = models.CharField(max_length=100, null=True, blank=True)
+    jsa_id = models.CharField(max_length=100, null=True, blank=True)
+    job_performer = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_job_performer')
+    supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_supervisor')
+    analysis_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_analysis_by')
+    company = models.CharField(max_length=100, null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    department = models.CharField(max_length=100, null=True, blank=True)
+    reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_reviewed_by')
+    date_raised = models.DateField(null=True, blank=True)
+
+
+class JobSafetyEquipment(models.Model):
+    job_safety_analysis = models.ForeignKey(JobSafetyAnalysis, on_delete=models.CASCADE)
+    safety_equipment = models.CharField(max_length=100, null=True, blank=True)
+
