@@ -10,6 +10,7 @@ import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import JobSafetyEquipmentAdd from '../jobsafetyanalysis/jobsafetyequipment/JobSafetyEquipmentAdd'
 
 // Others 
 import { useNavigate } from 'react-router'
@@ -126,6 +127,12 @@ function JobSafetyAnalysisEdit() {
         })
         navigate(-1)
         }
+
+        const forDeletingEquipment = (id) => {
+          JobSafetyEquipmentAPI.delete(`/${id}/`).then((res) => {
+           fetchJobSafetyEquipment();
+           }).catch(console.log)
+       }
     
 
   return (
@@ -257,7 +264,7 @@ function JobSafetyAnalysisEdit() {
                   />
                 </Form.Group>
 
-                {/* <JobSafetyEquipmentAdd jobsafetyanalysis = {params.id}/>
+                <JobSafetyEquipmentAdd jobsafetyanalysis = {params.id}/>
 
                 <h3 className="float-left">Safety Equipment</h3>
 
@@ -278,8 +285,11 @@ function JobSafetyAnalysisEdit() {
                         <tr key={jobsafetyequipment.id}>
                           <td>{jobsafetyequipment.id}</td>
                           <td>{jobsafetyequipment.safety_equipment}</td>
-                          <td>Edit</td>
-                          <td>Delete</td>
+                          <td><Link to={`/jobsafetyequipmentedit/${jobsafetyequipment.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                          <td><FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => forDeletingEquipment(jobsafetyequipment.id)}
+              /></td>
 
                         </tr>
                       )
@@ -288,7 +298,7 @@ function JobSafetyAnalysisEdit() {
                     }
                   </tbody>
 
-                </Table> */}
+                </Table>
 
                 <div className="mt-3 float-right">
                   <Button

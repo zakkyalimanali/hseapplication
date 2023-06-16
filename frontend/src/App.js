@@ -61,6 +61,7 @@ import PermitToWorkList from './pages/permittowork/PermitToWorkList';
 import JobSafetyAnalysis from './pages/jobsafetyanalysis/JobSafetyAnalysis';
 import JobSafetyAnalysisAdd from './pages/jobsafetyanalysis/JobSafetyAnalysisAdd';
 import JobSafetyAnalysisEdit from './pages/jobsafetyanalysis/JobSafetyAnalysisEdit';
+import JobSafetyEquipmentEdit from './pages/jobsafetyanalysis/jobsafetyequipment/JobSafetyEquipmentEdit';
 
 
 
@@ -102,6 +103,7 @@ function App() {
               <Route path="jobsafetyanalysis" element={<JobSafetyAnalysis/>}/>
               <Route path="jobsafetyanalysisadd" element={<JobSafetyAnalysisAdd/>}/>
               <Route path="jobsafetyanalysisedit/:id" element={<JobSafetyAnalysisEdit/>}/>
+              <Route path="jobsafetyequipmentedit/:id" element={<JobSafetyEquipmentEdit/>}/> 
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
               <Route path='stats' element={<Stats/>}/>
