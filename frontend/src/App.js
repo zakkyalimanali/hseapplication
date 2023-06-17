@@ -62,6 +62,7 @@ import JobSafetyAnalysis from './pages/jobsafetyanalysis/JobSafetyAnalysis';
 import JobSafetyAnalysisAdd from './pages/jobsafetyanalysis/JobSafetyAnalysisAdd';
 import JobSafetyAnalysisEdit from './pages/jobsafetyanalysis/JobSafetyAnalysisEdit';
 import JobSafetyEquipmentEdit from './pages/jobsafetyanalysis/jobsafetyequipment/JobSafetyEquipmentEdit';
+import JobSafetyStepsEdit from './pages/jobsafetyanalysis/jobsafetysteps/JobSafetyStepsEdit';
 
 
 
@@ -104,6 +105,7 @@ function App() {
               <Route path="jobsafetyanalysisadd" element={<JobSafetyAnalysisAdd/>}/>
               <Route path="jobsafetyanalysisedit/:id" element={<JobSafetyAnalysisEdit/>}/>
               <Route path="jobsafetyequipmentedit/:id" element={<JobSafetyEquipmentEdit/>}/> 
+              <Route path="jobsafetystepsedit/:id" element={<JobSafetyStepsEdit/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
               <Route path='stats' element={<Stats/>}/>

@@ -1,8 +1,10 @@
 import React , {useEffect , useState} from 'react'
+// APIS
 import JobSafetyAnalysisAPI from '../../API/JobSafetyAnalysisAPI';
 import JobSafetyEquipmentAPI from '../../API/JobSafetyEquipmentAPI';
-
+import JobSafetyStepsAPI from '../../API/JobSafetyStepsAPI';
 import StaffAPI from '../../API/StaffAPI';
+
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
@@ -14,6 +16,7 @@ import JobSafetyEquipmentAdd from '../jobsafetyanalysis/jobsafetyequipment/JobSa
 
 // Others 
 import { useNavigate } from 'react-router'
+import JobSafetyStepsAdd from './jobsafetysteps/JobSafetyStepsAdd';
 
 
 function JobSafetyAnalysisEdit() {
@@ -21,6 +24,7 @@ function JobSafetyAnalysisEdit() {
         const [staffs , setStaffs] = useState([])
         const [jobsafetyanalysises , setJobSafetyAnalysises ] = useState([])
         const [jobsafetyequipments , setJobSafetyEquipments] = useState([])
+        const [jobsafetysteps, setJobSafetySteps] = useState([])
         // for varibales
         const [job_title , setJobTitle] = useState('')
         const [jsa_id , setJsaId] = useState('')
@@ -46,6 +50,7 @@ function JobSafetyAnalysisEdit() {
         useEffect(() => {
             fetchStaff()      
             fetchJobSafetyEquipment()
+            fetchJobSafetySteps()
         },[]) 
     
         const fetchStaff = () => {
@@ -54,6 +59,14 @@ function JobSafetyAnalysisEdit() {
                 setStaffs(res.data)
             })
             .catch(console.log)
+        }
+
+        const fetchJobSafetySteps = () => {
+          JobSafetyStepsAPI.get('/')
+          .then((res) => {
+            setJobSafetySteps(res.data)
+          })
+          .catch(console.log)
         }
     
         const fetchJobSafetyAnalysis = () => {
@@ -134,6 +147,11 @@ function JobSafetyAnalysisEdit() {
            }).catch(console.log)
        }
     
+       const forDeletingSteps = (id) => {
+        JobSafetyStepsAPI.delete(`/${id}/`).then((res) => {
+         fetchJobSafetySteps();
+         }).catch(console.log)
+     }
 
   return (
     <div className="container mt-5">
@@ -298,6 +316,41 @@ function JobSafetyAnalysisEdit() {
                     }
                   </tbody>
 
+                </Table>
+
+                <JobSafetyStepsAdd jobsafetyanalysis = {params.id}/>
+
+                <h3 className="float-left">Job Steps</h3>
+
+                <Table striped bordered hover className='mt-3'>
+                  <thead>
+                    <tr>
+                        <th scope="col" className="col-2">ID</th>
+                        <th scope="col" className="col-2">Job Steps</th>
+                        <th scope="col" className="col-2">Hazards</th>
+                        <th scope="col" className="col-2">Controls</th>
+                        <th scope="col" className="col-1">Edit</th>
+                        <th scope="col" className="col-1">Delete</th>
+                      </tr>
+
+                  </thead>
+                  <tbody>
+                  {jobsafetysteps.filter((jobsafetystep)=> jobsafetystep.job_safety_analysis === Number(params.id)).map((jobsafetystep) => {
+                    return (
+                      <tr key={jobsafetystep.id}>
+                        <td>{jobsafetystep.id}</td>
+                        <td>{jobsafetystep.job_steps}</td>
+                        <td>{jobsafetystep.hazards}</td>
+                        <td>{jobsafetystep.controls}</td>
+                        <td><Link to={`/jobsafetystepsedit/${jobsafetystep.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                        <td><FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => forDeletingSteps(jobsafetystep.id)}
+              /></td>
+                      </tr>
+                    )
+                  })}
+                  </tbody>
                 </Table>
 
                 <div className="mt-3 float-right">
