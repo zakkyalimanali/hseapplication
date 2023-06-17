@@ -53,10 +53,11 @@ function JobSafetyEquipmentAdd(props) {
   return (
     <div className="container mt-5">
           <div className="row">
-            <div className= "col-md-12"></div>
-            <div className="col-md-12 ">
-              <h3 className="float-left">Create a JSA</h3>
-              
+            <div className= " col-md-12"></div>
+            <div className="col-md-12">
+        
+            <h3 style={{ textAlign: 'center' }}>List Safety Equipment</h3>
+       
               <Form onSubmit={willSubmitTheEntryIntoDatabase} 
               className="mt-4">
                 
@@ -70,15 +71,16 @@ function JobSafetyEquipmentAdd(props) {
                   />
                 </Form.Group>
 
-                <div className="mt-3 float-right">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={willSubmitTheEntryIntoDatabase}
-                    className="mx-2"
-                  >
-                    Save
-                  </Button>
+                <div className="mt-3 d-flex justify-content-center">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  onClick={willSubmitTheEntryIntoDatabase}
+                  className="mx-2"
+                >
+                  Save
+                </Button>
+            
                 </div>
               </Form>    
             </div>            

@@ -155,52 +155,52 @@ function JobSafetyAnalysisEdit() {
 
   return (
     <div className="container mt-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left">Create a JSA</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
+      <h3 className="float-left">Create a JSA</h3>
+        <Form onSubmit={willSubmitTheEntryIntoDatabase} 
               className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Date Raised</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Date Raised"
-                    value={date_raised}
-                    onChange={(e) => {
-                        const selectedDate = e.target.value;
-                        const formattedDate = selectedDate !== "" ? selectedDate : null;
-                        setDateRaised(formattedDate);
-                      }}
-                  />
+          <div className="row">
+            <div className="col-md-6">
+              <div className="row ">
+                <div className="col-md-10 ">
+                  <Form.Group className="mb-3" controlId="formName">
+                    <Form.Label>Date Raised</Form.Label>
+                      <Form.Control
+                        type="date"
+                        placeholder="Date Raised"
+                        value={date_raised}
+                        onChange={(e) => {
+                            const selectedDate = e.target.value;
+                            const formattedDate = selectedDate !== "" ? selectedDate : null;
+                            setDateRaised(formattedDate);
+                          }}
+                      />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Job Title</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Job Title"
-                    value={job_title}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                  />
-                </Form.Group>
+                    <Form.Control
+                      type="text"
+                      placeholder="Job Title"
+                      value={job_title}
+                      onChange={(e) => setJobTitle(e.target.value)}
+                    />
+                  </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>JSA Id</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="JSA Id"
-                    value={jsa_id}
-                    onChange={(e) => setJsaId(e.target.value)}
-                  />
+                    <Form.Control
+                      type="text"
+                      placeholder="JSA Id"
+                      value={jsa_id}
+                      onChange={(e) => setJsaId(e.target.value)}
+                    />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Job Performer</Form.Label>
-                  <Form.Control
-                    as ="select"
-                    placeholder="Job Performer"
-                    value={job_performer}
-                    onChange={(e) => setJobPerformer(e.target.value)}
-                  >
+                    <Form.Control
+                      as ="select"
+                      placeholder="Job Performer"
+                      value={job_performer}
+                      onChange={(e) => setJobPerformer(e.target.value)}
+                    >
                     <option value=''>Select An Option</option>
                 {staffs.map(staff => {
                   return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
@@ -223,6 +223,14 @@ function JobSafetyAnalysisEdit() {
 
                   </Form.Control>
                 </Form.Group>
+                
+                </div>
+              </div>
+            </div>
+                <div className="col">
+                <div className="row">
+                <div className="col-md-10 ">
+
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Analysed By</Form.Label>
                   <Form.Control
@@ -238,6 +246,9 @@ function JobSafetyAnalysisEdit() {
 
                   </Form.Control>
                 </Form.Group>
+
+
+                
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Reviewed By</Form.Label>
                   <Form.Control
@@ -281,10 +292,29 @@ function JobSafetyAnalysisEdit() {
                     onChange={(e) => setDepartment(e.target.value)}
                   />
                 </Form.Group>
+              
+                </div>
+              </div>
+              </div>
+              </div>
 
+
+
+
+
+
+
+
+
+
+
+
+              <div className="row  mx-auto">
+                <div className="col-md-4">
                 <JobSafetyEquipmentAdd jobsafetyanalysis = {params.id}/>
-
-                <h3 className="float-left">Safety Equipment</h3>
+                </div>
+                <div className="col-md-8">
+                <h3 className="float-left mt-5">Safety Equipment</h3>
 
                 <Table striped bordered hover className='mt-3'>
                   <thead>
@@ -317,6 +347,9 @@ function JobSafetyAnalysisEdit() {
                   </tbody>
 
                 </Table>
+
+              </div>
+              </div>
 
                 <JobSafetyStepsAdd jobsafetyanalysis = {params.id}/>
 
@@ -363,9 +396,10 @@ function JobSafetyAnalysisEdit() {
                     Update
                   </Button>
                 </div>
-              </Form>    
-            </div>            
-          </div>
+                 
+                
+  
+          </Form> 
         </div>
   )
 }

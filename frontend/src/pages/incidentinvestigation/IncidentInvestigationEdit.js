@@ -138,11 +138,11 @@ function IncidentInvestigationEdit() {
       <h3 className="float-left">Create a New Incident Investigation</h3>
         <Form onSubmit={onSubmit} className="mt-4">
       <div className="row">
-      <div className='col-md-6'>
-        <div className="row">
-          <div className="col-md-10 ">
-          <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Investigator</Form.Label>
+        <div className='col-md-6'>
+          <div className="row">
+            <div className="col-md-10 ">
+              <Form.Group className="mb-3" controlId="formName">
+                <Form.Label>Investigator</Form.Label>
                   <Form.Control
                     as="select"
                     placeholder="Investigator"
@@ -155,7 +155,7 @@ function IncidentInvestigationEdit() {
                 })}
 
                   </Form.Control>
-                </Form.Group>
+              </Form.Group>
               <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Team Member One</Form.Label>
                   <Form.Control
