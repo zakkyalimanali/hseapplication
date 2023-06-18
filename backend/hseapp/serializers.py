@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement ,RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps
+from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement ,RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards
 # from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
@@ -193,4 +193,9 @@ class JobSafetyEquipmentSerializer(serializers.ModelSerializer):
 class JobSafetyStepsSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobSafetySteps
+        fields = '__all__'
+
+class JobSafetyHazardsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobSafetyHazards
         fields = '__all__'

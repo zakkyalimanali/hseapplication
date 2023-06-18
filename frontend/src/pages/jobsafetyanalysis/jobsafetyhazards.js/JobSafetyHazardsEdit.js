@@ -1,27 +1,48 @@
-import {useState , useEffect, useContext} from 'react'
+import React , {useEffect , useState} from 'react'
 import JobSafetyAnalysisAPI from '../../../API/JobSafetyAnalysisAPI';
+
+import JobSafetyHazardsAPI from '../../../API/JobSafetyHazardsAPI';
 import JobSafetyStepsAPI from '../../../API/JobSafetyStepsAPI';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import axios from 'axios';
-import { Link , useNavigate } from 'react-router-dom';
-// import AuthContext from "../../context/AuthContext";
+import axios from 'axios'
 import Table from 'react-bootstrap/Table';
+import { ListGroup, Card, Button, Form } from "react-bootstrap";
+import { Link} from 'react-router-dom';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
 
-function JobSafetyStepsAdd(props) {
+// Others 
+import { useNavigate } from 'react-router'
+import { useParams } from 'react-router-dom';
+
+function JobSafetyHazardsEdit(props) {
     const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
-    const [jobsafetysteps , setJobSafetySteps] = useState([])
+
+    const [jobsafetyhazards , setJobSafetyHazards] = useState([])
     const job_safety_analysis = props.jobsafetyanalysis
-    const [job_steps , setJobSteps] = useState('')
-    // const [hazards , setHazards] = useState('')
-    // const [controls , setControls] = useState('')
+    const [hazards , setHazards] = useState('')
+    const [controls , setControls] = useState('')
+    const [id , setId] = useState(null)
     const navigate  = useNavigate()
+    const params = useParams()
+
+    useEffect(() => {
+        fetchJobSafetyHazards()
+        setId(params.id)
+    },[params.id])
+
+    const fetchJobSafetyHazards = () => {
+        axios.get(`http://127.0.0.1:8000/hseapp/jobsafetyhazards/${params.id}`)    
+        .then((res) => {
+            setJobSafetyHazards(res.data)
+            setControls(res.data.controls)
+            setHazards(res.data.hazards)
+        })
+        .catch(console.log)
+    }
 
     useEffect(() => {
         fetchJobSafetyAnalysis()
-        fetchJobSafetySteps()
     },[])
 
     const fetchJobSafetyAnalysis = () => {
@@ -32,57 +53,42 @@ function JobSafetyStepsAdd(props) {
         .catch(console.log)
     }
 
-    const fetchJobSafetySteps = () => {
-        JobSafetyStepsAPI.get('/')
-        .then((res) => {
-            setJobSafetySteps(res.data)
-        })
-        .catch(console.log)
-    }
-
-    // const willSubmitTheEntryIntoDatabase = (e) => {
-    //     e.preventDefault()
-    //     let item = {
-    //         job_steps,
-    //         hazards,
-    //         controls,
-    //         job_safety_analysis
-    //     }
-    //     navigate(0)
-    //     JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
-    // }
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
-            job_steps,
-            // hazards,
-            // controls,
+            hazards,
+            controls,
             job_safety_analysis
         }
         navigate(0)
-        JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
+        JobSafetyHazardsAPI.post('/', item).then(() => fetchJobSafetyHazards())
     }
+
+    const updateEntryToDatabase = (id) => {
+        let item = {
+            hazards,
+            controls,
+            job_safety_analysis
+        }
+        JobSafetyHazardsAPI.patch(`/${id}/`, item).then(() => {
+            setHazards('')
+            setControls('')
+            fetchJobSafetyHazards()
+        })
+        navigate(-1)
+    }
+
 
   return (
     <div className="container mt-5">
           <div className="row">
             <div className= "col-md-12"></div>
             <div className="col-md-12 ">
-              <h3 className="float-left">Create a Job Steps</h3>
+              <h3 className="float-left">List Job Hazard</h3>
               
               <Form onSubmit={willSubmitTheEntryIntoDatabase} 
               className="mt-4">
-                
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Job Steps</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Job Steps"
-                    value={job_steps}
-                    onChange={(e) => setJobSteps(e.target.value)}
-                  />
-                </Form.Group>
-                {/* <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Hazards</Form.Label>
                   <Form.Control
                     type="text"
@@ -99,16 +105,16 @@ function JobSafetyStepsAdd(props) {
                     value={controls}
                     onChange={(e) => setControls(e.target.value)}
                   />
-                </Form.Group> */}
+                </Form.Group>
 
-                <div className="mt-3 d-flex justify-content-center">
+                <div className="mt-3 float-right">
                   <Button
                     variant="primary"
-                    type="submit"
-                    onClick={willSubmitTheEntryIntoDatabase}
+                    type="button"
+                    onClick={(e) =>  updateEntryToDatabase(id)}
                     className="mx-2"
                   >
-                    Save
+                    Update
                   </Button>
                 </div>
               </Form>    
@@ -118,4 +124,4 @@ function JobSafetyStepsAdd(props) {
   )
 }
 
-export default JobSafetyStepsAdd
+export default JobSafetyHazardsEdit

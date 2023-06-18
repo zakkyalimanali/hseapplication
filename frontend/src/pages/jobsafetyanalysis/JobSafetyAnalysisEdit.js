@@ -3,6 +3,7 @@ import React , {useEffect , useState} from 'react'
 import JobSafetyAnalysisAPI from '../../API/JobSafetyAnalysisAPI';
 import JobSafetyEquipmentAPI from '../../API/JobSafetyEquipmentAPI';
 import JobSafetyStepsAPI from '../../API/JobSafetyStepsAPI';
+import JobSafetyHazardsAPI from '../../API/JobSafetyHazardsAPI';
 import StaffAPI from '../../API/StaffAPI';
 
 import axios from 'axios'
@@ -17,6 +18,7 @@ import JobSafetyEquipmentAdd from '../jobsafetyanalysis/jobsafetyequipment/JobSa
 // Others 
 import { useNavigate } from 'react-router'
 import JobSafetyStepsAdd from './jobsafetysteps/JobSafetyStepsAdd';
+import JobSafetyHazardsAdd from './jobsafetyhazards.js/JobSafetyHazardsAdd';
 
 
 function JobSafetyAnalysisEdit() {
@@ -25,6 +27,7 @@ function JobSafetyAnalysisEdit() {
         const [jobsafetyanalysises , setJobSafetyAnalysises ] = useState([])
         const [jobsafetyequipments , setJobSafetyEquipments] = useState([])
         const [jobsafetysteps, setJobSafetySteps] = useState([])
+        const [jobsafetyhazards , setJobSafetyHazards] = useState([])
         // for varibales
         const [job_title , setJobTitle] = useState('')
         const [jsa_id , setJsaId] = useState('')
@@ -51,6 +54,7 @@ function JobSafetyAnalysisEdit() {
             fetchStaff()      
             fetchJobSafetyEquipment()
             fetchJobSafetySteps()
+            fetchJobSafetyHazards()
         },[]) 
     
         const fetchStaff = () => {
@@ -65,6 +69,14 @@ function JobSafetyAnalysisEdit() {
           JobSafetyStepsAPI.get('/')
           .then((res) => {
             setJobSafetySteps(res.data)
+          })
+          .catch(console.log)
+        }
+
+        const fetchJobSafetyHazards = () => {
+          JobSafetyHazardsAPI.get('/')
+          .then((res) => {
+            setJobSafetyHazards(res.data)
           })
           .catch(console.log)
         }
@@ -150,6 +162,12 @@ function JobSafetyAnalysisEdit() {
        const forDeletingSteps = (id) => {
         JobSafetyStepsAPI.delete(`/${id}/`).then((res) => {
          fetchJobSafetySteps();
+         }).catch(console.log)
+     }
+
+       const forDeletingHazards = (id) => {
+        JobSafetyHazardsAPI.delete(`/${id}/`).then((res) => {
+         fetchJobSafetyHazards();
          }).catch(console.log)
      }
 
@@ -309,7 +327,7 @@ function JobSafetyAnalysisEdit() {
 
 
 
-              <div className="row  mx-auto">
+              <div className="row">
                 <div className="col-md-4">
                 <JobSafetyEquipmentAdd jobsafetyanalysis = {params.id}/>
                 </div>
@@ -320,7 +338,7 @@ function JobSafetyAnalysisEdit() {
                   <thead>
                     <tr>
                       <th scope="col" className="col-1">ID</th>
-                      <th scope="col" className="col-1">Safety Equipment</th>
+                      <th scope="col" className="col-9">Safety Equipment</th>
                       <th scope="col" className="col-1">Edit</th>
                       <th scope="col" className="col-1">Delete</th>
 
@@ -350,18 +368,20 @@ function JobSafetyAnalysisEdit() {
 
               </div>
               </div>
-
+              <div className="row">
+                <div className="col-md-4">
                 <JobSafetyStepsAdd jobsafetyanalysis = {params.id}/>
-
+                </div>
+                <div className="col-md-8 mt-5">
                 <h3 className="float-left">Job Steps</h3>
 
                 <Table striped bordered hover className='mt-3'>
                   <thead>
                     <tr>
-                        <th scope="col" className="col-2">ID</th>
-                        <th scope="col" className="col-2">Job Steps</th>
-                        <th scope="col" className="col-2">Hazards</th>
-                        <th scope="col" className="col-2">Controls</th>
+                        <th scope="col" className="col-1">ID</th>
+                        <th scope="col" className="col-9">Job Steps</th>
+                        {/* <th scope="col" className="col-2">Hazards</th>
+                        <th scope="col" className="col-2">Controls</th> */}
                         <th scope="col" className="col-1">Edit</th>
                         <th scope="col" className="col-1">Delete</th>
                       </tr>
@@ -373,8 +393,8 @@ function JobSafetyAnalysisEdit() {
                       <tr key={jobsafetystep.id}>
                         <td>{jobsafetystep.id}</td>
                         <td>{jobsafetystep.job_steps}</td>
-                        <td>{jobsafetystep.hazards}</td>
-                        <td>{jobsafetystep.controls}</td>
+                        {/* <td>{jobsafetystep.hazards}</td>
+                        <td>{jobsafetystep.controls}</td> */}
                         <td><Link to={`/jobsafetystepsedit/${jobsafetystep.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
                         <td><FontAwesomeIcon
                 icon={faTrash}
@@ -385,8 +405,53 @@ function JobSafetyAnalysisEdit() {
                   })}
                   </tbody>
                 </Table>
+                </div>
+              </div>
+              {/* <div className="row">
+                <div className="col-md-4"> */}
 
-                <div className="mt-3 float-right">
+                <JobSafetyHazardsAdd jobsafetyanalysis = {params.id}/>
+                {/* </div>
+                <div className="col-md-8 mt-5"> */}
+                <h3 className="float-left mt-3">Job Hazards</h3>
+
+                <Table striped bordered hover className='mt-3'>
+                  <thead>
+                    <tr>
+                        <th scope="col" className="col-2">ID</th>
+                        {/* <th scope="col" className="col-2">Job Steps</th> */}
+                        <th scope="col" className="col-4">Hazards</th>
+                        <th scope="col" className="col-4">Controls</th>
+                        <th scope="col" className="col-1">Edit</th>
+                        <th scope="col" className="col-1">Delete</th>
+                      </tr>
+
+                  </thead>
+                  <tbody>
+                  {jobsafetyhazards.filter((jobsafetyhazard)=> jobsafetyhazard.job_safety_analysis === Number(params.id)).map((jobsafetyhazard) => {
+                    return (
+                      <tr key={jobsafetyhazard.id}>
+                        <td>{jobsafetyhazard.id}</td>
+                        {/* <td>{jobsafetystep.job_steps}</td> */}
+                        <td>{jobsafetyhazard.hazards}</td>
+                        <td>{jobsafetyhazard.controls}</td>
+                        <td><Link to={`/jobsafetyhazardsedit/${jobsafetyhazard.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                        {/* <td>Edit</td> */}
+                        <td><FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => forDeletingHazards(jobsafetyhazard.id)}
+              /></td>
+              {/* <td>Delete</td> */}
+                      </tr>
+                    )
+                  })}
+                  </tbody>
+                </Table>
+                {/* </div>
+
+                </div> */}
+
+                <div className="mt-3 pb-3 d-flex justify-content-center">
                   <Button
                     variant="warning"
                     type="button"
@@ -395,6 +460,7 @@ function JobSafetyAnalysisEdit() {
                   >
                     Update
                   </Button>
+     
                 </div>
                  
                 

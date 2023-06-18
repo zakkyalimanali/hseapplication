@@ -19,8 +19,8 @@ function JobSafetyStepsEdit(props) {
     const [jobsafetysteps , setJobSafetySteps] = useState([])
     const job_safety_analysis = props.jobsafetyanalysis
     const [job_steps , setJobSteps] = useState('')
-    const [hazards , setHazards] = useState('')
-    const [controls , setControls] = useState('')
+    // const [hazards , setHazards] = useState('')
+    // const [controls , setControls] = useState('')
     const [id , setId] = useState(null)
     const navigate  = useNavigate()
     const params = useParams()
@@ -30,13 +30,22 @@ function JobSafetyStepsEdit(props) {
         setId(params.id)
     },[params.id]) 
 
+    // const fetchJobSafetySteps = () => {
+    //     axios.get(`http://127.0.0.1:8000/hseapp/jobsafetysteps/${params.id}`)
+    //     .then((res) => {
+    //         setJobSafetySteps(res.data)
+    //         setJobSteps(res.data.job_steps)
+    //         setHazards(res.data.hazards)
+    //         setControls(res.data.controls)
+    //     })
+    //     .catch(console.log)
+    // }
+
     const fetchJobSafetySteps = () => {
         axios.get(`http://127.0.0.1:8000/hseapp/jobsafetysteps/${params.id}`)
         .then((res) => {
             setJobSafetySteps(res.data)
             setJobSteps(res.data.job_steps)
-            setHazards(res.data.hazards)
-            setControls(res.data.controls)
         })
         .catch(console.log)
     }
@@ -53,29 +62,49 @@ function JobSafetyStepsEdit(props) {
         .catch(console.log)
     }
 
+    // const willSubmitTheEntryIntoDatabase = (e) => {
+    //     e.preventDefault()
+    //     let item = {
+    //         job_steps,
+    //         hazards,
+    //         controls,
+    //         job_safety_analysis
+    //     }
+    //     navigate(0)
+    //     JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
+    // }
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
             job_steps,
-            hazards,
-            controls,
             job_safety_analysis
         }
         navigate(0)
         JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
     }
 
+    // const updateEntryToDatabase = (id) => {
+    //     let item = {
+    //         job_steps,
+    //         hazards,
+    //         controls,
+    //         job_safety_analysis
+    //     }
+    //     JobSafetyStepsAPI.patch(`/${id}/`, item).then(() => {
+    //         setJobSteps('')
+    //         setHazards('')
+    //         setControls('')
+    //         fetchJobSafetySteps()
+    //     })
+    //     navigate(-1)
+    // }
     const updateEntryToDatabase = (id) => {
         let item = {
             job_steps,
-            hazards,
-            controls,
             job_safety_analysis
         }
         JobSafetyStepsAPI.patch(`/${id}/`, item).then(() => {
             setJobSteps('')
-            setHazards('')
-            setControls('')
             fetchJobSafetySteps()
         })
         navigate(-1)
@@ -100,7 +129,7 @@ function JobSafetyStepsEdit(props) {
               onChange={(e) => setJobSteps(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
+          {/* <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Hazards</Form.Label>
             <Form.Control
               type="text"
@@ -117,7 +146,7 @@ function JobSafetyStepsEdit(props) {
               value={controls}
               onChange={(e) => setControls(e.target.value)}
             />
-          </Form.Group>
+          </Form.Group> */}
 
           <div className="mt-3 float-right">
             <Button

@@ -222,6 +222,8 @@ class JobSafetyEquipment(models.Model):
 class JobSafetySteps(models.Model):
     job_safety_analysis = models.ForeignKey(JobSafetyAnalysis, on_delete=models.CASCADE)
     job_steps = models.CharField(max_length=300, null=True, blank=True)
+    
+class JobSafetyHazards(models.Model):
+    job_safety_analysis = models.ForeignKey(JobSafetyAnalysis, on_delete=models.CASCADE)
     hazards = models.CharField(max_length=300, null=True, blank=True)
     controls = models.CharField(max_length=300, null=True, blank=True)
-

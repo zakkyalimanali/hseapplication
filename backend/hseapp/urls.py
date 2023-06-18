@@ -28,6 +28,7 @@ router.register(r'incidentphotos', views.IncidentPhotosViewSet, basename='incide
 router.register(r'jobsafetyanalysis', views.JobSafetyAnalysisViewSet, basename='jobsafetyanalysis')
 router.register(r'jobsafetyequipment', views.JobSafetyEquipmentViewSet, basename='jobsafetyequipment')
 router.register(r'jobsafetysteps', views.JobSafetyStepsViewSet, basename='jobsafetysteps')
+router.register(r'jobsafetyhazards', views.JobSafetyHazardsViewSet, basename="jobsafetyhazards")
 
 # router.register(r'about', views.IncidentViewSet, basename="about")
 
