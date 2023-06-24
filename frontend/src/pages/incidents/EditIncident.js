@@ -1,10 +1,15 @@
 import {useEffect , useState , useContext} from 'react'
 import IncidentAPI from '../../API/IncidentAPI'
+import IncidentEventPhotosAPI from '../../API/IncidentEventPhotosAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { useParams } from 'react-router';
+import Table from 'react-bootstrap/Table';
+import IncidentEventPhotosAdd from './incidenteventphotos/IncidentEventPhotosAdd';
 import AuthContext from "../../context/AuthContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function EditIncident() {
@@ -24,17 +29,26 @@ export default function EditIncident() {
     const [follow_up , setFollowUp] = useState('')
     const [follow_up_remarks , setFollowUpRemarks] = useState('')
     const [status , setStatus] = useState('')
-    const [photo_image , setPhotoImage] = useState(null)
+    // const [photo_image , setPhotoImage] = useState(null)
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
+    const [incidenteventphotos , setIncidentEventPhotos] = useState([])
     const [responsible_party , setResponsibleParty] = useState('')
     const {authTokens} = useContext(AuthContext);
     
 
     useEffect(() => {
         fetchStaff()
+        fetchIncidentEventPhoto()
      },[]) 
+
+     const fetchIncidentEventPhoto = () => {
+      IncidentEventPhotosAPI.get('/')
+      .then((res) => {
+        setIncidentEventPhotos(res.data)
+      }).catch(console.log)
+    }
 
 
     useEffect(() => {
@@ -51,6 +65,33 @@ export default function EditIncident() {
      }
 
 
+    // const dataIncident = () => {
+    //   if (params.id) {
+    //     axios
+    //       .get(`http://127.0.0.1:8000/hseapp/oneincident/${params.id}/`)
+    //       .then((res) => {
+    //         setIncidents(res.data);
+    //         setShortDesc(res.data.short_desc);
+    //         setWhatHappened(res.data.what_happened);
+    //         setWhyHappened(res.data.why_happened);
+    //         setRaisedBy(res.data.raised_by)
+    //         setDateRaised(res.data.date_raised)
+    //         setLifeSavingRule(res.data.life_saving_rule)
+    //         setFindings(res.data.findings)
+    //         setIncidentDate(res.data.incident_date)
+    //         setLocation(res.data.location)
+    //         setDiscussion(res.data.discussion)
+    //         setTargetDate(res.data.target_date)
+    //         setFollowUp(res.data.follow_up)
+    //         setFollowUpRemarks(res.data.follow_up_remarks)
+    //         setStatus(res.data.status)
+    //         setResponsibleParty(res.data.responsible_party)
+    //         setPhotoImage(res.data.photo_image)
+    //         console.log(incidents)
+    //       })
+    //       .catch(console.log);
+    //   }
+    // };
     const dataIncident = () => {
       if (params.id) {
         axios
@@ -72,16 +113,32 @@ export default function EditIncident() {
             setFollowUpRemarks(res.data.follow_up_remarks)
             setStatus(res.data.status)
             setResponsibleParty(res.data.responsible_party)
-            setPhotoImage(res.data.photo_image)
             console.log(incidents)
           })
           .catch(console.log);
       }
     };
+    // const onSubmit = (e) => {
+    //     e.preventDefault();
+    //     let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
+        // IncidentAPI.post('/', item).then(() => dataIncident());
+//         let token = authTokens.access
+//         IncidentAPI.post('/' , item,  {
+//                 headers: {
+//                   'content-type': 'multipart/form-data',
+//                   'Authorization': `Bearer ${token}`
+//                 },
+//                 responseType: 'blob'
+//               })
+//               .then(() => dataIncident())  
+              
+              
+
+//     }
+// console.log(authTokens)
     const onSubmit = (e) => {
         e.preventDefault();
-        // let item = {short_desc , what_happened, why_happened , raised_by , date_raised, life_saving_rule,findings ,incident_date , location, discussion , target_date, follow_up, follow_up_remarks , status, responsible_party}
-        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
+        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
         // IncidentAPI.post('/', item).then(() => dataIncident());
         let token = authTokens.access
         IncidentAPI.post('/' , item,  {
@@ -100,7 +157,8 @@ console.log(authTokens)
 
   
 const onUpdate = (id) => {
-  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party,  photo_image};
+  // let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party,  photo_image};
+  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
   let token = authTokens.access
   IncidentAPI.patch(`/${id}/`, item , {
     headers: {
@@ -124,11 +182,33 @@ const onUpdate = (id) => {
     setFollowUpRemarks('')
     setStatus('')
     setResponsibleParty('')
-    setPhotoImage('')
+    // setPhotoImage('')
     setShortDesc(''); // Reset the short_desc state value after update
     dataIncident();
   });
 }
+// const onUpdate = (id) => {
+//   let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
+//   IncidentAPI.patch(`/${id}/`, item)
+//   .then(() => {
+//     setWhatHappened('')
+//     setWhyHappened('')
+//     setRaisedBy('')
+//     setDateRaised('')
+//     setLifeSavingRule('')
+//     setFindings('')
+//     setIncidentDate('')
+//     setLocation('')
+//     setDiscussion('')
+//     setTargetDate('')
+//     setFollowUp('')
+//     setFollowUpRemarks('')
+//     setStatus('')
+//     setResponsibleParty('')
+//     setShortDesc(''); // Reset the short_desc state value after update
+//     dataIncident();
+//   });
+// }
     const onDelete = (id) => {
         IncidentAPI.delete(`/${id}/`).then((res) => dataIncident())
     }
@@ -149,14 +229,20 @@ const onUpdate = (id) => {
         setFollowUpRemarks(item.follow_up_remarks)
         setStatus(item.status)
         setResponsibleParty(item.responsible_party)
-        setPhotoImage(item.photo_image)
+        // setPhotoImage(item.photo_image)
         setId(item.id)
     }
 
     
-    const handleImageChange = (e) => {
-      setPhotoImage(e.target.files[0]);
-    };
+    // const handleImageChange = (e) => {
+    //   setPhotoImage(e.target.files[0]);
+    // };
+
+    const onDeleteIncidentPhotos = (id) => {
+      IncidentEventPhotosAPI.delete(`/${id}/`).then((res) => {
+       fetchIncidentEventPhoto();
+       }).catch(console.log)
+   }
   
 
     return( 
@@ -432,17 +518,58 @@ const onUpdate = (id) => {
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formName">
+              {/* <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Photo Evidence</Form.Label>
                 <Form.Control
                   type="file"
                   // placeholder="Enter Responsible Party"
                   onChange={handleImageChange}
                 />
-              </Form.Group>
-              <div className="row justify-content-center">
+              </Form.Group> */}
+              {/* <div className="row justify-content-center">
                 <img className="col-md-10 mt-3" src={incidents.photo_image} alt={incidents.photo_image}/>
-              </div>
+              </div> */}
+              <IncidentEventPhotosAdd incidentphoto={params.id}/>
+
+              <h3 className="float-left">Incident Photos</h3>
+
+      <Table striped bordered hover className='mt-3'>
+                <thead>
+                    <tr>
+                        <th scope="col" className="col-1">ID</th>
+                        <th scope="col" className="col-1">Title</th>
+                        <th scope="col" className="col-1">Description</th>
+                        <th scope="col" className="col-3">Image</th>
+                        <th scope="col" className="col-1">Edit</th>
+                        <th scope="col" className="col-1">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {incidenteventphotos.filter ((incidenteventphoto) => incidenteventphoto.incident === Number(params.id))
+                      .map((incidenteventphoto) => {  
+                        return (
+                            <tr key={incidenteventphoto.id}>
+                                <td>{incidenteventphoto.id}</td>
+                                <td>{incidenteventphoto.title}</td>
+                                <td>{incidenteventphoto.description}</td>
+                                {/* <td>{hsemanagement.context}</td> */}
+                                <td><a href={`${incidenteventphoto.incident_photo}`} download={incidenteventphoto.incident_photo}><img className="col-12" src={incidenteventphoto.incident_photo} alt={incidenteventphoto.incident_photo}/></a> 
+                             
+                                  {/* <a href={`${incidentphoto.incident_photo}`} download={incidentphoto.incident_photo}>Download</a> */}
+                                </td>
+                                {/* <td><Link to={`/incidenteventphotosedit/${incidenteventphoto.id}`}><FontAwesomeIcon icon={faPen } /></Link></td> */}
+                                <td><Link to={`/incidenteventphotosedit/${incidenteventphoto.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                                {/* <td>Edit</td> */}
+
+                                {/* <td className='delete' onClick={() => onDeleteIncidentPhotos(incidentphoto.id)}><FontAwesomeIcon icon={faTrash } /></td> */}
+                                {/* <td>Delete</td> */}
+                                <td className='delete' onClick={() => onDeleteIncidentPhotos(incidenteventphoto.id)}><FontAwesomeIcon icon={faTrash } /></td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+        </Table>  
 
               {/* <div className="row text-center mt-3"> */}
               <div className="text-center mt-3">

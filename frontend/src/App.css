@@ -168,3 +168,15 @@ li {
     height: 20rem;
     width: auto;
 }
+
+.table-container {
+    background-color: white;
+  }
+  
+.table-container .rdt_TableRow {
+    background-color: lightgray;
+  }
+  
+.table-container .rdt_TableRow:nth-of-type(even) {
+    background-color: white;
+  }

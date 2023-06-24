@@ -27,7 +27,7 @@ export default function AddIncidents() {
     const [follow_up_remarks , setFollowUpRemarks] = useState('')
     const [status , setStatus] = useState('')
     const [responsible_party , setResponsibleParty] = useState('')
-    const [photo_image , setPhotoImage] = useState(null)
+    // const [photo_image , setPhotoImage] = useState(null)
     const [id , setId] = useState(null)
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
@@ -55,19 +55,21 @@ export default function AddIncidents() {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
+        // let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
+        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, }
         navigate("/incidenttable");
-      let token = authTokens.access
-      IncidentAPI.post('/' , item,  {
-                headers: {
-                  'content-type': 'multipart/form-data',
-                  'Authorization': `Bearer ${token}`
-                },
-                responseType: 'blob'
-              })
-              .then(() => incidentData())  
+      // let token = authTokens.access
+      // IncidentAPI.post('/' , item,  {
+      //           headers: {
+      //             'content-type': 'multipart/form-data',
+      //             'Authorization': `Bearer ${token}`
+      //           },
+      //           responseType: 'blob'
+      //         })
+      //         .then(() => incidentData())  
               
-              console.log(authTokens)
+      //         console.log(authTokens)
+      IncidentAPI.post('/', item).then(() => incidentData()) 
 
     // const onSubmit = (e) => {
     //   e.preventDefault();
@@ -117,9 +119,9 @@ export default function AddIncidents() {
   
     // console.log(authTokens)
 
-    const handleImageChange = (e) => {
-      setPhotoImage(e.target.files[0]);
-    };
+    // const handleImageChange = (e) => {
+    //   setPhotoImage(e.target.files[0]);
+    // };
   
   
 
@@ -414,14 +416,14 @@ export default function AddIncidents() {
                   onChange={(e) => setResponsibleParty(e.target.value)}
                 />
               </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
+                {/* <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Photo Evidence</Form.Label>
                 <Form.Control
                   type="file"
-                  // placeholder="Enter Responsible Party"
+                  placeholder="Enter Responsible Party"
                   onChange={handleImageChange}
                 />
-              </Form.Group>
+              </Form.Group> */}
 {/*               
               <Button
                   variant="primary"

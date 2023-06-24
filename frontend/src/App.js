@@ -64,6 +64,7 @@ import JobSafetyAnalysisEdit from './pages/jobsafetyanalysis/JobSafetyAnalysisEd
 import JobSafetyEquipmentEdit from './pages/jobsafetyanalysis/jobsafetyequipment/JobSafetyEquipmentEdit';
 import JobSafetyStepsEdit from './pages/jobsafetyanalysis/jobsafetysteps/JobSafetyStepsEdit';
 import JobSafetyHazardsEdit from './pages/jobsafetyanalysis/jobsafetyhazards.js/JobSafetyHazardsEdit';
+import IncidentEventPhotosEdit from './pages/incidents/incidenteventphotos/IncidentEventPhotosEdit';
 
 
 
@@ -79,6 +80,7 @@ function App() {
             <Route element={<LoginPage/>} path="/loginpage"/>
             <Route element={<PrivateRoutes/>}>
               <Route path='/' element={<Home/>} exact/>
+              
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
@@ -127,6 +129,7 @@ function App() {
               <Route path='addincident' element={<AddIncident/>} />
               <Route path='incident' element={<Incident/>} />
               <Route path='editincident/:id' element={<EditIncident/>}/>
+              <Route path="incidenteventphotosedit/:id" element={<IncidentEventPhotosEdit/>} />
               <Route path='incidenttable' element={<IncidentTable/>}/>
               <Route path='traininglist' element={<Traininglist/>}/>
               <Route path='trainingadd' element={<Trainingadd/>}/>

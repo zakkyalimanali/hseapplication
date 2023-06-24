@@ -60,9 +60,19 @@ class Incident(models.Model):
     status = models.CharField(max_length= 100 , null=True , blank= True)
     responsible_party = models.CharField(max_length= 100 , null=True , blank= True)
     # photo_image = models.ImageField(upload_to="photo_image/", height_field=None, width_field=None, max_length=100,null=True , blank= True)
-    photo_image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    # photo_image = models.ImageField(upload_to='post_images', null=True, blank=True)
     def __str__(self):
         return self.short_desc
+    
+class IncidentEventPhotos(models.Model): 
+    title = models.CharField(max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    # image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    incident_photo = models.ImageField(upload_to='post_images', null=True, blank=True)
+    incident= models.ForeignKey(Incident, on_delete=models.CASCADE, null=True, blank = True)
+    
+    def __str__(self):
+        return self.title    
 
 
 class DateList(models.Model):

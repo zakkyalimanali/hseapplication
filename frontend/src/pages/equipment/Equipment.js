@@ -51,6 +51,7 @@ function Equipment() {
         
           <div className= "col-md-4"></div>
           <div className="col-md-4 "></div>
+        <div className="table-responsive-md">
       <Table striped bordered hover className='mt-3'>
         {/* This is for the table heading */}
           <thead>
@@ -107,6 +108,8 @@ function Equipment() {
               
             </tbody>
           </Table> 
+
+          </div>
           <div className="text-center">
               <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/equipmentadd">
                 Add Equipment / Item 

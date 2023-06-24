@@ -1,23 +1,15 @@
 import React , {useState , useEffect , useContext} from 'react'
 
 // APIs imports
-import IncidentFactorsAPI from '../../../API/IncidentFactorsAPI'
 import IncidentInvestigationAPI from '../../../API/IncidentInvestigationAPI'
 import IncidentPhotosAPI from '../../../API/IncidentPhotosAPI'
-import StaffAPI from '../../../API/StaffAPI'
 import axios from 'axios'
 
 // from bootstrap 
-import Table from 'react-bootstrap/Table';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 
 // from react router
-import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
-// from fontawesome
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 // Others 
 import { useNavigate } from 'react-router'
@@ -51,7 +43,7 @@ function IncidentPhotosEdit(props) {
     const fetchIncidentPhoto = () => {
         axios.get(`http://127.0.0.1:8000/hseapp/incidentphotos/${params.id}`)
         .then((res) => {
-            setIncidentPhoto(res.data)
+            setIncidentPhotos(res.data)
             setTitle(res.data.title)
             setDescription(res.data.description)
             setIncidentPhoto(res.data.incident_photo)

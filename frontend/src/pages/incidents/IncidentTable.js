@@ -51,17 +51,58 @@ export default function IncidentTable() {
         setSelectedIncident(null)
     };
 
+
+    // const customStyles = {
+    //   headCells : {
+    //     style: {
+    //       backgroundColor: 'white'
+    //     }
+    //   },
+    //   rows : {
+    //     style: {
+    //       backgroundColor: 'lightgray' 
+    //     }
+    //   }
+    // }
+    const customStyles = {
+      headCells : {
+        style: {
+          border: '1px solid black',
+
+        },
+          },
+      cells : {
+        style: {
+          border: '1px solid black'
+        },
+      },
+}
+      // id : {
+      //   style: {
+      //     width: '10px'
+      //   }
+      // }
+
+    
+      // rows : {
+      //   style: {
+      //     backgroundColor: 'lightgray' 
+      //   }
+      // }
+    
+
     const columns = [
       {
-        name: 'id',
+        name: 'Id',
         selector: (row) => row.id,
         sortable: true,
+        width: '6rem'
         // style: {
         //   background: 'rgba(251,212,124, 0.5)',
         // },
       },
       {
-        name: 'description',
+        name: 'Description',
         selector: (row) => row.description,
         sortable: true,
         // style: {
@@ -69,31 +110,35 @@ export default function IncidentTable() {
         // },
       },
       {
-        name: 'date',
+        name: 'Date',
         selector: (row) => row.date,
         sortable: true,
+        width: '8rem'
         // style: {
         //   background: 'rgba(251,212,124, 0.5)',
         // },
       },
       {
-        name: 'raised',
+        name: 'Raised',
         selector: (row) => row.raised,
         sortable: true,
+        width: '12rem'
         // style: {
         //   background: 'rgba(251,212,124, 0.5)',
         // },
       },
       {
-        name: 'more_info',
+        name: 'More Info',
         selector: (row) => row.more_info,
+        width: '6rem'
         // style: {
         //   background: 'rgba(251,212,124, 0.5)',
         // },
       },
       {
-        name: 'delete',
+        name: 'Delete',
         selector: (row) => row.delete,
+        width: '6rem'
         // style: {
         //   background: 'rgba(251,212,124, 0.5)',
         // },
@@ -127,19 +172,41 @@ export default function IncidentTable() {
       setRecords(data);
     }, [incidents, staffs]);
 
+    // const handleFilter = (e) => {
+    //   const newData = incidents.map((incident) => {
+    //     const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
+    //     return {
+    //       ...incident,
+    //       person_name,
+    //     };
+    //   }).filter((attendence) => {
+    //     return attendence.person_name
+    //       .toLowerCase()
+    //       .includes(e.target.value.toLowerCase());
+    //   });
+    //   setIncidents(newData);
+    // };
+
     const handleFilter = (e) => {
-      const newData = incidents.map((incident) => {
-        const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
-        return {
-          ...incident,
-          person_name,
-        };
-      }).filter((attendence) => {
-        return attendence.person_name
-          .toLowerCase()
-          .includes(e.target.value.toLowerCase());
-      });
-      setIncidents(newData);
+      const searchText = e.target.value.toLowerCase();
+      
+      if (searchText === '') {
+        // If the search text is empty, fetch all incidents again
+        fetchIncidents();
+      } else {
+        const newData = incidents.map((incident) => {
+          const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
+          return {
+            ...incident,
+            person_name,
+          };
+        }).filter((attendence) => {
+          return attendence.person_name
+            .toLowerCase()
+            .includes(searchText);
+        });
+        setIncidents(newData);
+      }
     };
 
 
@@ -150,9 +217,10 @@ export default function IncidentTable() {
                         Add Incident
         </Button> */}
         <div className="mt-4 col-md-10 m row justify-content-center">
-        
-        <Button href="/addincident" variant="secondary" className="middle col-2 mb-4">Add Incident</Button>
-        
+        <div className="row justify-content-around">
+          <Button href="/addincident" variant="secondary" className="col-md-2 mb-4">Add Incident</Button>
+          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
+        </div>
 
               {/* <Table striped bordered hover>
               <thead>
@@ -194,9 +262,11 @@ export default function IncidentTable() {
 
 
               </Table> */}
-              <div className="text-end"><input type="text" onChange={handleFilter}/></div>
-              <div >
+              
+              <div>
+              <div className="table-container">
                 <DataTable 
+                  customStyles={customStyles}
                   //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
                   //  className='stripe'
                   columns={columns}
@@ -206,6 +276,7 @@ export default function IncidentTable() {
                   pagination
                 >
                 </DataTable>
+              </div>
               </div>
 
          
