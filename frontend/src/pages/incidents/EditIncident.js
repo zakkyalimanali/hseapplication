@@ -250,7 +250,7 @@ const onUpdate = (id) => {
         <div className="row">
           <div className= "col-md-2"></div>
             <div className="col-md-8 ">
-                <h3 className="float-center">Update an Incident</h3>
+                <h3 className="float-center mt-5">Update an Incident</h3>
             <Form onSubmit={onSubmit} className="update mt-4">
               <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Write a short Description</Form.Label>

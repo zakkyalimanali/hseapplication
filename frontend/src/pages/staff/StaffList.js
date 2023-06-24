@@ -105,9 +105,9 @@ export default function StaffList() {
    
 
     return(
-        <div className="row justify-content-center"> 
+        <div className="row justify-content-center mt-5"> 
           <h1 className="row justify-content-center mt-3">Staff List</h1>
-            <div className="mt-4 col-md-10 m row justify-content-center">
+            <div className="mt-4 col-md-10 m row justify-content-center mb-5">
                 
         <Button className="middle col-2 mb-4" variant="secondary" href="/addstaff">
             Add Staff

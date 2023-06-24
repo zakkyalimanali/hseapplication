@@ -264,7 +264,7 @@ export default function IncidentTable() {
               </Table> */}
               
               <div>
-              <div className="table-container">
+              <div className="table-container mb-5">
                 <DataTable 
                   customStyles={customStyles}
                   //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}

@@ -65,6 +65,7 @@ import JobSafetyEquipmentEdit from './pages/jobsafetyanalysis/jobsafetyequipment
 import JobSafetyStepsEdit from './pages/jobsafetyanalysis/jobsafetysteps/JobSafetyStepsEdit';
 import JobSafetyHazardsEdit from './pages/jobsafetyanalysis/jobsafetyhazards.js/JobSafetyHazardsEdit';
 import IncidentEventPhotosEdit from './pages/incidents/incidenteventphotos/IncidentEventPhotosEdit';
+import ChartsPage from './pages/charts/ChartsPage';
 
 
 
@@ -73,14 +74,14 @@ function App() {
     // <div className="App" style={{backgroundColor: 'rgb( 251, 248 ,251)'
     //   , height: '100vh'}}>
     <div className="App" style={{backgroundColor: 'white'
-      , height: '100vh'}}>
+      , height: '100vh', overflowX:"hidden"}}>
+        <div className="mt-5 mb-5">
       <BrowserRouter>
         <Routes>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
-            <Route element={<PrivateRoutes/>}>
+            <Route  element={<PrivateRoutes/>}>
               <Route path='/' element={<Home/>} exact/>
-              
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
@@ -110,6 +111,7 @@ function App() {
               <Route path="jobsafetyequipmentedit/:id" element={<JobSafetyEquipmentEdit/>}/> 
               <Route path="jobsafetystepsedit/:id" element={<JobSafetyStepsEdit/>}/>
               <Route path="jobsafetyhazardsedit/:id" element={<JobSafetyHazardsEdit/>}/>
+              <Route path="chartspage" element={<ChartsPage/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
               <Route path='stats' element={<Stats/>}/>
@@ -142,12 +144,14 @@ function App() {
               {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
               <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
               <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
+
               {/* <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/> */}
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>
         </Routes>
       </BrowserRouter>
+      </div>
     </div>
   );
 }

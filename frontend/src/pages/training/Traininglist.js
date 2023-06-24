@@ -135,7 +135,7 @@ const handleFilter = (e) => {
       
 
   return (
-    <div className="row justify-content-center"> 
+    <div className="row justify-content-center mt-5 mb-5"> 
           <h1 className="row justify-content-center mt-3">Training List</h1>
             <div className="mt-4 col-md-10 m row justify-content-center">
                 
