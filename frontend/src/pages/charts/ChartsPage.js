@@ -66,7 +66,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <GenderChart/>
                 </div> */}
-                <div className="display-border col-md-4 mt-3">
+                <div className="display-border col-md-4 mt-3 mb-5">
                     <WhatChat/>
                 </div>
                 {/* <div className="col-1">
@@ -74,7 +74,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <StatusChart/>
                 </div> */}
-                <div className="display-border col-md-4 mt-3">
+                <div className="display-border col-md-4 mt-3 mb-5">
                     <WhyChart/>
                 </div>
                 {/* <div className="col-1">
@@ -82,7 +82,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <SmartCardColorChart/>
                 </div> */}
-                <div className="display-border col-md-3 mt-3">
+                <div className="display-border col-md-3 mt-3 mb-5">
                     <LSRChart/>
                 </div>
             </div>
