@@ -82,7 +82,7 @@ export default function Navtop() {
             <Navbar style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}>
                 <Nav>
                     <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
-                    <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item>
+                    {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}
                    
                     <Nav>
                         <Nav.Menu className="black" title="HSE">
