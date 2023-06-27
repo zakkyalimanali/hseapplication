@@ -215,13 +215,13 @@ class IncidentPhotos(models.Model):
 class JobSafetyAnalysis(models.Model):
     job_title = models.CharField(max_length=100, null=True, blank=True)
     jsa_id = models.CharField(max_length=100, null=True, blank=True)
-    job_performer = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_job_performer')
-    supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_supervisor')
-    analysis_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_analysis_by')
+    job_performer = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_job_performer', null=True, blank=True)
+    supervisor = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_supervisor' , null=True, blank=True)
+    analysis_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_analysis_by', null=True, blank=True)
     company = models.CharField(max_length=100, null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
     department = models.CharField(max_length=100, null=True, blank=True)
-    reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_reviewed_by')
+    reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='job_safety_analysis_reviewed_by' , null=True, blank=True)
     date_raised = models.DateField(null=True, blank=True)
 
 
@@ -237,3 +237,55 @@ class JobSafetyHazards(models.Model):
     job_safety_analysis = models.ForeignKey(JobSafetyAnalysis, on_delete=models.CASCADE)
     hazards = models.CharField(max_length=300, null=True, blank=True)
     controls = models.CharField(max_length=300, null=True, blank=True)
+
+class PermitToWork(models.Model):
+    permit_number = models.CharField(max_length=300, null=True, blank=True)
+    location_of_work = models.CharField(max_length=300, null=True, blank=True)
+    nature_of_work = models.CharField(max_length=300, null=True, blank=True)
+    work_start = models.DateTimeField(null=True, blank=True)
+    work_completed = models.DateTimeField(null=True, blank=True)
+    
+
+class HazardsAndPrecautions(models.Model):
+    permit_to_work = models.ForeignKey(PermitToWork, on_delete=models.CASCADE)
+    hazards = models.CharField(max_length=300, null=True, blank=True)
+    precautions = models.CharField(max_length=300, null=True, blank=True)
+
+class PhysicalControls(models.Model):
+    permit_to_work = models.ForeignKey(PermitToWork, on_delete=models.CASCADE)
+    control_mechanisms =  models.CharField(max_length=300, null=True, blank=True)
+    control_how_will_it_help = models.CharField(max_length=300, null=True, blank=True)
+
+# class DetailOfWorkCompetentPersonSigniture(models.Model):
+#     competant_person_details_of_work_name = models.CharField(Staff, on_delete=models.CASCADE, null=True, blank = True)
+#     competant_person_signiture_details_of_work = models.ImageField(upload_to='post_images', null=True, blank=True)
+#     date_time_signed = models.DateTimeField(auto_now=True)
+
+# class DetailOfWorkWorkerSigniture(models.Model):
+#     worker_details_of_work_name = models.CharField(Staff, on_delete=models.CASCADE, null=True, blank = True)
+#     worker_signiture_details_of_work = models.ImageField(upload_to='post_images', null=True, blank=True)
+#     date_time_signed = models.DateTimeField(auto_now=True)
+
+
+
+# class AcceptanceCompetentPersonSigniture(models.Model):
+#     competant_person_acceptance_name = models.CharField(Staff, on_delete=models.CASCADE, null=True, blank = True)
+#     competant_person_signiture_acceptance = models.ImageField(upload_to='post_images', null=True, blank=True)
+#     date_time_signed = models.DateTimeField(auto_now=True)
+
+# class CompletionOfWorkCompetentPersonSigniture(models.Model):
+#     competant_person_signiture_completion_of_work_name = models.CharField(Staff, on_delete=models.CASCADE, null=True, blank = True)
+#     competant_person_signiture_completion_of_work = models.ImageField(upload_to='post_images', null=True, blank=True)
+#     date_time_signed = models.DateTimeField(auto_now=True)
+
+# class FinalSignOffSigniture(models.Model):
+#     authorized_person_name = models.CharField(Staff, on_delete=models.CASCADE, null=True, blank = True)
+#     authorized_person_signiture = models.ImageField(upload_to='post_images', null=True, blank=True)
+#     date_time_signed = models.DateTimeField(auto_now=True)
+class Signitures(models.Model):
+    permit_to_work = models.ForeignKey(PermitToWork, on_delete=models.CASCADE)
+    person_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
+    person_signiture = models.ImageField(upload_to='post_images', null=True, blank=True)
+    signiture_for = models.CharField(max_length=100 , null=True, blank=True)
+    position_class = models.CharField(max_length=100 , null=True, blank=True)
+    date_time_signed = models.DateTimeField(auto_now=True)

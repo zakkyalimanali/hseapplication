@@ -38,15 +38,10 @@ function ChartsPage() {
         <div className="row justify-content-around">
 
                 <div className="display-box col-md-2 mt-3 text-center">
-                    <br/>
-                    <br/>
-                    <h4><b> {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</b></h4>
-                    <br/>
-                    <br/>
-                    <h4><b>Incidents: {incidents.length}</b></h4>
-                    <br/>
-                    <br/>
-                    <h4><b>Staff: {staffs.length}</b></h4>
+                    <h4><b>Safety Incidents Charts</b></h4>
+                    <h4 className="mt-5"><b> {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</b></h4>
+                    <h4 className="m-3"><b>Incidents: {incidents.length}</b></h4>
+                    <h4 className="m-3"><b>Staff: {staffs.length}</b></h4>
 
                 </div>
                 <div className="display-border col-md-6 mt-3">
@@ -66,7 +61,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <GenderChart/>
                 </div> */}
-                <div className="display-border col-md-4 mt-3 mb-5">
+                <div className="display-border col-md-4 mt-3">
                     <WhatChat/>
                 </div>
                 {/* <div className="col-1">
@@ -74,7 +69,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <StatusChart/>
                 </div> */}
-                <div className="display-border col-md-4 mt-3 mb-5">
+                <div className="display-border col-md-4 mt-3">
                     <WhyChart/>
                 </div>
                 {/* <div className="col-1">
@@ -82,7 +77,7 @@ function ChartsPage() {
                 {/* <div className="display-border col-3">
                     <SmartCardColorChart/>
                 </div> */}
-                <div className="display-border col-md-3 mt-3 mb-5">
+                <div className="display-border col-md-3 mt-3">
                     <LSRChart/>
                 </div>
             </div>

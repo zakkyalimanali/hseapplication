@@ -112,13 +112,13 @@ function JobSafetyAnalysisEdit() {
             let item = {
                 job_title,
                 jsa_id,
-                job_performer,
-                supervisor,
-                analysis_by,
+                job_performer : job_performer || null,
+                supervisor : supervisor || null,
+                analysis_by : analysis_by || null,
                 company,
                 location,
                 department,
-                reviewed_by,
+                reviewed_by : reviewed_by || null,
                 date_raised : date_raised || null, 
             }
             JobSafetyAnalysisAPI.post('/', item).then(() => fetchJobSafetyAnalysis())
@@ -128,13 +128,13 @@ function JobSafetyAnalysisEdit() {
             let item = {
                 job_title,
                 jsa_id,
-                job_performer,
-                supervisor,
-                analysis_by,
+                job_performer : job_performer || null,
+                supervisor : supervisor || null,
+                analysis_by : analysis_by || null,
                 company,
                 location,
                 department,
-                reviewed_by,
+                reviewed_by : reviewed_by || null,
                 date_raised : date_raised || null, 
         } 
         JobSafetyAnalysisAPI.patch(`/${id}/`, item).then(() => {

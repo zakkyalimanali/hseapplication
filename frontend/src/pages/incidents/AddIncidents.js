@@ -132,13 +132,19 @@ export default function AddIncidents() {
 
     return(
 
-    <div className="container mt-5">
-        <div className="row">
-          <div className= "col-md-2"></div>
-            <div className="col-md-8 ">
-                <h3 className="float-left">Create a new Incident</h3>
+    <div className="container  mt-5 pb-3 ">
+      <h1 className="d-flex justify-content-center pb-3 pt-5">Create A New Safety Card</h1>
+        <Form onSubmit={onSubmit} className="update mt-4">
+        {/* <div className="row">
+          <div className= "col-md-2">
+            <div className="row">
+              <div className="col-md-8 "> */}
+              <div className="row">
+        <div className='col-md-6'>
+          <div className="row">
+            <div className="col-md-10 ">
             
-            <Form onSubmit={onSubmit} className="update mt-4">
+            
               <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Write a short Description</Form.Label>
                 <Form.Control
@@ -245,6 +251,8 @@ export default function AddIncidents() {
 
               </Form.Group>
 
+         
+
 
               {/* <Form.Group className="mb-3" controlId="formPosition">
                 <Form.Label>What Happened</Form.Label>
@@ -324,6 +332,29 @@ export default function AddIncidents() {
                 </Form.Control>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="status"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value=''>------</option>
+                    <option value='No Further Action Required'>No Further Action Required</option>
+                    <option value='Resolved'>Resolved</option>
+                    <option value='Ongoing'>Ongoing</option>
+                  </Form.Control>
+                </Form.Group>
+
+              
+              
+               </div>
+          </div>
+          </div>
+          <div class="col">
+          <div className="row">
+          <div className="col-md-10 ">
+          <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                  <Form.Label>Incident Date</Form.Label>
                  <Form.Control
                    type="date"
@@ -337,6 +368,7 @@ export default function AddIncidents() {
                   }}
                  />
                </Form.Group>
+
                <Form.Group className="mb-3" controlId="formStaffIdNumber=">
                  <Form.Label>Location</Form.Label>
                  <Form.Control
@@ -393,20 +425,7 @@ export default function AddIncidents() {
                    onChange={(e) => setFollowUpRemarks(e.target.value)}
                  />
                </Form.Group>
-               <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="status"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value=''>------</option>
-                    <option value='No Further Action Required'>No Further Action Required</option>
-                    <option value='Resolved'>Resolved</option>
-                    <option value='Ongoing'>Ongoing</option>
-                  </Form.Control>
-                </Form.Group>
+               
                 <Form.Group className="mb-3" controlId="formName">
                 <Form.Label>Responsible Party</Form.Label>
                 <Form.Control
@@ -434,17 +453,24 @@ export default function AddIncidents() {
                   <Link className="white" to="/incidenttable">Save</Link>
                 </Button> */}
                 {/* <Link  onClick={onSubmit} className="white" to="/incidenttable">Save</Link> */}
+                  
+                </div>
+              </div>
+            </div>
+        </div>
+                <div className="mt-3 mb-3 d-flex justify-content-center">
                   <Button
-                    variant="primary"
+                    className="col-md-8"
+                    variant="secondary"
                     onClick={onSubmit}>
                       Save
                   </Button>
+                </div>
+                  
   
             </Form>
 
             
-            </div>
-        </div>
     </div>
     )
 }

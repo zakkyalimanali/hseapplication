@@ -65,11 +65,11 @@ function Hsemanagement() {
   return (
     
     
-    <div className="container mt-5">
+    <div className="container mt-5 pb-5">
         <div className="row">
           <div className= "col-md-2"></div>
             <div className="col-md-8 ">
-                <h3 className="float-left">Create a new Incident</h3>
+                <h3 className="float-left mt-5">Add HSE Management File</h3>
             
             <Form onSubmit={onSubmit} className="update mt-4">
               
@@ -130,10 +130,9 @@ function Hsemanagement() {
 
             
             </div>
-            <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div>
+            {/* <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
 
         </div>
-
 
         <Table striped bordered hover className='mt-3'>
                 <thead>
@@ -161,6 +160,7 @@ function Hsemanagement() {
                     })}
                 </tbody>
         </Table>
+        
     </div>
   )
 }

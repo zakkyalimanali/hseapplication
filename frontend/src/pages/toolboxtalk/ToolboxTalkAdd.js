@@ -37,7 +37,12 @@ export default function ToolBoxTalkAdd() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {toolbox_date , topic , project , presenter}
+        let item = {
+          toolbox_date : toolbox_date || null,
+          topic,
+          project,
+          presenter : presenter || null,
+        }
         // let item = {toolbox_date }
         navigate("/toolboxtalklist");
         ToolBoxTalkAPI.post('/', item).then(() => fetchToolBoxTalk());
@@ -50,7 +55,7 @@ export default function ToolBoxTalkAdd() {
           <div className="row">
             <div className= "col-md-4"></div>
             <div className="col-md-4 ">
-              <h3 className="float-left">Create a new Staff</h3>
+              <h3 className="float-left mt-5">Create a new Toolbox Talk</h3>
               
               <Form onSubmit={onSubmit} className="mt-4">
                 <Form.Group className="mb-3" controlId="formName">
@@ -59,7 +64,12 @@ export default function ToolBoxTalkAdd() {
                     type="date"
                     placeholder="ToolBox Talk Date"
                     value={toolbox_date}
-                    onChange={(e) => setToolBoxDate(e.target.value)}
+                    // onChange={(e) => setToolBoxDate(e.target.value)}
+                    onChange={(e) => {
+                      const selectedDate = e.target.value;
+                      const formattedDate = selectedDate !== "" ? selectedDate : null;
+                      setToolBoxDate(formattedDate);
+                    }}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">

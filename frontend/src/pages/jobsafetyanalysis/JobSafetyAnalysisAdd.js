@@ -69,34 +69,39 @@ function JobSafetyAnalysisAdd() {
       .catch(console.log)
     }
 
+    // const jobPerformerValue = job_performer === '' ? null : job_performer;
+
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
             job_title,
             jsa_id,
-            job_performer,
-            supervisor,
-            analysis_by,
+            // job_performer : jobPerformerValue,
+            job_performer : job_performer || null,
+            supervisor : supervisor || null,
+            analysis_by : analysis_by || null,
             company,
             location,
             department,
-            reviewed_by,
+            reviewed_by : reviewed_by || null,
             date_raised : date_raised || null, 
         }
         navigate(-1);
         JobSafetyAnalysisAPI.post('/', item).then(() => fetchJobSafetyAnalysis())
-
+        .catch((error) => {
+          console.log("Error:", error);
+        })
 
     }
 
 
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 pb-5">
           <div className="row">
             <div className= "col-md-4"></div>
             <div className="col-md-4 ">
-              <h3 className="float-left">Create a JSA</h3>
+              <h3 className="float-left mt-5">Create a JSA</h3>
               
               <Form onSubmit={willSubmitTheEntryIntoDatabase} 
               className="mt-4">

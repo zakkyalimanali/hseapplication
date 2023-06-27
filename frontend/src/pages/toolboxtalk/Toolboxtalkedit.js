@@ -54,12 +54,30 @@ export default function ToolBoxTalkEdit() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {toolbox_date , topic , project , presenter , supervisor, time , crew_number ,address}
+        let item = {
+          toolbox_date : toolbox_date || null,
+          topic,
+          project,
+          presenter : presenter || null,
+          supervisor : supervisor || null,
+          time : time || null,
+          crew_number,
+          address
+        }
         ToolBoxTalkAPI.post('/', item).then(() => fetchToolBoxTalk());
     }
 
     const onUpdate = (id) => {
-        let item = {toolbox_date , topic, project ,presenter ,supervisor, time, crew_number , address};
+      let item = {
+        toolbox_date : toolbox_date || null,
+        topic,
+        project,
+        presenter : presenter || null,
+        supervisor : supervisor || null,
+        time : time || null,
+        crew_number,
+        address
+      }
         ToolBoxTalkAPI.patch(`/${id}/`, item).then(() => { 
             setToolBoxDate('')
             setTopic('')
@@ -77,11 +95,11 @@ export default function ToolBoxTalkEdit() {
 
 
     return(
-        <div className="container mt-5">
+        <div className="container mt-5 pb-5">
         <div className="row">
           <div className= "col-md-4"></div>
           <div className="col-md-4 ">
-            <h3 className="float-left">Toolbox Talk Edit</h3>
+            <h3 className="float-left mt-5">Toolbox Talk Edit</h3>
             
             <Form onSubmit={onSubmit} className="mt-4">
               <Form.Group className="mb-3" controlId="formName">
@@ -90,7 +108,11 @@ export default function ToolBoxTalkEdit() {
                   type="date"
                   placeholder="Enter date"
                   value={toolbox_date}
-                  onChange={(e) => setToolBoxDate(e.target.value)}
+                  onChange={(e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = selectedDate !== "" ? selectedDate : null;
+                    setToolBoxDate(formattedDate);
+                  }}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formName">

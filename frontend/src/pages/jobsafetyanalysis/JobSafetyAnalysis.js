@@ -41,11 +41,26 @@ function JobSafetyAnalysis() {
        }).catch(console.log)
    }
 
+   const customStyles = {
+    headCells : {
+      style: {
+        border: '1px solid black',
+
+      },
+        },
+    cells : {
+      style: {
+        border: '1px solid black'
+      },
+    },
+}
+
     const columns = [
         {
           name: 'Id',
           selector: (row) => row.id,
           sortable: true,
+          width: '6rem'
         },
         {
           name: 'Job Title',
@@ -56,24 +71,29 @@ function JobSafetyAnalysis() {
           name: 'JSA Id',
           selector: (row) => row.jsa_id,
           sortable: true,
+          width: '10rem'
         },
         {
           name: 'Job Performer',
           selector: (row) => row.job_performer,
           sortable: true,
+          width: '10rem'
         },
         {
           name: 'Supervisor',
           selector: (row) => row.supervisor,
           sortable: true,
+          width: '10rem'
         },
         {
           name: 'Edit',
           selector: (row) => row.edit,
+          width: '6rem'
         },
         {
           name: 'Delete',
           selector: (row) => row.delete,
+          width: '6rem'
         },
       ];
 
@@ -142,7 +162,8 @@ function JobSafetyAnalysis() {
   {/* <div className="text-end"><input type="text" /></div> */}
       
 
-    <DataTable 
+    <DataTable className='table-container mb-5' 
+           customStyles={customStyles}
            columns={columns}
            data={records}
            selectableRows

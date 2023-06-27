@@ -80,7 +80,7 @@ export default function Navtop() {
 
             {/* <Navbar style={{backgroundColor: 'skyblue'}}> */}
             {/* <Navbar style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}> */}
-            <Navbar  style={{backgroundColor: 'rgba(235,114,106)', position : "absolute", top: '0', width: '100%'}}>
+            <Navbar  style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}>
                 <Nav>
                     <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
                     <Nav.Item><NavLink className="black" to="chartspage">Charts</NavLink></Nav.Item>
@@ -90,7 +90,7 @@ export default function Navtop() {
                         <Nav.Menu className="black" title="HSE">
                             <Nav.Item><NavLink  to="stats" className="inprogress">Statistics (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="incidenttable">Incident</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="incidenttable">Safety Card</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></Nav.Item>
@@ -105,7 +105,7 @@ export default function Navtop() {
                             <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="permittowork" className="inprogress">Permit to Work (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="jobsafetyanalysis" className="inprogress">Job Safety Analysis (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>
                     <Nav>

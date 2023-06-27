@@ -30,6 +30,10 @@ router.register(r'jobsafetyequipment', views.JobSafetyEquipmentViewSet, basename
 router.register(r'jobsafetysteps', views.JobSafetyStepsViewSet, basename='jobsafetysteps')
 router.register(r'jobsafetyhazards', views.JobSafetyHazardsViewSet, basename="jobsafetyhazards")
 router.register(r'incidenteventphotos', views.IncidentEventPhotosViewSet, basename='incidenteventphotos')
+router.register(r'permittowork', views.PermitToWorkViewSet, basename='permittowork')
+router.register(r'hazardsandprecautions', views.HazardsAndPrecautionsViewSet, basename='hazardsandprecautions')
+router.register(r'physicalcontrols', views.PhysicalControlsViewSet, basename='physicalcontrols')
+router.register(r'signitures', views.SignituresViewSet, basename="signitures")
 
 # router.register(r'about', views.IncidentViewSet, basename="about")
 

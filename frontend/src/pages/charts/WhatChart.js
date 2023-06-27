@@ -363,7 +363,7 @@ export default function WhatChat() {
 }
 
   return (
-    <div className=" row justify-content-center" style={{ height: '800px'}}>
+    <div className=" row justify-content-center" style={{ height: '700px'}}>
       <Bar 
       // type="horizontalBar'"
       data={data}

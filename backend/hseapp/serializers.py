@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement ,RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos
+from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement ,RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures 
 # from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
@@ -203,4 +203,24 @@ class JobSafetyHazardsSerializer(serializers.ModelSerializer):
 class IncidentEventPhotosSerializer(serializers.ModelSerializer):
     class Meta:
         model = IncidentEventPhotos
+        fields = '__all__'
+
+class PermitToWorkSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = PermitToWork
+        fields = '__all__'
+
+class HazardsAndPrecautionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HazardsAndPrecautions
+        fields = '__all__'
+
+class PhysicalControlsSeralizer(serializers.ModelSerializer):
+    class Meta:
+        model = PhysicalControls
+        fields = '__all__'
+
+class SignituresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Signitures
         fields = '__all__'
