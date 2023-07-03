@@ -155,7 +155,7 @@ function JobSafetyStepsEdit(props) {
               onClick= {(e) => updateEntryToDatabase(id)}
               className="mx-2"
             >
-              Save
+              Update
             </Button>
           </div>
         </Form>    

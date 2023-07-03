@@ -66,6 +66,11 @@ import JobSafetyStepsEdit from './pages/jobsafetyanalysis/jobsafetysteps/JobSafe
 import JobSafetyHazardsEdit from './pages/jobsafetyanalysis/jobsafetyhazards.js/JobSafetyHazardsEdit';
 import IncidentEventPhotosEdit from './pages/incidents/incidenteventphotos/IncidentEventPhotosEdit';
 import ChartsPage from './pages/charts/ChartsPage';
+import PermitToWorkAdd from './pages/permittowork/PermitToWorkAdd';
+import PermitToWorkEdit from './pages/permittowork/PermitToWorkEdit';
+import HazardsAndPrecautionsEdit from './pages/permittowork/hazardsandprecautions/HazardsAndPrecautionsEdit';
+import PhysicalControlsEdit from './pages/permittowork/physicalcontrols/PhysicalControlsEdit';
+import SignituresEdit from './pages/permittowork/signitures/SignituresEdit';
 
 
 
@@ -105,6 +110,11 @@ function App() {
               <Route path="reportinglist" element={<Reportinglist/>}/>
               <Route path='stafflist' element={<StaffList/>} />
               <Route path="permittowork" element={<PermitToWorkList/>}/>
+              <Route path="permittoworkadd" element={<PermitToWorkAdd/>}/>
+              <Route path="permittoworkedit/:id" element={<PermitToWorkEdit/>}/>
+              <Route path="hazardsandprecautionsedit/:id" element={<HazardsAndPrecautionsEdit/>}/>
+              <Route path="physicalcontrolsedit/:id" element={<PhysicalControlsEdit/>}/>
+              <Route path="signituresedit/:id" element={<SignituresEdit/>}/>
               <Route path="jobsafetyanalysis" element={<JobSafetyAnalysis/>}/>
               <Route path="jobsafetyanalysisadd" element={<JobSafetyAnalysisAdd/>}/>
               <Route path="jobsafetyanalysisedit/:id" element={<JobSafetyAnalysisEdit/>}/>

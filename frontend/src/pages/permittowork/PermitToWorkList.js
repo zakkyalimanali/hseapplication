@@ -140,9 +140,7 @@ useEffect(() => {
       work_start: permittowork.work_start,
       work_completed: permittowork.work_completed,
       // more_info : <Link to={`/editincident/${incident.id}`}>
-      more_info : <Link to={`#`}>
-      <FontAwesomeIcon icon={faPen } />
-      </Link>,
+      more_info : <Link to={`/permittoworkedit/${permittowork.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
       delete: (
         <FontAwesomeIcon
           icon={faTrash}
@@ -195,7 +193,7 @@ const handleFilter = (e) => {
       </Button> */}
       <div className="mt-4 col-md-10 m row justify-content-center">
       <div className="row justify-content-around">
-        <Button href="#" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button>
+        <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button>
         <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
       </div>
 
