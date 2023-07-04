@@ -169,7 +169,7 @@ const updateEntryToDatabase = (id) => {
                         onChange={(e) => setSignitureFor(e.target.value)}
                     >
                         <option value=''>------</option>
-                        <option value='Details Of Work '>Details Of Work</option>
+                        <option value='Details Of Work'>Details Of Work</option>
                         <option value='Acceptance'>Acceptance</option>
                         <option value='Completion'>Completion</option>
                         <option value='Final Sign Off'>Final Sign Off</option>

@@ -143,13 +143,19 @@ function PermitToWorkEdit() {
        }).catch(console.log)
    }
 
+    const forDeletingSigniture = (id) => {
+      SignituresAPI.delete(`/${id}/`).then((res) => {
+       fetchSignitures();
+       }).catch(console.log)
+   }
+
 
   return (
     <div className="container mt-5 pb-5">
     <div className="row">
       <div className= "col-md-4"></div>
-      <div className="col-md-4 ">
-        <h3 className="float-left mt-5">Create a New Permit To Work</h3>
+      <div className="col-md-12 ">
+        <h3 className="d-flex justify-content-center mt-5">Create a New Permit To Work</h3>
         
         <Form onSubmit={willSubmitTheEntryIntoDatabase} 
         className="mt-4">
@@ -283,7 +289,7 @@ function PermitToWorkEdit() {
             </Table>
 
           <SignituresAdd permittowork = {params.id}/>  
-          <h3 className="float-left mt-3">Signitures</h3>
+          <h3 className="float-left mt-5">Details of Work (Worker)</h3>
 
           <Table striped bordered hover className='mt-3'>
               <thead>
@@ -292,7 +298,7 @@ function PermitToWorkEdit() {
                     {/* <th scope="col" className="col-2">Job Steps</th> */}
                     <th scope="col" className="col-4">Person Name</th>
                     <th scope="col" className="col-4">Person Signiture</th>
-                    <th scope="col" className="col-4">Signiture For</th>
+                    {/* <th scope="col" className="col-4">Signiture For</th> */}
                     <th scope="col" className="col-4">Position Class</th>
                     {/* <th scope="col" className="col-4">Date Time Signed</th> */}
                     <th scope="col" className="col-1">Edit</th>
@@ -301,27 +307,213 @@ function PermitToWorkEdit() {
 
               </thead>
               <tbody>
-              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Final Sign Off').map((signiture) => {
+              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Details Of Work' && signiture.position_class === 'Worker' ).map((signiture) => {
                 return (
                   <tr key={signiture.id}>
                     <td>{signiture.id}</td>
                     {/* <td>{jobsafetystep.job_steps}</td> */}
                     {/* <td>{signiture.person_name}</td> */}
-                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td>
+                    {/* <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name} - ({staffs.find((staff) => staff.id === signiture.person_name)?.position})</td>
                     <td>
                       <a href={`${signiture.person_signiture}`} download={signiture.person_signiture}><div className="d-flex justify-content-center"><img className="col-md-6 " src={signiture.person_signiture} alt={signiture.person_signiture}/></div>
                       </a>
                     </td>
-                    <td>{signiture.signiture_for}</td>
+                    {/* <td>{signiture.signiture_for}</td> */}
                     <td>{signiture.position_class}</td>
                     {/* <td>{signiture.date_time_signed}</td> */}
                     <td><Link to={`/signituresedit/${signiture.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
                     {/* <td>Edit</td> */}
-                    {/* <td><FontAwesomeIcon
+                    <td><FontAwesomeIcon
             icon={faTrash}
-            onClick={() => forDeletingPhysical(physicalcontrols.id)}
-            /></td> */}
-            <td>Delete</td>
+            onClick={() => forDeletingSigniture(signiture.id)}
+            /></td>
+            {/* <td>Delete</td> */}
+                  </tr>
+                )
+              })}
+              </tbody>
+            </Table>
+          <h3 className="float-left mt-5">Details of Work (Competent Person)</h3>
+
+          <Table striped bordered hover className='mt-3'>
+              <thead>
+                <tr>
+                    <th scope="col" className="col-2">ID</th>
+                    {/* <th scope="col" className="col-2">Job Steps</th> */}
+                    <th scope="col" className="col-4">Person Name</th>
+                    <th scope="col" className="col-4">Person Signiture</th>
+                    {/* <th scope="col" className="col-4">Signiture For</th> */}
+                    <th scope="col" className="col-4">Position Class</th>
+                    {/* <th scope="col" className="col-4">Date Time Signed</th> */}
+                    <th scope="col" className="col-1">Edit</th>
+                    <th scope="col" className="col-1">Delete</th>
+                  </tr>
+
+              </thead>
+              <tbody>
+              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Details Of Work' && signiture.position_class === 'Compenent Person' ).map((signiture) => {
+                return (
+                  <tr key={signiture.id}>
+                    <td>{signiture.id}</td>
+                    {/* <td>{jobsafetystep.job_steps}</td> */}
+                    {/* <td>{signiture.person_name}</td> */}
+                    {/* <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name} - ({staffs.find((staff) => staff.id === signiture.person_name)?.position})</td>
+                    <td>
+                      <a href={`${signiture.person_signiture}`} download={signiture.person_signiture}><div className="d-flex justify-content-center"><img className="col-md-6 " src={signiture.person_signiture} alt={signiture.person_signiture}/></div>
+                      </a>
+                    </td>
+                    {/* <td>{signiture.signiture_for}</td> */}
+                    <td>{signiture.position_class}</td>
+                    {/* <td>{signiture.date_time_signed}</td> */}
+                    <td><Link to={`/signituresedit/${signiture.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                    {/* <td>Edit</td> */}
+                    <td><FontAwesomeIcon
+            icon={faTrash}
+            onClick={() => forDeletingSigniture(signiture.id)}
+            /></td>
+            {/* <td>Delete</td> */}
+                  </tr>
+                )
+              })}
+              </tbody>
+            </Table>
+          <h3 className="float-left mt-5">Acceptance</h3>
+
+          <Table striped bordered hover className='mt-3'>
+              <thead>
+                <tr>
+                    <th scope="col" className="col-2">ID</th>
+                    {/* <th scope="col" className="col-2">Job Steps</th> */}
+                    <th scope="col" className="col-4">Person Name</th>
+                    <th scope="col" className="col-4">Person Signiture</th>
+                    {/* <th scope="col" className="col-4">Signiture For</th> */}
+                    <th scope="col" className="col-4">Position Class</th>
+                    {/* <th scope="col" className="col-4">Date Time Signed</th> */}
+                    <th scope="col" className="col-1">Edit</th>
+                    <th scope="col" className="col-1">Delete</th>
+                  </tr>
+
+              </thead>
+              <tbody>
+              {/* {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Acceptance').map((signiture) => { */}
+              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Acceptance' && signiture.position_class === 'Compenent Person' ).map((signiture) => {
+              {/* {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id)).map((signiture) => { */}
+                return (
+                  <tr key={signiture.id}>
+                    <td>{signiture.id}</td>
+                    {/* <td>{jobsafetystep.job_steps}</td> */}
+                    {/* <td>{signiture.person_name}</td> */}
+                    {/* <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name} - ({staffs.find((staff) => staff.id === signiture.person_name)?.position})</td>
+                    <td>
+                      <a href={`${signiture.person_signiture}`} download={signiture.person_signiture}><div className="d-flex justify-content-center"><img className="col-md-6 " src={signiture.person_signiture} alt={signiture.person_signiture}/></div>
+                      </a>
+                    </td>
+                    {/* <td>{signiture.signiture_for}</td> */}
+                    <td>{signiture.position_class}</td>
+                    {/* <td>{signiture.date_time_signed}</td> */}
+                    <td><Link to={`/signituresedit/${signiture.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                    {/* <td>Edit</td> */}
+                    <td><FontAwesomeIcon
+            icon={faTrash}
+            onClick={() => forDeletingSigniture(signiture.id)}
+            /></td>
+            {/* <td>Delete</td> */}
+                  </tr>
+                )
+              })}
+              </tbody>
+            </Table>
+
+          <h3 className="float-left mt-5">Completion of Work</h3>
+
+          <Table striped bordered hover className='mt-3'>
+              <thead>
+                <tr>
+                    <th scope="col" className="col-2">ID</th>
+                    {/* <th scope="col" className="col-2">Job Steps</th> */}
+                    <th scope="col" className="col-4">Person Name</th>
+                    <th scope="col" className="col-4">Person Signiture</th>
+                    {/* <th scope="col" className="col-4">Signiture For</th> */}
+                    <th scope="col" className="col-4">Position Class</th>
+                    {/* <th scope="col" className="col-4">Date Time Signed</th> */}
+                    <th scope="col" className="col-1">Edit</th>
+                    <th scope="col" className="col-1">Delete</th>
+                  </tr>
+
+              </thead>
+              <tbody>
+              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Completion' && signiture.position_class === 'Compenent Person' ).map((signiture) => {
+                return (
+                  <tr key={signiture.id}>
+                    <td>{signiture.id}</td>
+                    {/* <td>{jobsafetystep.job_steps}</td> */}
+                    {/* <td>{signiture.person_name}</td> */}
+                    {/* <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name} - ({staffs.find((staff) => staff.id === signiture.person_name)?.position})</td>
+                    <td>
+                      <a href={`${signiture.person_signiture}`} download={signiture.person_signiture}><div className="d-flex justify-content-center"><img className="col-md-6 " src={signiture.person_signiture} alt={signiture.person_signiture}/></div>
+                      </a>
+                    </td>
+                    {/* <td>{signiture.signiture_for}</td> */}
+                    <td>{signiture.position_class}</td>
+                    {/* <td>{signiture.date_time_signed}</td> */}
+                    <td><Link to={`/signituresedit/${signiture.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                    {/* <td>Edit</td> */}
+                    <td><FontAwesomeIcon
+            icon={faTrash}
+            onClick={() => forDeletingSigniture(signiture.id)}
+            /></td>
+            {/* <td>Delete</td> */}
+                  </tr>
+                )
+              })}
+              </tbody>
+            </Table>
+
+
+          <h3 className="float-left mt-5">Final Sign Off</h3>
+
+          <Table striped bordered hover className='mt-3'>
+              <thead>
+                <tr>
+                    <th scope="col" className="col-2">ID</th>
+                    {/* <th scope="col" className="col-2">Job Steps</th> */}
+                    <th scope="col" className="col-4">Person Name</th>
+                    <th scope="col" className="col-4">Person Signiture</th>
+                    {/* <th scope="col" className="col-4">Signiture For</th> */}
+                    <th scope="col" className="col-4">Position Class</th>
+                    {/* <th scope="col" className="col-4">Date Time Signed</th> */}
+                    <th scope="col" className="col-1">Edit</th>
+                    <th scope="col" className="col-1">Delete</th>
+                  </tr>
+
+              </thead>
+              <tbody>
+              {signitures.filter((signiture)=> signiture.permit_to_work === Number(params.id) && signiture.signiture_for === 'Final Sign Off' && signiture.position_class === 'Authorizer' ).map((signiture) => {
+                return (
+                  <tr key={signiture.id}>
+                    <td>{signiture.id}</td>
+                    {/* <td>{jobsafetystep.job_steps}</td> */}
+                    {/* <td>{signiture.person_name}</td> */}
+                    {/* <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name}</td> */}
+                    <td>{staffs.find((staff) => staff.id === signiture.person_name)?.name} - ({staffs.find((staff) => staff.id === signiture.person_name)?.position})</td>
+                    <td>
+                      <a href={`${signiture.person_signiture}`} download={signiture.person_signiture}><div className="d-flex justify-content-center"><img className="col-md-6 " src={signiture.person_signiture} alt={signiture.person_signiture}/></div>
+                      </a>
+                    </td>
+                    {/* <td>{signiture.signiture_for}</td> */}
+                    <td>{signiture.position_class}</td>
+                    {/* <td>{signiture.date_time_signed}</td> */}
+                    <td><Link to={`/signituresedit/${signiture.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
+                    {/* <td>Edit</td> */}
+                    <td><FontAwesomeIcon
+            icon={faTrash}
+            onClick={() => forDeletingSigniture(signiture.id)}
+            /></td>
+            {/* <td>Delete</td> */}
                   </tr>
                 )
               })}
