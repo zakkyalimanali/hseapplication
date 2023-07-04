@@ -285,7 +285,7 @@ class PhysicalControls(models.Model):
 class Signitures(models.Model):
     permit_to_work = models.ForeignKey(PermitToWork, on_delete=models.CASCADE)
     person_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
-    person_signiture = models.ImageField(upload_to='post_images', null=True, blank=True)
+    person_signiture = models.FileField(upload_to='signitures', null=True, blank=True)
     signiture_for = models.CharField(max_length=100 , null=True, blank=True)
     position_class = models.CharField(max_length=100 , null=True, blank=True)
     date_time_signed = models.DateTimeField(auto_now=True)
