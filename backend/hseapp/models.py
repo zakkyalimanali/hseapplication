@@ -289,3 +289,10 @@ class Signitures(models.Model):
     signiture_for = models.CharField(max_length=100 , null=True, blank=True)
     position_class = models.CharField(max_length=100 , null=True, blank=True)
     date_time_signed = models.DateTimeField(auto_now=True)
+
+class News(models.Model):
+    person_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
+    headline = models.CharField(max_length=100 , null=True, blank=True)
+    textbody = models.CharField(max_length=1000 , null=True, blank=True)
+    news_date = models.DateField(auto_now=True)
+    # news_image = models.ImageField(upload_to='post_images', null=True, blank=True)

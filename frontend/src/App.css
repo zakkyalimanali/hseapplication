@@ -211,3 +211,20 @@ li {
   .container {
     padding: 2px 16px;
   }
+
+  .Commitment_To_Safety {
+    background-image: linear-gradient(to bottom left, lightblue, royalblue);
+    /* background-image: linear-gradient(to bottom left, orange, yellow); */
+    text-shadow: 2px 1px black;
+    color: white;
+  }
+
+  .card_border {
+    border: 2px solid black;
+  }
+
+  .news-image {
+    width: 7rem;
+    height: 7rem;
+  }
+
