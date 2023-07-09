@@ -95,7 +95,7 @@ export default function Navtop() {
                             <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="hsereferenceslist" className="inprogress">HSE References (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="hsereferenceslist">HSE References</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="workplaceruleslist" className="inprogress">Work Place Rules (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="riskmitigationlist" className="inprogress">Risk Mitigation (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="hseauditlist" className="inprogress">HSE Audit (In Progress)</NavLink></Nav.Item>
