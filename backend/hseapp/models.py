@@ -187,6 +187,15 @@ class HSEManagement(models.Model):
     
     def __str__(self):
         return self.title
+    
+class HSERefrences(models.Model): 
+    title = models.CharField(max_length=100, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    # image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    hse_document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
 
 class RiskRegister(models.Model):
     date_raised = models.DateField(null=True, blank=True)
