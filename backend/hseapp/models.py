@@ -242,8 +242,9 @@ class PermitToWork(models.Model):
     permit_number = models.CharField(max_length=300, null=True, blank=True)
     location_of_work = models.CharField(max_length=300, null=True, blank=True)
     nature_of_work = models.CharField(max_length=300, null=True, blank=True)
-    work_start = models.DateTimeField(null=True, blank=True)
-    work_completed = models.DateTimeField(null=True, blank=True)
+    work_start = models.DateField(null=True, blank=True)
+    work_start_time = models.TimeField(null=True, blank=True)
+    work_completed = models.DateField(null=True, blank=True)
     
 
 class HazardsAndPrecautions(models.Model):

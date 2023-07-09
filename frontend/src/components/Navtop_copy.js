@@ -84,6 +84,7 @@ export default function Navtop() {
                 <Nav>
                     <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
                     <Nav.Item><NavLink className="black" to="chartspage">Charts</NavLink></Nav.Item>
+                    <Nav.Item><NavLink className="black" to="newslist">News</NavLink></Nav.Item>
                     {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}
                    
                     <Nav>
@@ -104,7 +105,7 @@ export default function Navtop() {
                             <Nav.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="permittowork" className="inprogress">Permit to Work (In Progress)</NavLink></Nav.Item>
+                            <Nav.Item><NavLink  to="permittowork" >Permit to Work</NavLink></Nav.Item>
                             <Nav.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></Nav.Item>
                         </Nav.Menu>
                     </Nav>

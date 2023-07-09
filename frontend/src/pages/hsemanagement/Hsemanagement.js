@@ -138,9 +138,10 @@ function Hsemanagement() {
                 <thead>
                     <tr>
                         <th scope="col" className="col-1">ID</th>
-                        <th scope="col" className="col-1">Title</th>
-                        <th scope="col" className="col-1">Content</th>
-                        <th >Download</th>
+                        <th scope="col" className="col-3">Title</th>
+                        <th scope="col" className="col-6">Content</th>
+                        <th scope="col" className="col-1">Download</th>
+                        {/* <th scope="col" className="col-1">Edit</th> */}
                         <th scope="col" className="col-1">Delete</th>
                     </tr>
                 </thead>
@@ -154,6 +155,7 @@ function Hsemanagement() {
                                 {/* <td>{hsemanagement.context}</td> */}
                                 <td><a href={`${hsemanagement.management_commitment_document}`} download={hsemanagement.management_commitment_document}>Download</a></td>
 
+                                {/* <td>Edit</td> */}
                                 <td className='delete' onClick={() => forDeletingHSEManagement(hsemanagement.id)}><FontAwesomeIcon icon={faTrash } /></td>
                             </tr>
                         )

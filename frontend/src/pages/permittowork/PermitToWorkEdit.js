@@ -30,6 +30,7 @@ function PermitToWorkEdit() {
     const [location_of_work , setLocationOfWork] = useState('')
     const [nature_of_work, setNatureOfWork] = useState('')
     const [work_start , setWorkStart] = useState('')
+    const [work_start_time , setWorkStartTime] = useState('')
     const [work_completed , setWorkCompleted] = useState('')
     const [id , setId] = useState(null)
 
@@ -89,6 +90,7 @@ function PermitToWorkEdit() {
             setNatureOfWork(res.data.nature_of_work)
             setWorkStart(res.data.work_start)
             setWorkCompleted(res.data.work_completed)
+            setWorkStartTime(res.data.work_start_time)
         })
         .catch(console.log)
     }
@@ -101,6 +103,7 @@ function PermitToWorkEdit() {
             nature_of_work,
             work_start : work_start || null,
             work_completed : work_completed || null,
+            work_start_time,
         }
         // navigate(-1);
         PermitToWorkAPI.post('/', item).then(()=> 
@@ -118,6 +121,7 @@ function PermitToWorkEdit() {
             nature_of_work,
             work_start : work_start || null,
             work_completed : work_completed || null,
+            work_start_time,
         }
         PermitToWorkAPI.patch(`/${id}/`, item).then(() => {
             setPermitNumber('')
@@ -201,6 +205,17 @@ function PermitToWorkEdit() {
                 }}
             />
           </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formName">
+            <Form.Label>Work Time Start</Form.Label>
+              <Form.Control
+                type="time"
+                placeholder="Work Time Start"
+                value={work_start_time}
+                onChange={(e) => setWorkStartTime(e.target.value)}
+              />
+            </Form.Group>
+
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Work Completed</Form.Label>
             <Form.Control

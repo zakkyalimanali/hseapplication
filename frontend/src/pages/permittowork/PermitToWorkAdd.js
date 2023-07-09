@@ -18,6 +18,7 @@ function PermitToWorkAdd() {
     const [location_of_work , setLocationOfWork] = useState('')
     const [nature_of_work, setNatureOfWork] = useState('')
     const [work_start , setWorkStart] = useState('')
+    const [work_start_time , setWorkStartTime] = useState('')
     const [work_completed , setWorkCompleted] = useState('')
 
     const navigate = useNavigate()
@@ -41,6 +42,8 @@ function PermitToWorkAdd() {
             location_of_work,
             nature_of_work,
             work_start : work_start || null,
+            // work_start_time : work_start_time || null, 
+            work_start_time,
             work_completed : work_completed || null,
         }
         navigate(-1);
@@ -93,18 +96,29 @@ function PermitToWorkAdd() {
 
 
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Work Start</Form.Label>
+            <Form.Label>Work Start</Form.Label>
+            <Form.Control
+              type="date"
+              placeholder="Work Start"
+              value={work_start}
+              onChange={(e) => {
+                  const selectedDate = e.target.value;
+                  const formattedDate = selectedDate !== "" ? selectedDate : null;
+                  setWorkStart(formattedDate);
+                }}
+            />
+          </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Work Time Start</Form.Label>
                   <Form.Control
-                    type="date"
-                    placeholder="Work Start"
-                    value={work_start}
-                    onChange={(e) => {
-                        const selectedDate = e.target.value;
-                        const formattedDate = selectedDate !== "" ? selectedDate : null;
-                        setWorkStart(formattedDate);
-                      }}
+                    type="time"
+                    placeholder="Work Time Start"
+                    value={work_start_time}
+                    onChange={(e) => setWorkStartTime(e.target.value)}
                   />
                 </Form.Group>
+
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Work Completed</Form.Label>
                   <Form.Control
