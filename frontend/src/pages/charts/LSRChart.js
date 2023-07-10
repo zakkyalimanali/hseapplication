@@ -95,7 +95,7 @@ export default function LSRChart() {
 }
 
   return (
-    <div className=" row justify-content-center" style={{ height: '225px'}}>
+    <div className=" row justify-content-center" style={{ height: '250px'}}>
       {/* <Bar 
       data={data}
       options={options}

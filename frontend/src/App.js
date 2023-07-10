@@ -82,7 +82,7 @@ function App() {
     //   , height: '100vh'}}>
     <div className="App" style={{backgroundColor: 'white'
       , height: '100vh', overflowX:"hidden"}}>
-        <div className="mt-5 mb-5">
+        <div className="mt-5">
       <BrowserRouter>
         <Routes>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>

@@ -83,6 +83,7 @@ export default function Navtop() {
             <Navbar  style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}>
                 <Nav>
                     <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
+                    <Nav.Item><NavLink className="black" to="about">About This Website</NavLink></Nav.Item>
                     <Nav.Item><NavLink className="black" to="chartspage">Charts</NavLink></Nav.Item>
                     <Nav.Item><NavLink className="black" to="newslist">News</NavLink></Nav.Item>
                     {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}

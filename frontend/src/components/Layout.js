@@ -10,7 +10,7 @@ export default function Layout() {
             <Navtop/>
             {/* <Sidebar/> */}
             <Outlet/>
-            <Footer/>
+            {/* <Footer/> */}
         </div>
     )
 }

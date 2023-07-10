@@ -14,15 +14,30 @@ import safetycard2 from '../images/SafetyImage2.jpg';
 import safetycard3 from '../images/SafetyImage3.jpg';
 import management from '../images/Management.jpg';
 import { Link } from 'react-router-dom';
+import NewsAPI from '../API/NewsAPI';
+import ContactPage from './ContactPage';
 
 
 export default function Home() {
+    const [work_news, setWorkNews] = useState([])
     // const [staffs , setStaff] = useState([])
     // const [incidents , setIncidents] = useState([])
     // const {authTokens , logoutUser} = useContext(AuthContext);
     // console.log(authTokens)
     let {loginUser} = useContext(AuthContext)
     console.log(loginUser)
+
+    useEffect(() => {
+        fetchNews()
+    },[])
+
+    const fetchNews = () => {
+        NewsAPI.get('/')
+        .then((res) => {
+            setWorkNews(res.data)
+        })
+        .catch(console.log)
+    }
 
     // useEffect(() => {
     //     StaffAPI.get('/')
@@ -92,7 +107,7 @@ export default function Home() {
             
             </div>
 
-            <div className="mt-3 row mb-5 p-5 Commitment_To_Safety">
+            <div className="mt-3 row mb-3 p-5 Commitment_To_Safety">
                 <div className="row d-flex justify-content-center">
                     <div className="col-md-3 me-2">
                         <img className="card-image" src={management} alt="Avatar"/>
@@ -103,20 +118,38 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="mt-3 row mb-5 p-5">
-            <div className="col-md-6">
-                    <div className='row p-3 card_border'>
-                        <div className="col-md-8 ms-2">
+            <div className="row mb-5 ps-5 pe-5 ">
+                <div className="col-md-6">
+                    <h3 className="mt-4 mb-3 d-flex justify-content-center">News</h3>
+                    {work_news.map(work_new => {
+                    return (
+                        <div className='row p-3 mb-3 card_border'>
+                            <h5>{work_new.headline}</h5>
+                            <p>{work_new.textbody}</p>
+                        
+                        </div>)
+                    
+                        {/* <div className="col-md-8 ms-2">
                             <h5>New Team Member</h5>
                             <p>veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit </p>
-                        </div>
-                        <div className="col-md-3 me-2 d-flex justify-content-center">
+                        </div> */}
+                        
+                            
+                            
+                        })}
+                        
+                        {/* <div className="col-md-8 ms-2">
+                            <h5></h5>
+                            <p></p>
+                        </div> */}
+                        {/* <div className="col-md-3 me-2 d-flex justify-content-center">
                             <img className="news-image" src={management} alt="Avatar"/>
-                        </div>
-                    </div>
+                        </div> */}
+              
                 </div>
 
             </div>
+            <ContactPage/>
 
         </div>
 

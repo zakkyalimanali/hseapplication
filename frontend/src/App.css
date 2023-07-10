@@ -228,3 +228,12 @@ li {
     height: 7rem;
   }
 
+  .icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .social_bar {
+    background-color: white;
+    border-radius: 15px;
+  }
