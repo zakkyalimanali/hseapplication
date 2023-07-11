@@ -1,28 +1,50 @@
-import {useState , useEffect, useContext} from 'react'
+import React , {useEffect , useState} from 'react'
+// APIS
 import NewsAPI from '../../API/NewsAPI';
 import StaffAPI from '../../API/StaffAPI';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import axios from 'axios';
-import { Link , useNavigate } from 'react-router-dom';
-import AuthContext from "../../context/AuthContext";
+
+import axios from 'axios'
 import Table from 'react-bootstrap/Table';
+import { ListGroup, Card, Button, Form } from "react-bootstrap";
+import { Link} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
-import { useParams } from 'react-router-dom';
 
-function NewsAdd() {
+
+// Others 
+import { useNavigate } from 'react-router'
+
+function NewsEdit() {
     const [worknews , setWorkNews] = useState([])
     const [staffs , setStaffs] = useState([])
     const [person_name , setPersonName] = useState('')
     const [headline , setHeadline] = useState('')
     const [textbrief , setTextBrief] = useState('')
     const [textcontent , setTextContent] = useState('')
+    const [id , setId] = useState(null)
     const navigate = useNavigate()
+    const params = useParams() 
 
     useEffect(() => {
-        fetchStaff()
-        fetchNews()
+        fetchNews() 
+        setId(params.id)
+    },[params.id])
+
+    const fetchNews = () => {
+        axios.get(`http://127.0.0.1:8000/hseapp/news/${params.id}`)
+        .then((res) => {
+            setWorkNews(res.data)
+            setPersonName(res.data.person_name)
+            setHeadline(res.data.headline)
+            setTextBrief(res.data.textbrief)
+            setTextContent(res.data.textcontent)
+        })
+        .catch(console.log)
+    }
+
+    useEffect(() => {
+        fetchStaff() 
     },[])
 
     const fetchStaff = () => {
@@ -33,18 +55,10 @@ function NewsAdd() {
         .catch(console.log)
     }
 
-    const fetchNews = () => {
-        NewsAPI.get('/')
-        .then((res) => {
-            setWorkNews(res.data)
-        })
-        .catch(console.log)
-    }
-
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
-            person_name,
+            person_name : person_name || null,
             headline,
             textbrief,
             textcontent,
@@ -55,6 +69,23 @@ function NewsAdd() {
             .catch((error) => {
                 console.log("Error:", error);
               })
+    }
+
+    const toUpdateDatabaseInfo = (id) => {
+        let item = {
+            person_name : person_name || null,
+            headline,
+            textbrief,
+            textcontent,
+        }
+    NewsAPI.patch(`/${id}/`, item).then(() => {
+        setPersonName('')
+        setHeadline('')
+        setTextBrief('')
+        setTextContent('')
+        fetchNews()
+    })
+    navigate(-1)
     }
 
   return (
@@ -114,13 +145,21 @@ function NewsAdd() {
                 
 
                 <div className="mt-3 float-right">
-                  <Button
+                  {/* <Button
                     variant="primary"
                     type="submit"
                     onClick={willSubmitTheEntryIntoDatabase}
                     className="mx-2"
                   >
                     Save
+                  </Button> */}
+                  <Button
+                    variant="warning"
+                    type="button"
+                    onClick={(e) => toUpdateDatabaseInfo(id)}
+                    className="mx-2"
+                  >
+                    Update
                   </Button>
                 </div>
               </Form>    
@@ -130,4 +169,4 @@ function NewsAdd() {
   )
 }
 
-export default NewsAdd
+export default NewsEdit

@@ -73,6 +73,7 @@ import PhysicalControlsEdit from './pages/permittowork/physicalcontrols/Physical
 import SignituresEdit from './pages/permittowork/signitures/SignituresEdit';
 import NewsList from './pages/news/NewsList';
 import NewsAdd from './pages/news/NewsAdd';
+import NewsEdit from './pages/news/NewsEdit';
 
 
 
@@ -82,7 +83,8 @@ function App() {
     //   , height: '100vh'}}>
     <div className="App" style={{backgroundColor: 'white'
       , height: '100vh', overflowX:"hidden"}}>
-        <div className="mt-5">
+        {/* <div className="mt-5"> */}
+        <div>
       <BrowserRouter>
         <Routes>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
@@ -125,6 +127,7 @@ function App() {
               <Route path="jobsafetyhazardsedit/:id" element={<JobSafetyHazardsEdit/>}/>
               <Route path="newslist" element={<NewsList/>}/>
               <Route path="newsadd" element={<NewsAdd/>}/>
+              <Route path="newsedit/:id" element={<NewsEdit/>}/>
               <Route path="chartspage" element={<ChartsPage/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />

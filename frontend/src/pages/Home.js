@@ -60,7 +60,7 @@ export default function Home() {
 
 
     return(
-    <div className="pt-5">
+    <div className="pt-4">
         <div>
             <div className="mt-4 row  p-5 Introduction">
                 <h1 className="d-flex justify-content-center">Welcome To Zakky Industries</h1>
@@ -125,7 +125,7 @@ export default function Home() {
                     return (
                         <div className='row p-3 mb-3 card_border'>
                             <h5>{work_new.headline}</h5>
-                            <p>{work_new.textbody}</p>
+                            <p>{work_new.textbrief}</p>
                         
                         </div>)
                     

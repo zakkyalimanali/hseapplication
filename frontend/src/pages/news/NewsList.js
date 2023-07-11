@@ -85,8 +85,8 @@ function NewsList() {
           // },
         },
         {
-          name: 'Text Body',
-          selector: (row) => row.textbody,
+          name: 'Brief',
+          selector: (row) => row.textbrief,
           sortable: true,
           // width: '12rem'
           // style: {
@@ -120,28 +120,32 @@ function NewsList() {
         },
       ];
 
+
+
 useEffect(() => {
   const data = worknews.map((worknew) => {
     return {
       id: worknew.id,
       person_name : worknew.person_name,
       headline : worknew.headline,
-      textbody : worknew.textbody,
+      textbrief : worknew.textbrief,
       news_date : worknew.news_date,
-      // more_info : <Link to={`/permittoworkedit/${permittowork.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-      more_info : "More Info",
-      // delete: (
-      //   <FontAwesomeIcon
-      //     icon={faTrash}
-      //     onClick={() => onDelete(permittowork.id)}
-      //   />
-      // ),
-      delete: "Delete",
+      more_info : <Link to={`/newsedit/${worknew.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
+      // more_info : "More Info",
+      delete: (
+        <FontAwesomeIcon
+          icon={faTrash}
+          onClick={() => onDelete(worknew.id)}
+        />
+      ),
+      // delete: "Delete",
 
     }
   })
   setRecords(data);
 }, [worknews])
+
+
 
   return (
     <div className="row justify-content-center"> 

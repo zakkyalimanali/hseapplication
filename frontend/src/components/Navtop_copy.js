@@ -2,12 +2,15 @@ import React , {useContext} from 'react'
 import {NavLink ,Link, Outlet} from "react-router-dom"
 import AuthContext from '../context/AuthContext';
 import { Button } from 'react-bootstrap';
-import { Navbar, Nav, Dropdown} from 'rsuite';
+// import { Navbar, Nav, Dropdown} from 'rsuite';
 import ExploreIcon from '@rsuite/icons/Explore';
 import AdminIcon from '@rsuite/icons/Admin';
 import PlusIcon from '@rsuite/icons/Plus';
 import SettingIcon from '@rsuite/icons/Setting';
 import 'rsuite/dist/rsuite.min.css';
+import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function Navtop() {
@@ -76,62 +79,127 @@ export default function Navtop() {
         //     </Navbar>
         //     </div>
 
-        <div>
-
-            {/* <Navbar style={{backgroundColor: 'skyblue'}}> */}
-            {/* <Navbar style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}> */}
-            <Navbar  style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}>
-                <Nav>
-                    <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
-                    <Nav.Item><NavLink className="black" to="about">About This Website</NavLink></Nav.Item>
-                    <Nav.Item><NavLink className="black" to="chartspage">Charts</NavLink></Nav.Item>
-                    <Nav.Item><NavLink className="black" to="newslist">News</NavLink></Nav.Item>
-                    {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}
+        // <div>
+        //     <Navbar  style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}>
+        //         <Nav>
+        //             <Nav.Item><NavLink className="black" to="/">Zakky Industries</NavLink></Nav.Item>
+        //             <Nav.Item><NavLink className="black" to="about">About This Website</NavLink></Nav.Item>
+        //             <Nav.Item><NavLink className="black" to="chartspage">Charts</NavLink></Nav.Item>
+        //             <Nav.Item><NavLink className="black" to="newslist">News</NavLink></Nav.Item>
+        //             {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}
                    
+        //             <Nav>
+        //                 <Nav.Menu className="black" title="HSE">
+        //                     <Nav.Item><NavLink  to="stats" className="inprogress">Statistics (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="incidenttable">Safety Card</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="hsereferenceslist">HSE References</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="workplaceruleslist" className="inprogress">Work Place Rules (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="riskmitigationlist" className="inprogress">Risk Mitigation (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="hseauditlist" className="inprogress">HSE Audit (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="emergencyplanlist" className="inprogress">Emergency Plan (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="hsemanagement">HSE Management</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="permittowork" >Permit to Work</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></Nav.Item>
+        //                 </Nav.Menu>
+        //             </Nav>
+        //             <Nav>
+        //                 <Nav.Menu className="black" title="Staff">
+        //                     <Nav.Item><NavLink to="attendencelist">Attendence</NavLink></Nav.Item>
+        //                     <Nav.Item><NavLink  to="stafflist">Staff</NavLink></Nav.Item>
+        //                 </Nav.Menu>
+        //             </Nav>
+        //             <Nav>
+        //                 <Nav.Menu className="black" title="Equipment and Items">
+        //                     <Nav.Item><NavLink to="equipment" >Equipment and Items</NavLink></Nav.Item>
+        //                 </Nav.Menu>
+        //             </Nav>
+        //         </Nav>
+        //         <div className="me-5" style={{float : "right"}}>
+        //         {user ? ( <Button className="me-auto mt-2" variant="secondary" onClick={logoutUser}>Logout</Button>
+        //             ) : (
+        //             <Button className="me-auto mt-2"  variant="secondary"><Link to="/loginpage">Login</Link></Button>
+        //             )
+        //             }
+        //         </div>
+        //     </Navbar>
+        // </div>
+        <div>
+            {/* <Navbar className="p-3" style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}> */}
+            {/* <Navbar className="p-3 Navheader"> */}
+            <Navbar className="p-3" expand="lg" style={{backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)',width: '100%', position: 'relative',
+    /* top: 0%; */
+    }}>
+
+                <Navbar.Brand><NavLink className="black" to="/">Zakky Industries</NavLink></Navbar.Brand>
+            
+                    
+                    
+                    {/* <Nav.Item><NavLink className="black" to="about">About Us</NavLink></Nav.Item> */}
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav>
-                        <Nav.Menu className="black" title="HSE">
-                            <Nav.Item><NavLink  to="stats" className="inprogress">Statistics (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="incidenttable">Safety Card</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="traininglist">Training</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="hsereferenceslist">HSE References</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="workplaceruleslist" className="inprogress">Work Place Rules (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="riskmitigationlist" className="inprogress">Risk Mitigation (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="hseauditlist" className="inprogress">HSE Audit (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="emergencyplanlist" className="inprogress">Emergency Plan (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="hsemanagement">HSE Management</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="permittowork" >Permit to Work</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></Nav.Item>
-                        </Nav.Menu>
+                        <NavDropdown className="black" title="HSE">
+                            <NavDropdown.Item><NavLink  to="stats" className="inprogress">Statistics (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="toolboxtalklist">Toolbox</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="incidenttable">Safety Card</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="traininglist">Training</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="sitevisitlist">Site Visit</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="safeworkpracticelist" className="inprogress">Safe Work Practice (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="hsereferenceslist">HSE References</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="workplaceruleslist" className="inprogress">Work Place Rules (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="riskmitigationlist" className="inprogress">Risk Mitigation (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="hseauditlist" className="inprogress">HSE Audit (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="emergencyplanlist" className="inprogress">Emergency Plan (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="hsemanagement">HSE Management</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="permittowork" >Permit to Work</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Menu className="black" title="Staff">
-                            <Nav.Item><NavLink to="attendencelist">Attendence</NavLink></Nav.Item>
-                            <Nav.Item><NavLink  to="stafflist">Staff</NavLink></Nav.Item>
-                        </Nav.Menu>
+                        <NavDropdown className="black" title="Staff">
+                            <NavDropdown.Item><NavLink to="attendencelist">Attendence</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="stafflist">Staff</NavLink></NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Menu className="black" title="Equipment and Items">
-                            <Nav.Item><NavLink to="equipment" >Equipment and Items</NavLink></Nav.Item>
-                        </Nav.Menu>
+                        <NavDropdown className="black" title="Equipment and Items">
+                            <NavDropdown.Item><NavLink to="equipment" >Equipment and Items</NavLink></NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
-                </Nav>
-                <div className="me-5" style={{float : "right"}}>
-                {user ? ( <Button className="me-auto mt-2" variant="secondary" onClick={logoutUser}>Logout</Button>
+                    <Nav>
+                        <NavDropdown className="black" title="Website Details">
+                            <NavDropdown.Item><NavLink className="black" to="about">About This Website</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink className="black" to="chartspage">Charts</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink className="black" to="newslist">News</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item>   {user ? ( <Button className="me-auto mt-2" variant="secondary" onClick={logoutUser}>Logout</Button>
+                            ) : (
+                            <Button className="me-auto mt-2"  variant="secondary"><Link to="/loginpage">Login</Link></Button>
+                            )
+                            }</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    </Navbar.Collapse>
+           
+                {/* <div className="me-5" style={{float : "right"}}> */}
+                {/* {user ? ( <Button className="me-auto mt-2" variant="secondary" onClick={logoutUser}>Logout</Button>
                     ) : (
                     <Button className="me-auto mt-2"  variant="secondary"><Link to="/loginpage">Login</Link></Button>
                     )
-                    }
-                </div>
+                    } */}
+                {/* </div> */}
             </Navbar>
-            
-        {/* {Outlet} */}
         </div>
     )
 }

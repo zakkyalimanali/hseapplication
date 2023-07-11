@@ -237,3 +237,10 @@ li {
     background-color: white;
     border-radius: 15px;
   }
+
+  .Navheader {
+    background-image: linear-gradient(to bottom left, lightblue, royalblue);
+    /* position: absolute; */
+    /* top: 0%; */
+    width: 100%;
+  }
