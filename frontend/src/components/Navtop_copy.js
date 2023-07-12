@@ -134,9 +134,10 @@ export default function Navtop() {
         <div>
             {/* <Navbar className="p-3" style={{backgroundColor: 'rgba(245,184,180,96)', position : "absolute", top: '0', width: '100%'}}> */}
             {/* <Navbar className="p-3 Navheader"> */}
-            <Navbar className="p-3" expand="lg" style={{backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)',width: '100%', position: 'relative',
-    /* top: 0%; */
-    }}>
+            {/* <Navbar className="p-3" expand="lg" style={{backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)',width: '100%', position: 'fixed', top: '0' , overflow: 'hidden'}}> */}
+            {/* <Navbar className="p-3  fixed-top" expand="lg" style={{backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)'
+    }}> */}
+    <Navbar className="p-3 sticky-top" expand="lg" style={{ backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)' }}>
 
                 <Navbar.Brand><NavLink className="black" to="/">Zakky Industries</NavLink></Navbar.Brand>
             
