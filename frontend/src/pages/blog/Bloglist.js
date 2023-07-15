@@ -1,6 +1,6 @@
 import {useEffect , useState} from 'react'
 import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import NewsAPI from '../../API/NewsAPI';
+import BlogAPI from '../../API/BlogAPI';
 import StaffAPI from '../../API/StaffAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -10,20 +10,20 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // import {   } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
 
-function NewsList() {
-    const [worknews , setWorkNews] = useState([])
+function Bloglist() {
+    const [blogs , setBlogs] = useState([])
     const [staffs , setStaffs] = useState([])
     const [records, setRecords] = useState([]);
 
     useEffect(() => {
         fetchStaff()
-        fetchNews()
+        fetchBlog()
     },[])
 
-    const fetchNews = () => {
-        NewsAPI.get('/')
+    const fetchBlog = () => {
+        BlogAPI.get('/')
         .then((res) => {
-            setWorkNews(res.data)
+            setBlogs(res.data)
         })
         .catch(console.log)
     }
@@ -37,8 +37,8 @@ function NewsList() {
     }
 
     const onDelete = (id) => {
-        NewsAPI.delete(`/${id}/`).then((res) => {
-            fetchNews();
+        BlogAPI.delete(`/${id}/`).then((res) => {
+            fetchBlog();
         }).catch(console.log)
     }
 
@@ -94,8 +94,8 @@ function NewsList() {
           // },
         },
         {
-          name: 'News Date',
-          selector: (row) => row.news_date,
+          name: 'Blog Date',
+          selector: (row) => row.blog_date,
           sortable: true,
           // width: '12rem'
           // style: {
@@ -123,39 +123,38 @@ function NewsList() {
 
 
 useEffect(() => {
-  const data = worknews.map((worknew) => {
-    const person_name = staffs.find((staff) => staff.id === worknew.person_name)?.name  
+  const data = blogs.map((blog) => {
+    const person_name = staffs.find((staff) => staff.id === blog.person_name)?.name  
     return {
-      id: worknew.id,
-      person_name : person_name,
-      headline : worknew.headline,
-      textbrief : worknew.textbrief,
-      news_date : worknew.news_date,
-      more_info : <Link to={`/newsedit/${worknew.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-      // more_info : "More Info",
+      id: blog.id,
+      person_name :person_name,
+      headline : blog.headline,
+      textbrief : blog.textbrief,
+      blog_date : blog.blog_date,
+      more_info : <Link to={`/blogedit/${blog.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
+    //   more_info : "More Info",
       delete: (
         <FontAwesomeIcon
           icon={faTrash}
-          onClick={() => onDelete(worknew.id)}
+          onClick={() => onDelete(blog.id)}
         />
       ),
-      // delete: "Delete",
+    //   delete: "Delete",
 
     }
   })
   setRecords(data);
-}, [worknews])
-
+}, [blogs])
 
 
   return (
     <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-5">News List</h1>
+    <h1 className="row justify-content-center mt-5">Blogs List</h1>
       
       <div className="mt-4 col-md-10 m row justify-content-center">
       <div className="row justify-content-around">
-      <Button href="/newsadd" variant="secondary" className="mb-4 col-md-2">
-                      Add News
+      <Button href="/blogadd" variant="secondary" className="mb-4 col-md-2">
+                      Add Blog
       </Button>
 
         {/* <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button> */}
@@ -186,4 +185,4 @@ useEffect(() => {
   )
 }
 
-export default NewsList
+export default Bloglist

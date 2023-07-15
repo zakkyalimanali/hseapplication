@@ -36,6 +36,7 @@ router.register(r'hazardsandprecautions', views.HazardsAndPrecautionsViewSet, ba
 router.register(r'physicalcontrols', views.PhysicalControlsViewSet, basename='physicalcontrols')
 router.register(r'signitures', views.SignituresViewSet, basename="signitures")
 router.register(r'news', views.NewsViewSet, basename = 'news')
+router.register(r'blog', views.BlogViewSet, basename='blog')
 
 # router.register(r'about', views.IncidentViewSet, basename="about")
 

@@ -74,6 +74,9 @@ import SignituresEdit from './pages/permittowork/signitures/SignituresEdit';
 import NewsList from './pages/news/NewsList';
 import NewsAdd from './pages/news/NewsAdd';
 import NewsEdit from './pages/news/NewsEdit';
+import Bloglist from './pages/blog/Bloglist';
+import BlogAdd from './pages/blog/BlogAdd';
+import BlogEdit from './pages/blog/BlogEdit';
 
 
 
@@ -128,6 +131,9 @@ function App() {
               <Route path="newslist" element={<NewsList/>}/>
               <Route path="newsadd" element={<NewsAdd/>}/>
               <Route path="newsedit/:id" element={<NewsEdit/>}/>
+              <Route path="bloglist" element={<Bloglist/>} />
+              <Route path='blogadd' element={<BlogAdd/>} />
+              <Route path="blogedit/:id" element={<BlogEdit/>}/>
               <Route path="chartspage" element={<ChartsPage/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />

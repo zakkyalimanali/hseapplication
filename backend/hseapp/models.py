@@ -307,3 +307,10 @@ class News(models.Model):
     textcontent = models.TextField(max_length=2000 , null=True , blank=True)
     news_date = models.DateField(auto_now=True)
     # news_image = models.ImageField(upload_to='post_images', null=True, blank=True)
+
+class Blog(models.Model):
+    person_name = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
+    headline = models.CharField(max_length=100 , null=True, blank=True)
+    textbrief = models.CharField(max_length=500 , null=True, blank=True)
+    textcontent = models.TextField(max_length=2000 , null=True , blank=True)
+    blog_date = models.DateField(auto_now=True)
