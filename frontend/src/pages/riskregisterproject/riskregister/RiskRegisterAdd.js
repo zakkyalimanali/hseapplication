@@ -6,10 +6,11 @@ import { Link , useNavigate } from 'react-router-dom';
 import StaffAPI from '../../../API/StaffAPI';
 // import AuthContext from "../../context/AuthContext";
 
-function RiskRegisterAdd() {
+function RiskRegisterAdd(props) {
     const [riskregisters , setRiskRegisters] = useState([])
     const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
+    const project_name = props.projectlist
     // const [date_raised, setDateRaised] = useState('') 
     const [raised_by , setRaisedBy] = useState('')
     const [reviewed_by , setReviewedBy] = useState('')
@@ -58,6 +59,8 @@ function RiskRegisterAdd() {
             contingency_action,
             progress_on_actions,
             status,
+            project_name,
+
         }
         navigate(-1);
         RiskRegisterAPI.post('/', item).then(() => fetchRiskRegister())

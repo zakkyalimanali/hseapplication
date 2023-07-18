@@ -77,6 +77,9 @@ import NewsEdit from './pages/news/NewsEdit';
 import Bloglist from './pages/blog/Bloglist';
 import BlogAdd from './pages/blog/BlogAdd';
 import BlogEdit from './pages/blog/BlogEdit';
+import RiskRegisterProjectList from './pages/riskregisterproject/RiskRegisterProjectList';
+import RiskRegisterProjectAdd from './pages/riskregisterproject/RiskRegisterProjectAdd';
+import RiskRegisterProjectEdit from './pages/riskregisterproject/RiskRegisterProjectEdit';
 
 
 
@@ -109,6 +112,9 @@ function App() {
               <Route path="riskregisterlist" element={<RiskRegisterList/>}/>
               <Route path="riskregisteradd" element={<RiskRegisterAdd/>}/>
               <Route path="riskregisteredit/:id" element={<RiskRegisterEdit/>}/>
+              <Route path='riskregisterprojectlist' element={<RiskRegisterProjectList/>}/>
+              <Route path="riskregisterprojectadd" element={<RiskRegisterProjectAdd/>}/>
+              <Route path="riskregisterprojectedit/:id" element={<RiskRegisterProjectEdit/>}/>
               <Route path="equipmenttotals" element={<EquipmentTotals/>}/>
               <Route path="hseauditlist" element={<Hseaditlist/>}/>
               <Route path="emergencyplanlist" element={<Emergencyplanlist/>}/>

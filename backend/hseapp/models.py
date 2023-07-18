@@ -198,14 +198,14 @@ class HSERefrences(models.Model):
         return self.title
     
 class RiskRegisterProject(models.Model):
-    project = models.CharField(max_length=300, null=True, blank=True)
+    project_name = models.CharField(max_length=300, null=True, blank=True)
     date_raised = models.DateField(auto_now_add=True ,null=True, blank=True)
     date_reviewed = models.DateField(auto_now=True, null=True, blank=True)
     raised_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True, related_name='risk_register_project_raised_by')
     reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True,  related_name='risk_register_project_reviewed_by')
 
 class RiskRegister(models.Model):
-    project = models.ForeignKey(RiskRegisterProject, on_delete=models.CASCADE, null=True, blank = True)
+    project_name = models.ForeignKey(RiskRegisterProject, on_delete=models.CASCADE, null=True, blank = True)
     date_raised = models.DateField(auto_now_add=True ,null=True, blank=True)
     date_reviewed = models.DateField(auto_now=True, null=True, blank=True)
     raised_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True, related_name='risk_register_raised_by')
