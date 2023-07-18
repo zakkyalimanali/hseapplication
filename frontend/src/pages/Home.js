@@ -134,8 +134,8 @@ export default function Home() {
                     <h3 className="mt-4 mb-3 d-flex justify-content-center">News</h3>
                     {work_news.map(work_new => {
                     return (
-                        <div className='row p-3 mb-3 card_border'>
-                            <h5>{work_new.headline}</h5>
+                        <div className='row p-3 mb-3 card_border_2'>
+                            <h5 className="d-flex justify-content-center">{work_new.headline}</h5>
                             <p>{work_new.textbrief}</p>
                         
                         </div>)
@@ -154,8 +154,8 @@ export default function Home() {
                     <h3 className="mt-4 mb-3 d-flex justify-content-center">Blog</h3>
                     {blogs.map(blog => {
                     return (
-                        <div className='row p-3 mb-3 card_border'>
-                            <h5>{blog.headline}</h5>
+                        <div className='row p-3 mb-3 card_border_2'>
+                            <h5 className="d-flex justify-content-center">{blog.headline}</h5>
                             <p>{blog.textbrief}</p>
                         
                         </div>)
