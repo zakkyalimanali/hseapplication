@@ -25,6 +25,7 @@ router.register(r'itemsperbox', views.ItemsPerBoxViewSet, basename='itemsperbox'
 router.register(r'hsemanagement', views.HSEManagementViewSet, basename='hsemanagement')
 router.register(r'hsereferences', views.HSERefrencesViewSet, basename="hsereferences")
 router.register(r'riskregister', views. RiskRegisterViewSet, basename='riskregister')
+router.register(r'riskregisterproject', views.RiskRegisterProjectViewSet, basename='riskregisterproject')
 router.register(r'incidentphotos', views.IncidentPhotosViewSet, basename='incidentphotos')
 router.register(r'jobsafetyanalysis', views.JobSafetyAnalysisViewSet, basename='jobsafetyanalysis')
 router.register(r'jobsafetyequipment', views.JobSafetyEquipmentViewSet, basename='jobsafetyequipment')
@@ -37,6 +38,7 @@ router.register(r'physicalcontrols', views.PhysicalControlsViewSet, basename='ph
 router.register(r'signitures', views.SignituresViewSet, basename="signitures")
 router.register(r'news', views.NewsViewSet, basename = 'news')
 router.register(r'blog', views.BlogViewSet, basename='blog')
+router.register(r'safetycard', views.SafetyCardViewSet, basename='safetycard')
 
 # router.register(r'about', views.IncidentViewSet, basename="about")
 

@@ -1,69 +1,72 @@
 import {useEffect , useState} from 'react'
-import { ListGroup, Card, Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import IncidentAPI from '../../API/IncidentAPI';
+import SafetyCardAPI from '../../API/SafetyCardAPI';
+import StaffAPI from '../../API/StaffAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // import {   } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
+// import AuthContext from '../../context/AuthContext';
 
 
 export default function IncidentTable() {
     const [records, setRecords] = useState([]);
     const [incidents , setIncidents] = useState([])
-    const [selectedIncident , setSelectedIncident] = useState(null)
+    const [safetycards, setSafetyCards] = useState([])
+    // const [selectedIncident , setSelectedIncident] = useState(null)
     const [staffs , setStaffs] = useState([])
 
     useEffect(() => {
-        fetchIncidents();
+        // fetchIncidents();
+        fetchSafetyCards();
         fetchStaff();
     },[])
 
     const fetchStaff = () => {
-      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      StaffAPI.get('/')
       .then((res) => {
           setStaffs(res.data)
       })
       .catch(console.log)
   }
+    const fetchSafetyCards = () => {
+      SafetyCardAPI.get('/')
+      .then((res) => {
+          setSafetyCards(res.data)
+      })
+      .catch(console.log)
+  }
 
-    const fetchIncidents = () => {
-        IncidentAPI.get('/')
-        .then((res) => {
-            setIncidents(res.data)
-        })
-        .catch(console.log) 
-    }
-
-    const onDelete = (id) => {
-        IncidentAPI.delete(`/${id}/`).then((res) => {
-            fetchIncidents();
-        }).catch(console.log)
-    }
-
-    const selectIncident = (id) => {
-        setSelectedIncident(incidents.find((incident) => incident.id === id))
-    }
-
-    const clearSelectedIncident = () => {
-        setSelectedIncident(null)
-    };
-
-
-    // const customStyles = {
-    //   headCells : {
-    //     style: {
-    //       backgroundColor: 'white'
-    //     }
-    //   },
-    //   rows : {
-    //     style: {
-    //       backgroundColor: 'lightgray' 
-    //     }
-    //   }
+    // const fetchIncidents = () => {
+    //     IncidentAPI.get('/')
+    //     .then((res) => {
+    //         setIncidents(res.data)
+    //     })
+    //     .catch(console.log) 
     // }
+
+  //   const onDelete = (id) => {
+  //     IncidentAPI.delete(`/${id}/`).then((res) => {
+  //         fetchIncidents();
+  //     }).catch(console.log)
+  // }
+    const onDelete = (id) => {
+      SafetyCardAPI.delete(`/${id}/`).then((res) => {
+          fetchSafetyCards();
+      }).catch(console.log)
+  }
+
+    // const selectIncident = (id) => {
+    //     setSelectedIncident(incidents.find((incident) => incident.id === id))
+    // }
+
+    // const clearSelectedIncident = () => {
+    //     setSelectedIncident(null)
+    // };
+
     const customStyles = {
       headCells : {
         style: {
@@ -77,18 +80,7 @@ export default function IncidentTable() {
         },
       },
 }
-      // id : {
-      //   style: {
-      //     width: '10px'
-      //   }
-      // }
-
     
-      // rows : {
-      //   style: {
-      //     backgroundColor: 'lightgray' 
-      //   }
-      // }
     
 
     const columns = [
@@ -146,18 +138,14 @@ export default function IncidentTable() {
     ];
 
     useEffect(() => {
-      const data = incidents.map((incident) => {
-        // const staff = staffs.find((staff) => staff.id === attendence.staff_id);
-        // const staff_name = staff ? staff.name : '';
-        // {staffs.find((staff) => staff.id === attendence.staff_name)?.name}
+      // const data = incidents.map((incident) => {
+      const data = safetycards.map((incident) => {
         const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name  
         return {
           id: incident.id,
           description: incident.short_desc,
           date: incident.date_raised,
           raised: person_name,
-          // attendencestatus: attendence.attendence_status,
-          // edit: <FontAwesomeIcon icon={faPen} />,
           more_info : <Link to={`/editincident/${incident.id}`}>
           <FontAwesomeIcon icon={faPen } />
           </Link>,
@@ -170,7 +158,8 @@ export default function IncidentTable() {
         };
       });
       setRecords(data);
-    }, [incidents, staffs]);
+    // }, [incidents, staffs]);
+    }, [safetycards, staffs]);
 
     // const handleFilter = (e) => {
     //   const newData = incidents.map((incident) => {
@@ -192,9 +181,11 @@ export default function IncidentTable() {
       
       if (searchText === '') {
         // If the search text is empty, fetch all incidents again
-        fetchIncidents();
+        // fetchIncidents();
+        fetchSafetyCards();
       } else {
-        const newData = incidents.map((incident) => {
+        // const newData = incidents.map((incident) => {
+        const newData = safetycards.map((incident) => {
           const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
           return {
             ...incident,
@@ -213,9 +204,7 @@ export default function IncidentTable() {
     return (
       <div className="row justify-content-center"> 
       <h1 className="row justify-content-center mt-5">Safety Incident Card List</h1>
-        {/* <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
-                        Add Incident
-        </Button> */}
+  
         <div className="mt-4 col-md-10 m row justify-content-center">
         <div className="row justify-content-around">
           <Button href="/addincident" variant="secondary" className="col-md-2 mb-4">Add Incident</Button>
@@ -267,8 +256,6 @@ export default function IncidentTable() {
               <div className="table-container mb-5">
                 <DataTable 
                   customStyles={customStyles}
-                  //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                  //  className='stripe'
                   columns={columns}
                   data={records}
                   selectableRows
@@ -280,16 +267,6 @@ export default function IncidentTable() {
               </div>
 
          
-            </div>
-            <div>
-            {incidents.map((incident, index) => {
-                    return (
-                      // <div>{incident.photo_image}</div>
-                      <div>
-                        {/* <img src={incident.photo_image} alt={incident.photo_image}/> */}
-                      </div>
-                    )
-                    })}
             </div>
           </div>
     )

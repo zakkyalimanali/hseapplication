@@ -1,6 +1,7 @@
 import {useState , useEffect, useContext} from 'react'
 // API
 import IncidentAPI from '../../../API/IncidentAPI';
+import SafetyCardAPI from '../../../API/SafetyCardAPI';
 import IncidentEventPhotosAPI from '../../../API/IncidentEventPhotosAPI';
 
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
@@ -30,7 +31,8 @@ function IncidentEventPhotosAdd(props) {
     },[])
 
     const fetchIncident = () => {
-      IncidentAPI.get('/')
+      // IncidentAPI.get('/')
+     SafetyCardAPI.get('/')
       .then((res) => {
           setIncidents(res.data);
       }).catch(console.log)

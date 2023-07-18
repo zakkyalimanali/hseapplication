@@ -48,7 +48,7 @@ class Incident(models.Model):
     what_happened = models.CharField(max_length= 500 , null=True , blank= True)
     why_happened = models.CharField(max_length= 500 , null=True , blank= True)
     date_raised = models.DateField(null=True , blank= True)
-    raised_by  = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    raised_by  = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
     life_saving_rule = models.CharField(max_length= 500 , null=True , blank= True)
     findings = models.CharField(max_length= 100 , null=True , blank= True)
     incident_date = models.DateField(null=True , blank= True)
@@ -196,18 +196,39 @@ class HSERefrences(models.Model):
     
     def __str__(self):
         return self.title
+    
+class RiskRegisterProject(models.Model):
+    project = models.CharField(max_length=300, null=True, blank=True)
+    date_raised = models.DateField(auto_now_add=True ,null=True, blank=True)
+    date_reviewed = models.DateField(auto_now=True, null=True, blank=True)
+    raised_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True, related_name='risk_register_project_raised_by')
+    reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True,  related_name='risk_register_project_reviewed_by')
 
 class RiskRegister(models.Model):
-    date_raised = models.DateField(null=True, blank=True)
+    project = models.ForeignKey(RiskRegisterProject, on_delete=models.CASCADE, null=True, blank = True)
+    date_raised = models.DateField(auto_now_add=True ,null=True, blank=True)
+    date_reviewed = models.DateField(auto_now=True, null=True, blank=True)
+    raised_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True, related_name='risk_register_raised_by')
+    reviewed_by = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True,  related_name='risk_register_reviewed_by')
     risk_description = models.CharField(max_length=300, null=True, blank=True)
+    ### this describes the risk there
     likelihood_of_risk = models.CharField(max_length=300, null=True, blank=True)
+    ### this a ranking from 1 - 5
     impact_of_risk = models.CharField(max_length=300, null=True, blank=True)
+    ### this should be a range from low , medium , high , highest 
     severity = models.CharField(max_length=300, null=True, blank=True)
-    owner = models.CharField(max_length=300, null=True, blank=True)
+    ### this is a mix of both the likelyhood and risk to show if this is a priority risk
+    responsible_party = models.CharField(max_length=300, null=True, blank=True)
+    ### we should have two versions of this, one with staff and one without staff
     mitigating_action = models.CharField(max_length=300, null=True, blank=True)
+    ### initial mitigation
     contingency_action = models.CharField(max_length=300, null=True, blank=True)
+    ### what if the migations do not work
+    ### follow the pyramid of risk... 
     progress_on_actions = models.CharField(max_length=300, null=True, blank=True)
+    ### this is to show what has been done so far
     status = models.CharField(max_length=300, null=True, blank=True)
+    ### This should be a dropdown if it is still open or closed
     # useful_resources = 
 
 
@@ -314,3 +335,20 @@ class Blog(models.Model):
     textbrief = models.CharField(max_length=500 , null=True, blank=True)
     textcontent = models.TextField(max_length=2000 , null=True , blank=True)
     blog_date = models.DateField(auto_now=True)
+
+class SafetyCard(models.Model): 
+    short_desc = models.CharField(max_length=200, null=True , blank=True)
+    raised_by  = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank = True)
+    what_happened = models.CharField(max_length= 500 , null=True , blank= True)
+    why_happened = models.CharField(max_length= 500 , null=True , blank= True)
+    date_raised = models.DateField(null=True , blank= True)
+    life_saving_rule = models.CharField(max_length= 500 , null=True , blank= True)
+    findings = models.CharField(max_length= 100 , null=True , blank= True)
+    incident_date = models.DateField(null=True , blank= True)
+    location = models.CharField(max_length= 100 , null=True , blank= True)
+    discussion = models.CharField(max_length= 100 , null=True , blank= True)
+    target_date = models.DateField(null=True , blank= True)
+    follow_up = models.CharField(max_length= 100 , null=True , blank= True)
+    follow_up_remarks = models.CharField(max_length= 100 , null=True , blank= True)
+    status = models.CharField(max_length= 100 , null=True , blank= True)
+    responsible_party = models.CharField(max_length= 100 , null=True , blank= True)

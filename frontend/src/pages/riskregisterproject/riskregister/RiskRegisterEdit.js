@@ -1,5 +1,6 @@
 import React ,{useState, useEffect , useContext} from 'react'
-import RiskRegisterAPI from '../../API/RiskRegisterAPI';
+import RiskRegisterAPI from '../../../API/RiskRegisterAPI';
+import StaffAPI from '../../../API/StaffAPI';
 import { useParams } from 'react-router'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
@@ -12,13 +13,16 @@ import { useNavigate } from 'react-router'
 
 function RiskRegisterEdit() {
     const [riskregisters , setRiskRegisters] = useState([])
+    const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
-    const [date_raised, setDateRaised] = useState('') 
+    // const [date_raised, setDateRaised] = useState('') 
+    const [raised_by , setRaisedBy] = useState('')
+    const [reviewed_by , setReviewedBy] = useState('')
     const [risk_description, setRiskDescription] = useState('') 
     const [likelihood_of_risk, setLikelihoodOfRisk] = useState('') 
     const [impact_of_risk, setImpactOfRisk] = useState('') 
     const [severity,setSeverity] = useState('') 
-    const [owner, setOwner] = useState('') 
+    const [responsible_party, setResponsibleParty] = useState('') 
     const [mitigating_action, setMitigatingAction] = useState('') 
     const [contingency_action, setContingencyAction] = useState('') 
     const [progress_on_actions, setProgressOnActions] = useState('') 
@@ -31,16 +35,30 @@ function RiskRegisterEdit() {
         setId(params.id)
     },[params.id]) 
 
+    useEffect(() => {
+      fetchStaff()
+    },[])
+
+    const fetchStaff = () => {
+      StaffAPI.get('/')
+      .then((res) => {
+        setStaffs(res.data)
+      })
+      .catch(console.log)
+    }
+
     const fetchRiskRegister = () =>{
         axios.get(`http://127.0.0.1:8000/hseapp/riskregister/${params.id}`)
         .then((res) => {
             setRiskRegisters(res.data)
-            setDateRaised(res.data.date_raised)
+            // setDateRaised(res.data.date_raised)
+            setRaisedBy(res.data.raised_by)
+            setReviewedBy(res.data.reviewed_by)
             setRiskDescription(res.data.risk_description)
             setLikelihoodOfRisk(res.data.likelihood_of_risk)
             setImpactOfRisk(res.data.impact_of_risk)
             setSeverity(res.data.severity)
-            setOwner(res.data.owner)
+            setResponsibleParty(res.data.responsible_party)
             setMitigatingAction(res.data.mitigating_action)
             setContingencyAction(res.data.contingency_action)
             setProgressOnActions(res.data.progress_on_actions)
@@ -52,12 +70,14 @@ function RiskRegisterEdit() {
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
-            date_raised : date_raised || null, 
+            // date_raised : date_raised || null, 
+            raised_by : raised_by || null,
+            reviewed_by : reviewed_by || null,
             risk_description,
             likelihood_of_risk,
             impact_of_risk,
             severity,
-            owner,
+            responsible_party,
             mitigating_action,
             contingency_action,
             progress_on_actions,
@@ -71,24 +91,28 @@ function RiskRegisterEdit() {
 
     const willUpdateRiskOnDatabase = (id) => {
         let item = {
-            date_raised : date_raised || null, 
+            // date_raised : date_raised || null, 
+            raised_by : raised_by || null,
+            reviewed_by : reviewed_by || null,
             risk_description,
             likelihood_of_risk,
             impact_of_risk,
             severity,
-            owner,
+            responsible_party,
             mitigating_action,
             contingency_action,
             progress_on_actions,
             status,
         }
         RiskRegisterAPI.patch(`/${id}/`, item).then(() => {
-            setDateRaised('')
+            // setDateRaised('')
+            setRaisedBy('')
+            setReviewedBy('')
             setRiskDescription('')
             setLikelihoodOfRisk('')
             setImpactOfRisk('')
             setSeverity('')
-            setOwner('')
+            setResponsibleParty('')
             setMitigatingAction('')
             setContingencyAction('')
             setProgressOnActions('')
@@ -109,7 +133,7 @@ function RiskRegisterEdit() {
         
         <Form onSubmit={willSubmitTheEntryIntoDatabase} 
         className="mt-4">
-          <Form.Group className="mb-3" controlId="formName">
+          {/* <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Date Raised</Form.Label>
             <Form.Control
               type="date"
@@ -121,7 +145,39 @@ function RiskRegisterEdit() {
                   setDateRaised(formattedDate);
                 }}
             />
-          </Form.Group>
+          </Form.Group> */}
+          <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Raised By</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Raised By"
+                    value={raised_by}
+                    onChange={(e) => setRaisedBy(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Reviewed By</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Reviewed By"
+                    value={reviewed_by}
+                    onChange={(e) => setReviewedBy(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+
+                  </Form.Control>
+                </Form.Group>
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Risk Description</Form.Label>
             <Form.Control
@@ -159,12 +215,12 @@ function RiskRegisterEdit() {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Owner</Form.Label>
+            <Form.Label>Responsible Party</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Owner"
-              value={owner}
-              onChange={(e) => setOwner(e.target.value)}
+              placeholder="Responsible Party"
+              value={responsible_party}
+              onChange={(e) => setResponsibleParty(e.target.value)}
             />
           </Form.Group>
           

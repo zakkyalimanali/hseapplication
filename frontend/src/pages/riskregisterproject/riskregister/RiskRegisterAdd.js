@@ -1,19 +1,23 @@
 import {useState , useEffect, useContext} from 'react'
-import RiskRegisterAPI from '../../API/RiskRegisterAPI';
+import RiskRegisterAPI from '../../../API/RiskRegisterAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import { Link , useNavigate } from 'react-router-dom';
-import AuthContext from "../../context/AuthContext";
+import StaffAPI from '../../../API/StaffAPI';
+// import AuthContext from "../../context/AuthContext";
 
 function RiskRegisterAdd() {
     const [riskregisters , setRiskRegisters] = useState([])
+    const [staffs , setStaffs] = useState([])
     const [id, setId] = useState(null)
-    const [date_raised, setDateRaised] = useState('') 
+    // const [date_raised, setDateRaised] = useState('') 
+    const [raised_by , setRaisedBy] = useState('')
+    const [reviewed_by , setReviewedBy] = useState('')
     const [risk_description, setRiskDescription] = useState('') 
     const [likelihood_of_risk, setLikelihoodOfRisk] = useState('') 
     const [impact_of_risk, setImpactOfRisk] = useState('') 
     const [severity,setSeverity] = useState('') 
-    const [owner, setOwner] = useState('') 
+    const [responsible_party, setResponsibleParty] = useState('') 
     const [mitigating_action, setMitigatingAction] = useState('') 
     const [contingency_action, setContingencyAction] = useState('') 
     const [progress_on_actions, setProgressOnActions] = useState('') 
@@ -22,6 +26,7 @@ function RiskRegisterAdd() {
 
     useEffect(() => {
         fetchRiskRegister()
+        fetchStaff()
     },[])
 
     const fetchRiskRegister = () => {
@@ -31,15 +36,24 @@ function RiskRegisterAdd() {
         }).catch(console.log)
     }
 
+    const fetchStaff = () => {
+      StaffAPI.get('/')
+      .then((res) => {
+        setStaffs(res.data)
+      }).catch(console.log)
+    }
+
     const willSubmitTheEntryIntoDatabase = (e) => {
         e.preventDefault()
         let item = {
-            date_raised : date_raised || null, 
+            // date_raised : date_raised || null, 
+            raised_by : raised_by || null,
+            reviewed_by : reviewed_by || null,
             risk_description,
             likelihood_of_risk,
             impact_of_risk,
             severity,
-            owner,
+            responsible_party,
             mitigating_action,
             contingency_action,
             progress_on_actions,
@@ -59,7 +73,7 @@ function RiskRegisterAdd() {
               
               <Form onSubmit={willSubmitTheEntryIntoDatabase} 
               className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
+                {/* <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Date Raised</Form.Label>
                   <Form.Control
                     type="date"
@@ -71,7 +85,40 @@ function RiskRegisterAdd() {
                         setDateRaised(formattedDate);
                       }}
                   />
+                </Form.Group> */}
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Raised By</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Raised By"
+                    value={raised_by}
+                    onChange={(e) => setRaisedBy(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+
+                  </Form.Control>
                 </Form.Group>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label>Reviewed By</Form.Label>
+                  <Form.Control
+                    as="select"
+                    placeholder="Reviewed By"
+                    value={reviewed_by}
+                    onChange={(e) => setReviewedBy(e.target.value)}
+                  >
+                    <option value=''>Select An Option</option>
+                {staffs.map(staff => {
+                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
+                })}
+
+
+                  </Form.Control>
+                </Form.Group>
+
                 <Form.Group className="mb-3" controlId="formName">
                   <Form.Label>Risk Description</Form.Label>
                   <Form.Control
@@ -109,12 +156,12 @@ function RiskRegisterAdd() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Owner</Form.Label>
+                  <Form.Label>Responsible Party</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Owner"
-                    value={owner}
-                    onChange={(e) => setOwner(e.target.value)}
+                    placeholder="Responsible Party"
+                    value={responsible_party}
+                    onChange={(e) => setResponsibleParty(e.target.value)}
                   />
                 </Form.Group>
                 

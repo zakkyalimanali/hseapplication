@@ -1,5 +1,6 @@
 import {useEffect , useState , useContext} from 'react'
 import IncidentAPI from '../../API/IncidentAPI'
+import SafetyCardAPI from '../../API/SafetyCardAPI';
 import IncidentEventPhotosAPI from '../../API/IncidentEventPhotosAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
@@ -95,7 +96,8 @@ export default function EditIncident() {
     const dataIncident = () => {
       if (params.id) {
         axios
-          .get(`http://127.0.0.1:8000/hseapp/oneincident/${params.id}/`)
+          // .get(`http://127.0.0.1:8000/hseapp/oneincident/${params.id}/`)
+          .get(`http://127.0.0.1:8000/hseapp/safetycard/${params.id}/`)
           .then((res) => {
             setIncidents(res.data);
             setShortDesc(res.data.short_desc);
@@ -138,10 +140,11 @@ export default function EditIncident() {
 // console.log(authTokens)
     const onSubmit = (e) => {
         e.preventDefault();
-        let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
+        let item = {short_desc, raised_by : raised_by|| null, date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
         // IncidentAPI.post('/', item).then(() => dataIncident());
         let token = authTokens.access
-        IncidentAPI.post('/' , item,  {
+        // IncidentAPI.post('/' , item,  {
+        SafetyCardAPI.post('/' , item,  {
                 headers: {
                   'content-type': 'multipart/form-data',
                   'Authorization': `Bearer ${token}`
@@ -160,7 +163,8 @@ const onUpdate = (id) => {
   // let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party,  photo_image};
   let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
   let token = authTokens.access
-  IncidentAPI.patch(`/${id}/`, item , {
+  // IncidentAPI.patch(`/${id}/`, item , {
+  SafetyCardAPI.patch(`/${id}/`, item , {
     headers: {
       'content-type': 'multipart/form-data',
       'Authorization': `Bearer ${token}`

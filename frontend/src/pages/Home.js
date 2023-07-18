@@ -15,11 +15,13 @@ import safetycard3 from '../images/SafetyImage3.jpg';
 import management from '../images/Management.jpg';
 import { Link } from 'react-router-dom';
 import NewsAPI from '../API/NewsAPI';
+import BlogAPI from '../API/BlogAPI'
 import ContactPage from './ContactPage';
 
 
 export default function Home() {
     const [work_news, setWorkNews] = useState([])
+    const [blogs , setBlogs] = useState([])
     // const [staffs , setStaff] = useState([])
     // const [incidents , setIncidents] = useState([])
     // const {authTokens , logoutUser} = useContext(AuthContext);
@@ -29,12 +31,21 @@ export default function Home() {
 
     useEffect(() => {
         fetchNews()
+        fetchBlog()
     },[])
 
     const fetchNews = () => {
         NewsAPI.get('/')
         .then((res) => {
             setWorkNews(res.data)
+        })
+        .catch(console.log)
+    }
+
+    const fetchBlog = () => {
+        BlogAPI.get('/')
+        .then((res) => {
+            setBlogs(res.data)
         })
         .catch(console.log)
     }
@@ -118,8 +129,8 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="row mb-5 ps-5 pe-5 ">
-                <div className="col-md-6">
+            <div className="row mb-5 d-flex justify-content-around">
+                <div className="col-md-5">
                     <h3 className="mt-4 mb-3 d-flex justify-content-center">News</h3>
                     {work_news.map(work_new => {
                     return (
@@ -129,22 +140,33 @@ export default function Home() {
                         
                         </div>)
                     
-                        {/* <div className="col-md-8 ms-2">
-                            <h5>New Team Member</h5>
-                            <p>veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit </p>
-                        </div> */}
+            
                         
                             
                             
                         })}
                         
-                        {/* <div className="col-md-8 ms-2">
-                            <h5></h5>
-                            <p></p>
-                        </div> */}
-                        {/* <div className="col-md-3 me-2 d-flex justify-content-center">
-                            <img className="news-image" src={management} alt="Avatar"/>
-                        </div> */}
+
+              
+                </div>
+                
+                <div className="col-md-5">
+                    <h3 className="mt-4 mb-3 d-flex justify-content-center">Blog</h3>
+                    {blogs.map(blog => {
+                    return (
+                        <div className='row p-3 mb-3 card_border'>
+                            <h5>{blog.headline}</h5>
+                            <p>{blog.textbrief}</p>
+                        
+                        </div>)
+                    
+            
+                        
+                            
+                            
+                        })}
+                        
+
               
                 </div>
 
