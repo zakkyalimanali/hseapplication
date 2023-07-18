@@ -249,3 +249,8 @@ class SafetyCardSerializer(serializers.ModelSerializer):
     class Meta: 
         model = SafetyCard
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(SafetyCardSerializer, self).to_representation(instance)
+        rep['name'] = instance.raised_by.name
+        return rep

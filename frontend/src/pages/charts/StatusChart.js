@@ -1,12 +1,14 @@
 import {useEffect, useState} from 'react'
 import IncidentAPI from '../../API/IncidentAPI';
+import SafetyCardAPI from '../../API/SafetyCardAPI';
 import { Pie } from "react-chartjs-2";
 
 export default function StatusChart() {
     const [incidents , setIncidents] = useState([])
 
     useEffect(() => {
-        IncidentAPI.get('/')
+        // IncidentAPI.get('/')
+        SafetyCardAPI.get('/')
         .then((res) => {
             setIncidents(res.data)
             console.log(res.data)

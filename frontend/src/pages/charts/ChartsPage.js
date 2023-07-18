@@ -1,6 +1,7 @@
 import {useState , useEffect} from 'react'
 import StaffAPI from '../../API/StaffAPI'
 import IncidentAPI from '../../API/IncidentAPI'
+import SafetyCardAPI from '../../API/SafetyCardAPI'
 import GenderChart from './GenderChart'
 import StatusChart from './StatusChart'
 import NumIncidents from './NumIncidents'
@@ -24,7 +25,8 @@ function ChartsPage() {
     },[])
 
     useEffect(() => {
-        IncidentAPI.get('/')
+        // IncidentAPI.get('/')
+        SafetyCardAPI.get('/')
         .then((res) => {
             setIncidents(res.data)
             console.log(res.data)

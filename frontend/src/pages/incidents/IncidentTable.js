@@ -176,27 +176,61 @@ export default function IncidentTable() {
     //   setIncidents(newData);
     // };
 
+    // const handleFilter = (e) => {
+    //   const searchText = e.target.value.toLowerCase();
+      
+    //   if (searchText === '') {
+    //     // If the search text is empty, fetch all incidents again
+    //     // fetchIncidents();
+    //     fetchSafetyCards();
+    //   } else {
+    //     // const newData = incidents.map((incident) => {
+    //     const newData = safetycards.map((incident) => {
+    //       const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
+    //       return {
+    //         ...incident,
+    //         person_name,
+    //       };
+    //     }).filter((attendence) => {
+    //       return attendence.person_name
+    //         .toLowerCase()
+    //         .includes(searchText);
+    //     });
+    //     // setIncidents(newData);
+    //     setSafetyCards(newData);
+    //   }
+    // };
+
     const handleFilter = (e) => {
       const searchText = e.target.value.toLowerCase();
-      
+    
       if (searchText === '') {
         // If the search text is empty, fetch all incidents again
-        // fetchIncidents();
         fetchSafetyCards();
       } else {
-        // const newData = incidents.map((incident) => {
-        const newData = safetycards.map((incident) => {
-          const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
-          return {
-            ...incident,
-            person_name,
-          };
-        }).filter((attendence) => {
-          return attendence.person_name
-            .toLowerCase()
-            .includes(searchText);
-        });
-        setIncidents(newData);
+        const newData = safetycards
+          .map((safetycard) => {
+            const person_name = staffs.find(
+              (staff) => staff.id === safetycard.raised_by
+            )?.name;
+            return {
+              ...safetycard,
+              person_name,
+            };
+          })
+          .filter((safetycard) => {
+            const incidentProps = Object.values(safetycard);
+            for (let i = 0; i < incidentProps.length; i++) {
+              if (
+                incidentProps[i] &&
+                incidentProps[i].toString().toLowerCase().includes(searchText)
+              ) {
+                return true; // Return true if a match is found in any property
+              }
+            }
+            return false; // Return false if no match is found in any property
+          });
+        setSafetyCards(newData);
       }
     };
 

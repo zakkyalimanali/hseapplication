@@ -1,7 +1,10 @@
 import {useEffect , useState} from 'react'
 import StaffAPI from '../../API/StaffAPI'
 import IncidentAPI from '../../API/IncidentAPI';
+import SafetyCardAPI from '../../API/SafetyCardAPI';
 import { Bar } from 'react-chartjs-2';
+import axios from 'axios';
+
 
 export default function NumIncidents() {
     const [incidents , setIncidents] = useState([])
@@ -9,14 +12,7 @@ export default function NumIncidents() {
 
     
 
-    const StaffMap = () => {
-        const incidentCounts = staffs.map(staff => {
-          const count = incidents.filter(incident => incident.name === staff.name).length;
-          return { name: staff.name, count };
-        });
-        return incidentCounts;
-      };
-    
+   
       useEffect(() => {
         StaffAPI.get('/')
         .then((res) => {
@@ -27,13 +23,27 @@ export default function NumIncidents() {
     },[])
 
     useEffect(() => {
-        IncidentAPI.get('/')
+        // IncidentAPI.get('/')
+        SafetyCardAPI.get('/')
+        // axios.get('http://127.0.0.1:8000/hseapp/safetycard/')
         .then((res) => {
             setIncidents(res.data)
             console.log(res.data)
         })
-        .catch(console.log)
+        .catch(console.log())
     },[])
+
+    const StaffMap = () => {
+      const incidentCounts = staffs.map(staff => {
+        // const count = incidents.filter(incident => incident.name === staff.name).length;
+        const count = incidents.filter(incident => incident.name
+          === staff.name).length;
+        // return { name: staff.name, count };
+        return { name: staff.name, count };
+      });
+      return incidentCounts;
+    };
+  
 
 
     const data = {

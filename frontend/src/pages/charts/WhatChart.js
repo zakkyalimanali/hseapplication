@@ -60,6 +60,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import IncidentAPI from '../../API/IncidentAPI';
+import SafetyCardAPI from '../../API/SafetyCardAPI';
 
 export default function WhatChat() {
   const [incidents, setIncidents] = useState([]);
@@ -71,7 +72,8 @@ export default function WhatChat() {
   // };
 
   useEffect(() => {
-    IncidentAPI.get('/')
+    // IncidentAPI.get('/')
+    SafetyCardAPI.get('/')
       .then((res) => {
         setIncidents(res.data);
       })
