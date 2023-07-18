@@ -62,7 +62,7 @@ function RiskRegisterAdd(props) {
             project_name,
 
         }
-        navigate(-1);
+        navigate(0);
         RiskRegisterAPI.post('/', item).then(() => fetchRiskRegister())
 
 

@@ -6,15 +6,15 @@ import RiskRegisterAPI from '../../API/RiskRegisterAPI';
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import RiskRegisterAdd from './riskregister/RiskRegisterAdd';
+import { Link , useNavigate} from 'react-router-dom';
 
+// DataTable items
+import DataTable from 'react-data-table-component'
 
-// Others 
-import { useNavigate } from 'react-router'
 
 function RiskRegisterProjectEdit() {
     const [riskregisterprojects , setRiskRegisterProjects] = useState([])
@@ -24,6 +24,7 @@ function RiskRegisterProjectEdit() {
     const [raised_by , setRaisedBy] = useState('')
     const [reviewed_by , setReviewedBy] = useState('')
     const [id , setId] = useState(null)
+    const [records, setRecords] = useState([]);
     const navigate = useNavigate()
     const params = useParams()
 
@@ -94,6 +95,290 @@ function RiskRegisterProjectEdit() {
     navigate(-1)
     }
 
+    const deleteRisk = (id) => {
+        RiskRegisterAPI.delete(`/${id}`).then((res) => {
+          fetchRiskRegister();
+  
+        }).catch(console.log)
+      }
+
+    const customStyles = {
+        headCells : {
+          style: {
+            border: '1px solid black',
+      
+          },
+            },
+        cells : {
+          style: {
+            border: '1px solid black'
+          },
+        },
+      }
+  
+      const columns = [
+        {
+          name: 'Id',
+          selector: (row) => row.id,
+          sortable: true,
+          
+          // width: '6rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Date Raised',
+          selector: (row) => row.date_raised,
+          sortable: true,
+          // width: '8rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Date Reviewed',
+          selector: (row) => row.date_reviewed,
+          sortable: true,
+          // width: '8rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Raised By',
+          selector: (row) => row.raised_by,
+          sortable: true,
+          // width: '8rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Reviwed By',
+          selector: (row) => row.reviewed_by,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Risk Description',
+          selector: (row) => row.risk_description,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Likelihood Of Risk',
+          selector: (row) => row.likelihood_of_risk,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Impact Of Risk',
+          selector: (row) => row.impact_of_risk,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Severity',
+          selector: (row) => row.severity,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Responsible Party',
+          selector: (row) => row.responsible_party,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Mitigating Action',
+          selector: (row) => row.mitigating_action,
+          sortable: true,
+          width: '12rem',
+          cell: (row) => (
+            <div style={{ wordWrap: 'break-word', width: '150px' }}>
+              {row.mitigating_action}
+            </div>
+          ),
+ 
+        },
+        {
+          name: 'Contingency Action',
+          selector: (row) => row.contingency_action,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Progress On Actions',
+          selector: (row) => row.progress_on_actions,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Status',
+          selector: (row) => row.status,
+          sortable: true,
+          // width: '12rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'More Info',
+          selector: (row) => row.more_info,
+          // width: '6rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+        {
+          name: 'Delete',
+          selector: (row) => row.delete,
+          // width: '6rem'
+          // style: {
+          //   background: 'rgba(251,212,124, 0.5)',
+          // },
+        },
+      ];
+
+    //   useEffect(() => {
+    //     // const data = riskregisters.map((riskregister) => {
+    //     const data = riskregisters.filter((riskregister) => riskregister.project_name === Number(params.id).map((riskregister))) 
+
+
+    //       const raised_by = staffs.find((staff) => staff.id === riskregister.raised_by)?.name  
+    //       const reviewed_by = staffs.find((staff) => staff.id === riskregister.reviewed_by)?.name  
+          
+    //       return {
+    //         id: riskregister.id,
+    //         date_raised : riskregister.date_raised ,
+    //         date_reviewed : riskregister.date_reviewed,
+    //         textbrief : riskregister.textbrief,
+    //         raised_by : raised_by,
+    //         reviewed_by : reviewed_by,
+    //         risk_description : riskregister.risk_description,
+    //         likelihood_of_risk : riskregister.likelihood_of_risk,
+    //         impact_of_risk : riskregister.impact_of_risk,
+    //         severity : riskregister.severity,
+    //         responsible_party : riskregister.responsible_party,
+    //         mitigating_action : riskregister.mitigating_action,
+    //         contingency_action : riskregister.contingency_action,
+    //         progress_on_actions : riskregister.progress_on_actions,
+    //         status : riskregister.status,
+    //         // more_info : <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
+    //         more_info : "More Info",
+    //         delete: (
+    //           <FontAwesomeIcon
+    //             icon={faTrash}
+    //             onClick={() => deleteRisk(riskregister.id)}
+    //           />
+    //         ),
+    //         // delete: "Delete",
+      
+    //       }
+    //     })
+    //     setRecords(data);
+    //   }, [riskregisters])
+
+    useEffect(() => {
+        const data = riskregisters
+          .filter((riskregister) => riskregister.project_name === Number(params.id))
+          .map((riskregister) => {
+            const raised_by = staffs.find((staff) => staff.id === riskregister.raised_by)?.name;
+            const reviewed_by = staffs.find((staff) => staff.id === riskregister.reviewed_by)?.name;
+      
+            return {
+              id: riskregister.id,
+              date_raised: riskregister.date_raised,
+              date_reviewed: riskregister.date_reviewed,
+              textbrief: riskregister.textbrief,
+              raised_by: raised_by,
+              reviewed_by: reviewed_by,
+              risk_description: riskregister.risk_description,
+              likelihood_of_risk: riskregister.likelihood_of_risk,
+              impact_of_risk: riskregister.impact_of_risk,
+              severity: riskregister.severity,
+              responsible_party: riskregister.responsible_party,
+              mitigating_action: riskregister.mitigating_action,
+              contingency_action: riskregister.contingency_action,
+              progress_on_actions: riskregister.progress_on_actions,
+              status: riskregister.status,
+              more_info: <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen} /></Link>,
+              delete: (
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={() => deleteRisk(riskregister.id)}
+                />
+              ),
+            };
+          });
+      
+        setRecords(data);
+      }, [riskregisters, params.id]);
+
+
+      const handleFilter = (e) => {
+        const searchText = e.target.value.toLowerCase();
+      
+        if (searchText === '') {
+          // If the search text is empty, fetch all incidents again
+          fetchRiskRegister();
+        } else {
+          const newData = riskregisters
+            .map((riskregister) => {
+              const person_raised = staffs.find(
+                (staff) => staff.id === riskregister.raised_by
+              )?.name;
+              const person_reviewed = staffs.find(
+                (staff) => staff.id === riskregister.reviewed_by
+              )?.name;
+              return {
+                ...riskregister,
+                person_raised,
+                person_reviewed,
+              };
+            })
+            .filter((riskregister) => {
+              const incidentProps = Object.values(riskregister);
+              for (let i = 0; i < incidentProps.length; i++) {
+                if (
+                  incidentProps[i] &&
+                  incidentProps[i].toString().toLowerCase().includes(searchText)
+                ) {
+                  return true; // Return true if a match is found in any property
+                }
+              }
+              return false; // Return false if no match is found in any property
+            });
+          setRiskRegisters(newData);
+        }
+      };
+  
+
 
   return (
     <div className="container mt-5 pb-5">
@@ -160,6 +445,21 @@ function RiskRegisterProjectEdit() {
             </div>            
           </div>
           <RiskRegisterAdd projectlist = {params.id}/>
+
+          <div className="table-container mb-5 mt-5">
+          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
+              <DataTable 
+                customStyles={customStyles}
+                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
+                //  className='stripe'
+                columns={columns}
+                data={records}
+                selectableRows
+                fixedHeader
+                pagination
+              >
+              </DataTable>
+            </div>
         </div>
   )
 }
