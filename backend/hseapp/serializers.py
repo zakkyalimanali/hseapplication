@@ -246,11 +246,16 @@ class RiskRegisterProjectSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SafetyCardSerializer(serializers.ModelSerializer):
+    # raised_by = serializers.StringRelatedField(source='raised_by.name')
+    name = serializers.CharField(source='raised_by.name', read_only=True)
+
     class Meta: 
         model = SafetyCard
         fields = '__all__'
 
-    def to_representation(self, instance):
-        rep = super(SafetyCardSerializer, self).to_representation(instance)
-        rep['name'] = instance.raised_by.name
-        return rep
+    # def to_representation(self, instance):
+    #     rep = super(SafetyCardSerializer, self).to_representation(instance)
+    #     rep['name'] = instance.raised_by.name
+    #     return rep
+
+

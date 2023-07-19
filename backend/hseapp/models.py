@@ -352,3 +352,6 @@ class SafetyCard(models.Model):
     follow_up_remarks = models.CharField(max_length= 100 , null=True , blank= True)
     status = models.CharField(max_length= 100 , null=True , blank= True)
     responsible_party = models.CharField(max_length= 100 , null=True , blank= True)
+
+    def __str__(self):
+        return self.short_desc
