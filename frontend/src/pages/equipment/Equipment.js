@@ -39,7 +39,7 @@ function Equipment() {
  }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
         <div className="row">
         {/* This is for the title */}
         <h1 className="row justify-content-center mt-3">Equipment and Items</h1>

@@ -237,7 +237,7 @@ export default function IncidentTable() {
 
     return (
       <div className="row justify-content-center"> 
-      <h1 className="row justify-content-center mt-5">Safety Incident Card List</h1>
+      <h1 className="row justify-content-center mt-3">Safety Incident Card List</h1>
   
         <div className="mt-4 col-md-10 m row justify-content-center">
         <div className="row justify-content-around">

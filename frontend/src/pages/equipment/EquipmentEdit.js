@@ -78,11 +78,11 @@ function EquipmentEdit() {
 
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3 pb-5">
           <div className="row">
             <div className= "col-md-4"></div>
             <div className="col-md-4 ">
-              <h3 className="float-left">Create a New Equipment / Item</h3>
+              <h3 className="d-flex justify-content-center mt-3">Create a New Equipment / Item</h3>
               
               <Form onSubmit={onSubmit} 
               className="mt-4">

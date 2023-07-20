@@ -105,7 +105,7 @@ export default function StaffList() {
    
 
     return(
-        <div className="row justify-content-center mt-5"> 
+        <div className="row justify-content-center mt-3"> 
           <h1 className="row justify-content-center mt-3">Staff List</h1>
             <div className="mt-4 col-md-10 m row justify-content-center mb-5">
                 

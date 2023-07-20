@@ -65,11 +65,11 @@ const forDeletingHSEReference = (id) => {
 return (
 
 
-<div className="container mt-5 pb-5">
+<div className="container mt-3 pb-5">
     <div className="row">
       <div className= "col-md-2"></div>
         <div className="col-md-8 ">
-            <h3 className="float-left mt-5">Add HSE Reference File</h3>
+            <h1 className="d-flex justify-content-center mt-3">Add HSE Reference File</h1>
         
         <Form onSubmit={onSubmit} className="update mt-4">
           

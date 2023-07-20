@@ -758,8 +758,8 @@ export default function AddIncidents() {
 //           </div>
 //         </div>
 
-        <div className="container  mt-5 pb-3 ">
-      <h1 className="d-flex justify-content-center pb-3 pt-5">Create A New Safety Card</h1>
+        <div className="container  mt-3  ">
+      <h1 className="d-flex justify-content-center pb-3 ">Create A New Safety Card</h1>
         <Form onSubmit={onSubmit} className="update mt-4">
               <div className="row">
         <div className='col-md-6'>

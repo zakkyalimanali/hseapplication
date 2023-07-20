@@ -134,8 +134,8 @@ function IncidentInvestigationEdit() {
   
 
   return (
-    <div className="container mt-5">
-      <h3 className="float-left">Create a New Incident Investigation</h3>
+    <div className="container mt-3">
+      <h3 className="d-flex justify-content-center mt-3">Create a New Incident Investigation</h3>
         <Form onSubmit={onSubmit} className="mt-4">
       <div className="row">
         <div className='col-md-6'>

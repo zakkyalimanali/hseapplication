@@ -157,7 +157,7 @@ setRecords(data);
 
   return (
     <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-5">Project List</h1>
+    <h1 className="row justify-content-center mt-3">Project List</h1>
       
       <div className="mt-4 col-md-10 m row justify-content-center">
       <div className="row justify-content-around">

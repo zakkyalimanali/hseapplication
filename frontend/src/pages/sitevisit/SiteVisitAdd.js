@@ -44,11 +44,11 @@ function SiteVisitAdd() {
     }
 
   return (
-    <div className="container mt-5">
+    <div className="container pb-5 mt-3">
           <div className="row">
             <div className= "col-md-4"></div>
             <div className="col-md-4 ">
-              <h3 className="float-left">Create new Site Visit</h3>
+              <h3 className="d-flex justify-content-center mt-3">Create new Site Visit</h3>
               
               <Form onSubmit={onSubmit} className="mt-4">
                 <Form.Group className="mb-3" controlId="formName">

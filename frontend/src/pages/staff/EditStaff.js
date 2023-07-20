@@ -121,11 +121,11 @@ export default function EditStaff() {
     // }
 
     return(
-      <div className="container mt-5">
+      <div className="container mt-3 pb-5">
         <div className="row">
           <div className= "col-md-4"></div>
           <div className="col-md-4 ">
-            <h3 className="float-left">Create a new Staff</h3>
+            <h3 className="d-flex justify-content-center mt-3">Create a new Staff</h3>
             
             <Form onSubmit={onSubmit} className="mt-4">
               <Form.Group className="mb-3" controlId="formName">

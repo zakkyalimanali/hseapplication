@@ -349,7 +349,7 @@ function IncidentInvestigationList() {
     //           </div>
     // </div>
     <div className="row justify-content-center"> 
-      <h1 className="row justify-content-center mt-5">Incident Investigation</h1>
+      <h1 className="row justify-content-center mt-3">Incident Investigation</h1>
         <div className="mt-4 col-md-10 m row justify-content-center">
         <div className="row justify-content-around">
           <Button href="/incidentinvestigationadd" variant="secondary" className="col-md-2 mb-4">Add Incident Investigation</Button>

@@ -250,9 +250,9 @@ const onUpdate = (id) => {
   
 
   return( 
-    <div className="container mt-5">
+    <div className="container mt-3">
       <div className="d-flex justify-content-center">
-        <h1 className="mt-3 pt-5 mb-3">Update Safety Card</h1>
+        <h1 className="mt-3  mb-3">Update Safety Card</h1>
       </div>
       
         <Form onSubmit={onSubmit} className="update mt-4">

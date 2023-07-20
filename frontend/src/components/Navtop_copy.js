@@ -163,7 +163,7 @@ export default function Navtop() {
                             <NavDropdown.Item><NavLink  to="riskmanagementlist" className="inprogress">Risk Management (In Progress)</NavLink></NavDropdown.Item>
                             <NavDropdown.Item><NavLink  to="reportinglist" className="inprogress">Reporting (In Progress)</NavLink></NavDropdown.Item>
                             <NavDropdown.Item><NavLink  to="incidentinvestigationlist">Incident Investigation</NavLink></NavDropdown.Item>
-                            <NavDropdown.Item><NavLink  to="riskregisterlist">Risk Register</NavLink></NavDropdown.Item>
+                            <NavDropdown.Item><NavLink  to="riskregisterlist" className="inprogress">Risk Register (Old)</NavLink></NavDropdown.Item>
                             <NavDropdown.Item><NavLink  to="riskregisterprojectlist">Risk Register Project</NavLink></NavDropdown.Item>
                             <NavDropdown.Item><NavLink  to="permittowork" >Permit to Work</NavLink></NavDropdown.Item>
                             <NavDropdown.Item><NavLink  to="jobsafetyanalysis">Job Safety Analysis</NavLink></NavDropdown.Item>

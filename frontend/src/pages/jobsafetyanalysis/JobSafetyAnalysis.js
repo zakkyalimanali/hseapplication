@@ -152,7 +152,7 @@ function JobSafetyAnalysis() {
 
   return (
     <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-4">JSA List</h1>
+    <h1 className="row justify-content-center mt-3">Job Safety Analysis List</h1>
       <div className="mt-4 col-md-10 m row justify-content-center">
           
   <Button className="middle col-2 mb-4" variant="secondary" href="/jobsafetyanalysisadd">
