@@ -249,3 +249,12 @@ li {
     /* top: 0%; */
     width: 100%;
   }
+
+  /* .carousel-control-next-icon {
+    background-color: black;
+  } */
+
+  .project-img {
+    width: 60rem;
+    border-radius: 20px;
+  }

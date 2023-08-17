@@ -80,6 +80,7 @@ import BlogEdit from './pages/blog/BlogEdit';
 import RiskRegisterProjectList from './pages/riskregisterproject/RiskRegisterProjectList';
 import RiskRegisterProjectAdd from './pages/riskregisterproject/RiskRegisterProjectAdd';
 import RiskRegisterProjectEdit from './pages/riskregisterproject/RiskRegisterProjectEdit';
+import NewHome from './pages/NewHome';
 
 
 
@@ -93,6 +94,7 @@ function App() {
         <div>
       <BrowserRouter>
         <Routes>
+        <Route path='newhome' element={<NewHome/>} />
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
             <Route  element={<PrivateRoutes/>}>
