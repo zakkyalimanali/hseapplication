@@ -75,7 +75,7 @@ export default function Home() {
         <div>
             {/* <div className="mt-4 row  p-5 Introduction"> */}
             <div className="mt-4 row  p-5">
-                <h1 className="d-flex justify-content-center">Ali Industries</h1>
+                <h1 className="d-flex justify-content-center">Welcome to Ali Industries</h1>
                 <br/>
                 {/* <h3 className="mt-3 d-flex justify-content-center">The Future of Health And Safety is Digital</h3> */}
             </div>
@@ -84,7 +84,7 @@ export default function Home() {
                     <div class="card_border">
                         <img className="card-image" src={safetycard} alt="Avatar"/>
                         <div class="container">
-                            <Link className="mt-2 d-flex justify-content-center" to="incidenttable"><h3><b>Safety Cards</b></h3></Link>
+                            <Link className="mt-2 d-flex justify-content-center" to="/incidenttable"><h3><b>Safety Cards</b></h3></Link>
                             <p className="mt-2">Here you will be able to see how many safety have been submit, by whom and if they have been resolved</p>              
                         </div>
                     </div>
@@ -95,7 +95,7 @@ export default function Home() {
                         <div class="container">
                             {/* <h4 className="d-flex justify-content-center"><b><a href="">Safety Cards</a></b></h4> */}
                             {/* <h4 className="d-flex justify-content-center"><b><a href="">Safety Cards</a></b></h4> */}
-                            <Link className="mt-2 d-flex justify-content-center" to="sitevisitlist"><h3><b>Site Visit</b></h3></Link>
+                            <Link className="mt-2 d-flex justify-content-center" to="/sitevisitlist"><h3><b>Site Visit</b></h3></Link>
                             <p className="mt-2">Here you will be able to check on site visits, where they have been conducted, by whom and if they have been when they were done</p>
 
                             
@@ -108,7 +108,7 @@ export default function Home() {
                         <div class="container">
                             {/* <h4 className="d-flex justify-content-center"><b><a href="">Safety Cards</a></b></h4> */}
                             {/* <h4 className="d-flex justify-content-center"><b><a href="">Safety Cards</a></b></h4> */}
-                            <Link className="mt-2 d-flex justify-content-center" to="incidentinvestigationlist"><h3><b>Incident Investigation</b></h3></Link>
+                            <Link className="mt-2 d-flex justify-content-center" to="/incidentinvestigationlist"><h3><b>Incident Investigation</b></h3></Link>
                             <p className="mt-2">Here you will be able to see how many incident investigations have been done, by whom and if they have been resolved</p>
 
                             
