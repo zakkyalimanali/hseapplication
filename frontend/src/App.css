@@ -13,6 +13,131 @@ body {
     padding: 0;
   } */
 
+  /* @media (max-width: 770px) {
+    .HeroText{
+      font-size: 1rem;
+      color: blue
+      }
+    .HomeHero {
+      width: 100%;
+      height:30rem;
+    }
+    .HomeHeroText {
+      width: 3rem;
+      border-radius: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(250, 249, 246, 0.8);
+    }
+
+
+  } */
+
+
+
+  .HomeHero {
+    position: relative; 
+  }
+
+  .ContactHero {
+    position: relative; 
+    height: 100vh;
+  }
+
+  .HomeImage {
+    width: 100%;
+    height: 95vh;
+  }
+
+  .VisionImage {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .HomeHeroText {
+    background-color: rgba(250, 249, 246, 0.8);
+    width: 35rem;
+    border-radius: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .VisionText {
+    background-color: rgba(250, 249, 246, 0.8);
+    width: 50rem;
+    border-radius: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .HeroText {
+    font-Size: 4rem;
+    color: #E15047;
+  }
+
+  .Carousel-Image-Title {
+    color: #E15047;
+    border-radius: 20px;
+    background-color: rgba(250, 249, 246, 0.8);
+  }
+
+  .contact_us {
+    color: #E15047;
+  }
+
+  @media (max-width: 770px) {
+    .HomeImage {
+      width: 100%;
+      height: 60vh;
+    }
+
+    .HomeHeroText {
+      width: 90%;
+      max-width: 35rem;
+      height: auto;
+      border-radius: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(250, 249, 246, 0.8);
+    }
+    .HeroText {
+      font-size: 2rem;
+      /* color: green; */
+      text-align: center;
+    }
+
+    .Carousel-Image {
+      width: 100%;
+      height: 60vh;
+    }
+
+    .Carousel-Image-Text {
+      width: 90%;
+      max-width: 35rem;
+      height: auto;
+      border-radius: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .Carousel-Image-Title {
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    
+  }
+
 .center {
     /* margin-left: auto;
     margin-right:auto */
@@ -213,10 +338,10 @@ li {
   }
 
   .Commitment_To_Safety {
-    background-image: linear-gradient(to bottom left, lightblue, royalblue);
+    /* background-image: linear-gradient(to bottom left, lightblue, royalblue); */
     /* background-image: linear-gradient(to bottom left, orange, yellow); */
-    text-shadow: 2px 1px black;
-    color: white;
+    /* text-shadow: 2px 1px black; */
+    color: black;
   }
 
   .card_border {
@@ -258,3 +383,4 @@ li {
     width: 60rem;
     border-radius: 20px;
   }
+

@@ -139,7 +139,7 @@ export default function Navtop() {
     }}> */}
     <Navbar className="p-3 sticky-top" expand="lg" style={{ backgroundImage: 'linear-gradient(to bottom left, lightblue, royalblue)' }}>
 
-                <Navbar.Brand><NavLink className="black" to="/">Zakky Industries</NavLink></Navbar.Brand>
+                <Navbar.Brand><NavLink className="black" to="/">Ali Industries</NavLink></Navbar.Brand>
             
                     
                     

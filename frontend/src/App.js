@@ -94,11 +94,13 @@ function App() {
         <div>
       <BrowserRouter>
         <Routes>
-        <Route path='newhome' element={<NewHome/>} />
+        {/* <Route path='newhome' element={<NewHome/>} /> */}
+        <Route path= '/' element={<NewHome/>} />
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
             <Route  element={<PrivateRoutes/>}>
-              <Route path='/' element={<Home/>} exact/>
+              {/* <Route path='/' element={<Home/>} exact/> */}
+              <Route path='stafflog' element={<Home/>} exact/>
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
               <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
               <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>

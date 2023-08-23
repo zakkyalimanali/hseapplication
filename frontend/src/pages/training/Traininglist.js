@@ -46,6 +46,7 @@ function Traininglist() {
           name: 'id',
           selector: (row) => row.id,
           sortable: true,
+          width: '6rem'
         },
         {
           name: 'staff_name',
@@ -73,21 +74,37 @@ function Traininglist() {
           sortable: true,
         },
         
-        {
-          name: 'training_provider',
-          selector: (row) => row.training_provider,
-          sortable: true,
-        },
+        // {
+        //   name: 'training_provider',
+        //   selector: (row) => row.training_provider,
+        //   sortable: true,
+        // },
         
         {
           name: 'edit',
           selector: (row) => row.edit,
+          width: '6rem'
         },
         {
           name: 'delete',
           selector: (row) => row.delete,
+          width: '6rem'
         },
       ];
+
+      const customStyles = {
+        headCells : {
+          style: {
+            border: '1px solid black',
+    
+          },
+            },
+        cells : {
+          style: {
+            border: '1px solid black'
+          },
+        },
+    }
 
       useEffect(() =>{
         const data = trainings.map((training) => {
@@ -102,7 +119,7 @@ function Traininglist() {
           training: training.training,
           training_date: training.training_date,
           training_expiry: training.training_expiry,
-          training_provider: training.training_provider,
+          // training_provider: training.training_provider,
           edit : 
           <Link to={`/trainingedit/${training.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
           delete: (
@@ -146,7 +163,8 @@ const handleFilter = (e) => {
 
           <div className="text-end"><input type="text" onChange={handleFilter}/></div>
 
-              <DataTable 
+              <DataTable className='table-container mb-5'
+                 customStyles={customStyles}
                  columns={columns}
                  data={records}
                  selectableRows

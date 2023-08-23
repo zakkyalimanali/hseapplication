@@ -73,10 +73,11 @@ export default function Home() {
     return(
     <div className="pt-4">
         <div>
-            <div className="mt-4 row  p-5 Introduction">
-                <h1 className="d-flex justify-content-center">Welcome To Zakky Industries</h1>
+            {/* <div className="mt-4 row  p-5 Introduction"> */}
+            <div className="mt-4 row  p-5">
+                <h1 className="d-flex justify-content-center">Ali Industries</h1>
                 <br/>
-                <h3 className="mt-3 d-flex justify-content-center">The Future of Health And Safety is Digital</h3>
+                {/* <h3 className="mt-3 d-flex justify-content-center">The Future of Health And Safety is Digital</h3> */}
             </div>
             <div className="row  d-flex justify-content-around">
                 <div className="col-md-3 mt-5 pb-5">
@@ -129,7 +130,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="row mb-5 d-flex justify-content-around">
+            {/* <div className="row mb-5 d-flex justify-content-around">
                 <div className="col-md-5">
                     <h3 className="mt-4 mb-3 d-flex justify-content-center">News</h3>
                     {work_news.map(work_new => {
@@ -170,8 +171,8 @@ export default function Home() {
               
                 </div>
 
-            </div>
-            <ContactPage/>
+            </div> */}
+            {/* <ContactPage/> */}
 
         </div>
 

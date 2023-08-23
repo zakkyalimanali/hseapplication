@@ -39,11 +39,35 @@ function Sitevisitlist() {
         .catch(console.log)
     }
 
+    const onDelete = (id) => {
+      SiteVisitAPI.delete(`/${id}/`).then((res) => {
+          fetchSiteVisit();
+      }).catch(console.log)
+  }
+
+  
+
+    const customStyles = {
+      headCells : {
+        style: {
+          border: '1px solid black',
+  
+        },
+          },
+      cells : {
+        style: {
+          border: '1px solid black'
+        },
+      },
+  }
+  
+
     const columns = [
         {
           name: 'id',
           selector: (row) => row.id,
           sortable: true,
+          width: '6rem'
         },
         {
           name: 'inspector',
@@ -63,18 +87,16 @@ function Sitevisitlist() {
         {
           name: 'edit',
           selector: (row) => row.edit,
+          width: '6rem'
         },
         {
           name: 'delete',
           selector: (row) => row.delete,
+          width: '6rem'
         },
       ];
 
-      const onDelete = (id) => {
-        SiteVisitAPI.delete(`/${id}/`).then((res) => {
-            fetchSiteVisit();
-        }).catch(console.log)
-    }
+   
 
 
       useEffect(() => {
@@ -115,7 +137,8 @@ function Sitevisitlist() {
 
 {/* <div className="text-end"><input type="text" onChange={handleFilter}/></div> */}
 
-    <DataTable 
+    <DataTable className='table-container mb-5'
+       customStyles={customStyles}
        columns={columns}
        data={records}
        selectableRows
