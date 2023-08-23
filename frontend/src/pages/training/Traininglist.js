@@ -156,12 +156,22 @@ const handleFilter = (e) => {
           <h1 className="row justify-content-center mt-3">Training List</h1>
             <div className="mt-4 col-md-10 m row justify-content-center">
                 
-        <Button className="middle col-2 mb-4" variant="secondary" href="/trainingadd">
+        {/* <Button className="middle col-2 mb-4" variant="secondary" href="/trainingadd">
             Add Training 
         </Button>
             
 
-          <div className="text-end"><input type="text" onChange={handleFilter}/></div>
+          <div className="text-end"><input type="text" onChange={handleFilter}/></div> */}
+
+
+<div className="row justify-content-around">
+<Button className="middle col-2 mb-4" variant="secondary" href="/trainingadd">
+            Add Training 
+        </Button>
+          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/>
+          </div>
+        </div>
+            
 
               <DataTable className='table-container mb-5'
                  customStyles={customStyles}

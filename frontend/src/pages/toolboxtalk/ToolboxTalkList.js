@@ -49,6 +49,7 @@ export default function ToolBoxTalkList() {
         name: 'id',
         selector: (row) => row.id,
         sortable: true,
+        width: '6rem'
       },
       {
         name: 'date',
@@ -73,12 +74,28 @@ export default function ToolBoxTalkList() {
       {
         name: 'edit',
         selector: (row) => row.edit,
+        width: '6rem'
       },
       {
         name: 'delete',
         selector: (row) => row.delete,
+        width: '6rem'
       },
     ];
+
+    const customStyles = {
+      headCells : {
+        style: {
+          border: '1px solid black',
+  
+        },
+          },
+      cells : {
+        style: {
+          border: '1px solid black'
+        },
+      },
+  }
 
     useEffect(() => {
       const data = toolBoxTalks.map((toolBoxTalk) => {
@@ -130,9 +147,17 @@ export default function ToolBoxTalkList() {
           <h1 className="row justify-content-center mt-3">Toolbox Talk List</h1>
             <div className="mt-4 col-md-10 m row justify-content-center">
                 
+        {/* <Button className="middle col-2 mb-4" variant="secondary" href="/toolboxtalkadd">
+            Add ToolBox Talk
+        </Button> */}
+
+        <div className="row justify-content-around">
         <Button className="middle col-2 mb-4" variant="secondary" href="/toolboxtalkadd">
             Add ToolBox Talk
         </Button>
+          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/>
+          </div>
+        </div>
             
           {/* <Table striped bordered hover>
           <thead>
@@ -172,9 +197,10 @@ export default function ToolBoxTalkList() {
             </tbody>
           </Table> */}
 
-          <div className="text-end"><input type="text" onChange={handleFilter}/></div>
+          {/* <div className="text-end"><input type="text" onChange={handleFilter}/></div> */}
 
-              <DataTable 
+              <DataTable className='table-container mb-5'
+                 customStyles={customStyles}
                  columns={columns}
                  data={records}
                  selectableRows
