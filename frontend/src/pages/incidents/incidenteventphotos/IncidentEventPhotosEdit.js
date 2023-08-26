@@ -4,6 +4,7 @@ import React , {useState , useEffect , useContext} from 'react'
 import IncidentAPI from '../../../API/IncidentAPI';
 import SafetyCardAPI from '../../../API/SafetyCardAPI';
 import IncidentEventPhotosAPI from '../../../API/IncidentEventPhotosAPI';
+import SafetyCardPhotosAPI from '../../../API/SafetyCardPhotosAPI';
 import axios from 'axios'
 
 // from bootstrap 
@@ -35,7 +36,8 @@ function IncidentEventPhotosEdit(props) {
     },[params.id])
 
     const fetchIncidentEventPhoto = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/incidenteventphotos/${params.id}`)
+        // axios.get(`http://127.0.0.1:8000/hseapp/incidenteventphotos/${params.id}`)
+        axios.get(`http://127.0.0.1:8000/hseapp/safetycardphotos/${params.id}`)
         .then((res) => {
             setIncidentEventPhotos(res.data)
             setTitle(res.data.title)
@@ -86,7 +88,14 @@ function IncidentEventPhotosEdit(props) {
         }
         let token= authTokens.access
   
-        IncidentEventPhotosAPI.patch(`/${id}/`, item , {
+      //   IncidentEventPhotosAPI.patch(`/${id}/`, item , {
+      //     headers: {
+      //         'content-type': 'multipart/form-data',
+      //         'Authorization': `Bearer ${token}`
+      //       },
+      //       responseType: 'blob'
+      // }) 
+        SafetyCardPhotosAPI.patch(`/${id}/`, item , {
           headers: {
               'content-type': 'multipart/form-data',
               'Authorization': `Bearer ${token}`

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard
+from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard, SafetyCardPhotos
 # from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
@@ -251,6 +251,11 @@ class SafetyCardSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = SafetyCard
+        fields = '__all__'
+
+class SafetyCardPhotosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SafetyCardPhotos
         fields = '__all__'
 
     # def to_representation(self, instance):

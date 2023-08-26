@@ -2,6 +2,7 @@ import {useState , useEffect, useContext} from 'react'
 // API
 import IncidentAPI from '../../../API/IncidentAPI';
 import SafetyCardAPI from '../../../API/SafetyCardAPI';
+import SafetyCardPhotosAPI from '../../../API/SafetyCardPhotosAPI';
 import IncidentEventPhotosAPI from '../../../API/IncidentEventPhotosAPI';
 
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
@@ -38,8 +39,14 @@ function IncidentEventPhotosAdd(props) {
       }).catch(console.log)
   }
 
+    // const fetchIncidentEventPhoto = () => {
+    //   IncidentEventPhotosAPI.get('/')
+    //   .then((res) => {
+    //     setIncidentEventPhotos(res.data)
+    //   }).catch(console.log)
+    // }
     const fetchIncidentEventPhoto = () => {
-      IncidentEventPhotosAPI.get('/')
+      SafetyCardPhotosAPI.get('/')
       .then((res) => {
         setIncidentEventPhotos(res.data)
       }).catch(console.log)
@@ -54,8 +61,18 @@ function IncidentEventPhotosAdd(props) {
           incident
       }
       navigate(0);
+    //   let token= authTokens.access
+    //   IncidentEventPhotosAPI.post('/' , item , {
+    //       headers: {
+    //           'content-type': 'multipart/form-data',
+    //           'Authorization': `Bearer ${token}`
+    //         },
+    //         responseType: 'blob'
+    //   }) 
+    //   .then(() => fetchIncidentEventPhoto())
+    // }
       let token= authTokens.access
-      IncidentEventPhotosAPI.post('/' , item , {
+      SafetyCardPhotosAPI.post('/' , item , {
           headers: {
               'content-type': 'multipart/form-data',
               'Authorization': `Bearer ${token}`

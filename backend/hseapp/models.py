@@ -73,6 +73,8 @@ class IncidentEventPhotos(models.Model):
     
     def __str__(self):
         return self.title    
+    
+
 
 
 class DateList(models.Model):
@@ -355,3 +357,13 @@ class SafetyCard(models.Model):
 
     def __str__(self):
         return self.short_desc
+    
+class SafetyCardPhotos(models.Model): 
+    title = models.CharField(max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    # image = models.ImageField(upload_to='post_images', null=True, blank=True)
+    incident_photo = models.ImageField(upload_to='post_images', null=True, blank=True)
+    incident= models.ForeignKey(SafetyCard, on_delete=models.CASCADE, null=True, blank = True)
+    
+    def __str__(self):
+        return self.title    

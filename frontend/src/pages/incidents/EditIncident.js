@@ -1,6 +1,7 @@
 import {useEffect , useState , useContext} from 'react'
 import IncidentAPI from '../../API/IncidentAPI'
 import SafetyCardAPI from '../../API/SafetyCardAPI';
+import SafetyCardPhotosAPI from '../../API/SafetyCardPhotosAPI';
 import IncidentEventPhotosAPI from '../../API/IncidentEventPhotosAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
@@ -35,17 +36,25 @@ export default function EditIncident() {
     const [incidents , setIncidents] = useState([])
     const [staffs , setStaffs] = useState([])
     const [incidenteventphotos , setIncidentEventPhotos] = useState([])
+    // const [safetycardphotos , setSafetyCardPhotos] = useState([])
     const [responsible_party , setResponsibleParty] = useState('')
     const {authTokens} = useContext(AuthContext);
     
 
     useEffect(() => {
         fetchStaff()
-        fetchIncidentEventPhoto()
+        // fetchIncidentEventPhoto()
+        fetchSafetyCardPhotos()
      },[]) 
 
-     const fetchIncidentEventPhoto = () => {
-      IncidentEventPhotosAPI.get('/')
+    //  const fetchIncidentEventPhoto = () => {
+    //   IncidentEventPhotosAPI.get('/')
+    //   .then((res) => {
+    //     setIncidentEventPhotos(res.data)
+    //   }).catch(console.log)
+    // }
+     const fetchSafetyCardPhotos = () => {
+      SafetyCardPhotosAPI.get('/')
       .then((res) => {
         setIncidentEventPhotos(res.data)
       }).catch(console.log)
@@ -242,9 +251,15 @@ const onUpdate = (id) => {
     //   setPhotoImage(e.target.files[0]);
     // };
 
+  //   const onDeleteIncidentPhotos = (id) => {
+  //     IncidentEventPhotosAPI.delete(`/${id}/`).then((res) => {
+  //      fetchIncidentEventPhoto();
+  //      }).catch(console.log)
+  //  }
+  
     const onDeleteIncidentPhotos = (id) => {
-      IncidentEventPhotosAPI.delete(`/${id}/`).then((res) => {
-       fetchIncidentEventPhoto();
+      SafetyCardPhotosAPI.delete(`/${id}/`).then((res) => {
+       fetchSafetyCardPhotos();
        }).catch(console.log)
    }
   
