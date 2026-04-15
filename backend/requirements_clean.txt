@@ -1,0 +1,14 @@
+asgiref==3.6.0
+Django==4.1.7
+django-cors-headers==3.14.0
+django-csp==3.7
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
+mssql-django==1.2
+mysqlclient==2.1.1
+Pillow==9.5.0
+PyJWT==2.6.0
+pyodbc==4.0.39
+pytz==2023.3
+sqlparse==0.4.3
+tzdata==2023.3

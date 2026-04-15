@@ -144,6 +144,17 @@ WSGI_APPLICATION = 'hseproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hseapplication',
+        'USER': 'postgres',
+        'PASSWORD': 'Crazyno248@',
+        'HOST': 'localhost',
+        'PORT': '5433',
+    }
+}
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -151,16 +162,16 @@ WSGI_APPLICATION = 'hseproject.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'database_name',
-        'USER': 'root',
-        'PASSWORD': 'Crazyno248@',
-        'HOST':'localhost',
-        'PORT':'3306',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'database_name',
+#         'USER': 'root',
+#         'PASSWORD': 'Crazyno248@',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 
 
 # DATABASES = {
