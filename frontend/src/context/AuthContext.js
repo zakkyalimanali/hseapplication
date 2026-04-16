@@ -12,6 +12,14 @@ export const AuthProvider = ({ children }) => {
   let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
   let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null);
   let [loading, setLoading] = useState(true)
+  let [tenantName, setTenantName] = useState('')
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/tenant/info/`)
+      .then(r => r.json())
+      .then(d => setTenantName(d.name || ''))
+      .catch(() => {})
+  }, [])
 
   const navigate = useNavigate()
 
@@ -74,13 +82,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   const contextData = {
-    // loginUser,
-    // user,
-    // setUser,
     user : user,
     authTokens : authTokens,
     loginUser : loginUser,
     logoutUser : logoutUser,
+    tenantName : tenantName,
   };
 
   useEffect(() => {

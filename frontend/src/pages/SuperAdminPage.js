@@ -1,9 +1,88 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Button, Alert, Spinner, Table, Badge } from 'react-bootstrap'
 
 const PUBLIC_API = 'http://127.0.0.1:8000'
 
+// ── Superadmin login gate ──────────────────────────────────────────────────
+const SuperAdminLogin = ({ onSuccess }) => {
+  const [creds, setCreds] = useState({ username: '', password: '' })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch(`${PUBLIC_API}/api/token/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(creds),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        sessionStorage.setItem('superadminToken', data.access)
+        onSuccess()
+      } else {
+        setError('Invalid username or password.')
+      }
+    } catch {
+      setError('Could not connect to server.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-4 mx-auto">
+          <div className="card p-4 shadow-sm">
+            <h5 className="mb-1 text-center">Platform Admin</h5>
+            <p className="text-muted text-center small mb-4">Superadmin access only</p>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={creds.username}
+                  onChange={e => setCreds({ ...creds, username: e.target.value })}
+                  placeholder="Enter username"
+                />
+              </Form.Group>
+              <Form.Group className="mb-4">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={creds.password}
+                  onChange={e => setCreds({ ...creds, password: e.target.value })}
+                  placeholder="Enter password"
+                />
+              </Form.Group>
+              <Button type="submit" className="w-100" disabled={loading}>
+                {loading ? <Spinner animation="border" size="sm" /> : 'Sign In'}
+              </Button>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main superadmin dashboard ──────────────────────────────────────────────
 const SuperAdminPage = () => {
+  const [authed, setAuthed] = useState(!!sessionStorage.getItem('superadminToken'))
+
+  if (!authed) {
+    return <SuperAdminLogin onSuccess={() => setAuthed(true)} />
+  }
+
+  return <SuperAdminDashboard onLogout={() => { sessionStorage.removeItem('superadminToken'); setAuthed(false) }} />
+}
+
+const SuperAdminDashboard = ({ onLogout }) => {
   const [formData, setFormData] = useState({
     name: '',
     subdomain: '',
@@ -74,7 +153,10 @@ const SuperAdminPage = () => {
 
   return (
     <div className="container py-5">
-      <h2 className="mb-1">Tenant Management</h2>
+      <div className="d-flex justify-content-between align-items-center mb-1">
+        <h2 className="mb-0">Tenant Management</h2>
+        <Button variant="outline-secondary" size="sm" onClick={onLogout}>Sign Out</Button>
+      </div>
       <p className="text-muted mb-4">Create and manage companies on this platform.</p>
 
       <div className="row">

@@ -121,6 +121,7 @@ function Hsemanagement() {
                 {/* <Link  onClick={onSubmit} className="white" to="/incidenttable">Save</Link> */}
                   <Button
                     variant="primary"
+                    className="w-100"
                     onClick={onSubmit}>
                       Save
                   </Button>

@@ -38,6 +38,22 @@ def getRoutes(request):
     return Response(routes)
 
 
+@api_view(['GET'])
+@permission_classes([])
+def tenantInfo(request):
+    from django.db import connection
+    from django_tenants.utils import get_public_schema_name
+    schema = connection.schema_name
+    if schema == get_public_schema_name():
+        return Response({'name': 'Platform Admin', 'schema': schema})
+    try:
+        from tenants.models import Client
+        client = Client.objects.get(schema_name=schema)
+        return Response({'name': client.name, 'schema': schema})
+    except Exception:
+        return Response({'name': schema, 'schema': schema})
+
+
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
