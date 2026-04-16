@@ -50,8 +50,11 @@ function NewHome() {
                 <Button variant="warning" className="me-2">
                     <NavLink style={{color: '#E15047', textDecoration: 'none'}} to="/loginpage">Login</NavLink>
                 </Button>
-                <Button variant="outline-danger">
+                <Button variant="outline-danger" className="me-2">
                     <NavLink style={{color: '#E15047', textDecoration: 'none'}} to="/register">Register</NavLink>
+                </Button>
+                <Button variant="outline-secondary">
+                    <NavLink style={{textDecoration: 'none', color: '#555'}} to="/superadmin">Admin</NavLink>
                 </Button>
             </Nav>
            

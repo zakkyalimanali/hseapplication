@@ -15,7 +15,7 @@ class IncidentSeriallizer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(IncidentSeriallizer, self).to_representation(instance)
-        rep['name'] = instance.raised_by.name
+        rep['name'] = instance.raised_by.name if instance.raised_by else None
         return rep
 
 class AttendenceSeriallizer(serializers.ModelSerializer):

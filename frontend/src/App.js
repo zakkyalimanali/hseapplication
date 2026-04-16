@@ -82,6 +82,7 @@ import RiskRegisterProjectList from './pages/riskregisterproject/RiskRegisterPro
 import RiskRegisterProjectAdd from './pages/riskregisterproject/RiskRegisterProjectAdd';
 import RiskRegisterProjectEdit from './pages/riskregisterproject/RiskRegisterProjectEdit';
 import NewHome from './pages/NewHome';
+import SuperAdminPage from './pages/SuperAdminPage';
 
 
 
@@ -98,6 +99,7 @@ function App() {
         {/* <Route path='newhome' element={<NewHome/>} /> */}
         <Route path= '/' element={<NewHome/>} />
         <Route element={<RegisterPage/>} path="/register"/>
+        <Route element={<SuperAdminPage/>} path="/superadmin"/>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
             <Route  element={<PrivateRoutes/>}>
