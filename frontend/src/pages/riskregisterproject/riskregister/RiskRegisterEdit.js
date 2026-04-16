@@ -1,291 +1,238 @@
-import React ,{useState, useEffect , useContext} from 'react'
-import RiskRegisterAPI from '../../../API/RiskRegisterAPI';
-import StaffAPI from '../../../API/StaffAPI';
-import { useParams } from 'react-router'
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router'
-import API_BASE from "../../../utils/apiBase";
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import RiskRegisterAPI from '../../../API/RiskRegisterAPI'
+import StaffAPI from '../../../API/StaffAPI'
+import AuthContext from '../../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../../utils/apiBase'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function RiskRegisterEdit(props) {
-    const [riskregisters , setRiskRegisters] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [id, setId] = useState(null)
-    const project_name = props.projectlist
-    // const [date_raised, setDateRaised] = useState('') 
-    const [raised_by , setRaisedBy] = useState('')
-    const [reviewed_by , setReviewedBy] = useState('')
-    const [risk_description, setRiskDescription] = useState('') 
-    const [likelihood_of_risk, setLikelihoodOfRisk] = useState('') 
-    const [impact_of_risk, setImpactOfRisk] = useState('') 
-    const [severity,setSeverity] = useState('') 
-    const [responsible_party, setResponsibleParty] = useState('') 
-    const [mitigating_action, setMitigatingAction] = useState('') 
-    const [contingency_action, setContingencyAction] = useState('') 
-    const [progress_on_actions, setProgressOnActions] = useState('') 
-    const [status, setStatus] = useState('') 
-    let navigate = useNavigate();
-    const params = useParams()
+export default function RiskRegisterEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchRiskRegister()
-        setId(params.id)
-    },[params.id]) 
+  const [project_name, setProjectName] = useState(null)
+  const [raised_by, setRaisedBy] = useState('')
+  const [reviewed_by, setReviewedBy] = useState('')
+  const [risk_description, setRiskDescription] = useState('')
+  const [likelihood_of_risk, setLikelihoodOfRisk] = useState('')
+  const [impact_of_risk, setImpactOfRisk] = useState('')
+  const [severity, setSeverity] = useState('')
+  const [responsible_party, setResponsibleParty] = useState('')
+  const [mitigating_action, setMitigatingAction] = useState('')
+  const [contingency_action, setContingencyAction] = useState('')
+  const [progress_on_actions, setProgressOnActions] = useState('')
+  const [status, setStatus] = useState('')
+  const [staffs, setStaffs] = useState([])
 
-    useEffect(() => {
-      fetchStaff()
-    },[])
+  useEffect(() => {
+    const h = { Authorization: `Bearer ${authTokens.access}` }
 
-    const fetchStaff = () => {
-      StaffAPI.get('/')
-      .then((res) => {
-        setStaffs(res.data)
-      })
-      .catch(console.log)
+    axios.get(`${API_BASE}/hseapp/riskregister/${params.id}/`, { headers: h })
+      .then(res => {
+        const d = res.data
+        setProjectName(d.project_name)
+        setRaisedBy(d.raised_by || '')
+        setReviewedBy(d.reviewed_by || '')
+        setRiskDescription(d.risk_description || '')
+        setLikelihoodOfRisk(d.likelihood_of_risk || '')
+        setImpactOfRisk(d.impact_of_risk || '')
+        setSeverity(d.severity || '')
+        setResponsibleParty(d.responsible_party || '')
+        setMitigatingAction(d.mitigating_action || '')
+        setContingencyAction(d.contingency_action || '')
+        setProgressOnActions(d.progress_on_actions || '')
+        setStatus(d.status || '')
+      }).catch(console.log)
+
+    StaffAPI.get('/', { headers: h }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [params.id])
+
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      project_name,
+      raised_by: raised_by || null,
+      reviewed_by: reviewed_by || null,
+      risk_description,
+      likelihood_of_risk,
+      impact_of_risk,
+      severity,
+      responsible_party,
+      mitigating_action,
+      contingency_action,
+      progress_on_actions,
+      status,
     }
+    RiskRegisterAPI.patch(`/${params.id}/`, item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
-    const fetchRiskRegister = () =>{
-        axios.get(`${API_BASE}/hseapp/riskregister/${params.id}`)
-        .then((res) => {
-            setRiskRegisters(res.data)
-            // setDateRaised(res.data.date_raised)
-            setRaisedBy(res.data.raised_by)
-            setReviewedBy(res.data.reviewed_by)
-            setRiskDescription(res.data.risk_description)
-            setLikelihoodOfRisk(res.data.likelihood_of_risk)
-            setImpactOfRisk(res.data.impact_of_risk)
-            setSeverity(res.data.severity)
-            setResponsibleParty(res.data.responsible_party)
-            setMitigatingAction(res.data.mitigating_action)
-            setContingencyAction(res.data.contingency_action)
-            setProgressOnActions(res.data.progress_on_actions)
-            setStatus(res.data.status)
-        })
-        .catch(console.log)
-    }
-
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            // date_raised : date_raised || null, 
-            raised_by : raised_by || null,
-            reviewed_by : reviewed_by || null,
-            risk_description,
-            likelihood_of_risk,
-            impact_of_risk,
-            severity,
-            responsible_party,
-            mitigating_action,
-            contingency_action,
-            progress_on_actions,
-            status,
-            project_name,
-        }
-        // navigate(-1);
-        RiskRegisterAPI.post('/', item).then(() => fetchRiskRegister())
-
-
-    }
-
-    const willUpdateRiskOnDatabase = (id) => {
-        let item = {
-            // date_raised : date_raised || null, 
-            raised_by : raised_by || null,
-            reviewed_by : reviewed_by || null,
-            risk_description,
-            likelihood_of_risk,
-            impact_of_risk,
-            severity,
-            responsible_party,
-            mitigating_action,
-            contingency_action,
-            progress_on_actions,
-            status,
-            project_name,
-        }
-        RiskRegisterAPI.patch(`/${id}/`, item).then(() => {
-            // setDateRaised('')
-            setRaisedBy('')
-            setReviewedBy('')
-            setRiskDescription('')
-            setLikelihoodOfRisk('')
-            setImpactOfRisk('')
-            setSeverity('')
-            setResponsibleParty('')
-            setMitigatingAction('')
-            setContingencyAction('')
-            setProgressOnActions('')
-            setStatus('')
-            fetchRiskRegister()
-        }
-        )
-        navigate(-1)
-
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
   return (
-    <div className="container mt-5">
-    <div className="row">
-      <div className= "col-md-4"></div>
-      <div className="col-md-4 ">
-        <h3 className="float-left">Create a Risk Registar</h3>
-        
-        <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-        className="mt-4">
-          {/* <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Date Raised</Form.Label>
+    <div style={{ padding: '40px', maxWidth: '860px', margin: '0 auto' }}>
+
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Project
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Risk Entry</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update risk details, severity, and corrective actions.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Risk Description</Form.Label>
             <Form.Control
-              type="date"
-              placeholder="Equipment / Item"
-              value={date_raised}
-              onChange={(e) => {
-                  const selectedDate = e.target.value;
-                  const formattedDate = selectedDate !== "" ? selectedDate : null;
-                  setDateRaised(formattedDate);
-                }}
-            />
-          </Form.Group> */}
-          <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Raised By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Raised By"
-                    value={raised_by}
-                    onChange={(e) => setRaisedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Reviewed By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Reviewed By"
-                    value={reviewed_by}
-                    onChange={(e) => setReviewedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-
-                  </Form.Control>
-                </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Risk Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Risk_Description"
+              as="textarea" rows={3}
+              placeholder="Describe the risk..."
               value={risk_description}
-              onChange={(e) => setRiskDescription(e.target.value)}
+              onChange={e => setRiskDescription(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Likelihood Of Risk</Form.Label>
+
+          <div className="row">
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Likelihood</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. High, Medium, Low"
+                  value={likelihood_of_risk}
+                  onChange={e => setLikelihoodOfRisk(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Impact</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. High, Medium, Low"
+                  value={impact_of_risk}
+                  onChange={e => setImpactOfRisk(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Severity</Form.Label>
+                <Form.Select value={severity} onChange={e => setSeverity(e.target.value)}>
+                  <option value="">Select...</option>
+                  <option>Critical</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Status</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. Open, Closed"
+                  value={status}
+                  onChange={e => setStatus(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Responsible Party</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Likelihood Of Risk"
-              value={likelihood_of_risk}
-              onChange={(e) => setLikelihoodOfRisk(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Impact Of Risk</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Impact Of Risk"
-              value={impact_of_risk}
-              onChange={(e) => setImpactOfRisk(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Severity</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Severity"
-              value={severity}
-              onChange={(e) => setSeverity(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Responsible Party</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Responsible Party"
+              placeholder="Who is responsible for this risk?"
               value={responsible_party}
-              onChange={(e) => setResponsibleParty(e.target.value)}
+              onChange={e => setResponsibleParty(e.target.value)}
             />
           </Form.Group>
-          
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Mitigating Action</Form.Label>
+
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Raised By</Form.Label>
+                <Form.Select value={raised_by} onChange={e => setRaisedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Reviewed By</Form.Label>
+                <Form.Select value={reviewed_by} onChange={e => setReviewedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+          </div>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Mitigating Action</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Mitigating Action"
+              placeholder="Action taken to reduce the risk..."
               value={mitigating_action}
-              onChange={(e) => setMitigatingAction(e.target.value)}
+              onChange={e => setMitigatingAction(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Contingency Action</Form.Label>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Contingency Action</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Contingency Action"
+              placeholder="Fallback action if the risk materialises..."
               value={contingency_action}
-              onChange={(e) =>  setContingencyAction(e.target.value)}
+              onChange={e => setContingencyAction(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Progress on Actions</Form.Label>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Progress on Actions</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Progress On Actions"
+              placeholder="Current progress on corrective actions..."
               value={progress_on_actions}
-              onChange={(e) => setProgressOnActions(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Status</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={e => setProgressOnActions(e.target.value)}
             />
           </Form.Group>
 
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
+            </Button>
+          </div>
 
-
-        
- 
-          
-          
-          <div className="mt-3 float-right">
-                  <Button
-                    variant="warning"
-                    type="button"
-                    onClick={(e) => willUpdateRiskOnDatabase(id)}
-                    className="mx-2 mb-3"
-                  >
-                    Update
-                  </Button>
-                </div>
-        </Form>    
-      </div>            
+        </Form>
+      </div>
     </div>
-  </div>
   )
 }
-
-export default RiskRegisterEdit

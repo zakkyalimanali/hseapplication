@@ -40,6 +40,13 @@ router.register(r'news', views.NewsViewSet, basename = 'news')
 router.register(r'blog', views.BlogViewSet, basename='blog')
 router.register(r'safetycard', views.SafetyCardViewSet, basename='safetycard')
 router.register(r'safetycardphotos', views.SafetyCardPhotosViewSet, basename='safetycardphotos')
+router.register(r'safeworkpractice', views.SafeWorkPracticeViewSet, basename='safeworkpractice')
+router.register(r'hseaudit', views.HseAuditViewSet, basename='hseaudit')
+router.register(r'emergencyplan', views.EmergencyPlanViewSet, basename='emergencyplan')
+router.register(r'riskmanagement', views.RiskManagementViewSet, basename='riskmanagement')
+router.register(r'reports', views.ReportViewSet, basename='reports')
+router.register(r'workplacerules', views.WorkplaceRuleViewSet, basename='workplacerules')
+router.register(r'riskmitigation', views.RiskMitigationViewSet, basename='riskmitigation')
 
 # router.register(r'about', views.IncidentViewSet, basename="about")
 

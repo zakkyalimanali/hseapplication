@@ -1,171 +1,161 @@
-import {useEffect , useState} from 'react'
-import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import StaffAPI from '../../API/StaffAPI';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table';
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
+
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
+
+const CARD_COLOUR = {
+  Yellow: { bg: '#FEF9C3', color: '#A16207' },
+  Red:    { bg: '#FEE2E2', color: '#DC2626' },
+  Green:  { bg: '#D1FAE5', color: '#059669' },
+}
 
 export default function StaffList() {
-    const [records, setRecords] = useState([]);
-    const [staffs , setStaffs] = useState([])
-    const [selectedStaff , setSelectedStaff] = useState([])
+  const { authTokens } = useContext(AuthContext)
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    useEffect(() => {
-        fetchStaff();
-    },[])
+  useEffect(() => {
+    fetchStaff()
+  }, [])
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
+  const fetchStaff = () => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }
 
-    const onDelete = (id) => {
-        StaffAPI.delete(`/${id}/`).then((res) => {
-            fetchStaff();
-        }).catch(console.log)
-    }
+  const onDelete = (id) => {
+    StaffAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchStaff()).catch(console.log)
+  }
 
-    const columns = [
-      {
-        name: 'name',
-        selector: (row) => row.name,
-        sortable: true,
-      },
-      {
-        name: 'position',
-        selector: (row) => row.position,
-        sortable: true,
-      },
-      {
-        name: 'staff_id',
-        selector: (row) => row.staff_id,
-        sortable: true,
-      },
-      {
-        name: 'gender',
-        selector: (row) => row.gender,
-        sortable: true,
-      },
-      {
-        name: 'leave_left',
-        selector: (row) => row.leave_left,
-        sortable: true,
-      },
-      {
-        name: 'edit',
-        selector: (row) => row.edit,
-      },
-      {
-        name: 'delete',
-        selector: (row) => row.delete,
-      },
-    ];
+  const filtered = staffs.filter(s => {
+    const q = search.toLowerCase()
+    return (
+      (s.name || '').toLowerCase().includes(q) ||
+      (s.position || '').toLowerCase().includes(q) ||
+      (s.staff_id_number || '').toLowerCase().includes(q) ||
+      (s.nationality || '').toLowerCase().includes(q) ||
+      (s.department || '').toLowerCase().includes(q)
+    )
+  })
 
-    useEffect(() => {
-      const data =staffs.map((staff) => {
-        // const staff = staffs.find((staff) => staff.id === attendence.staff_id);
-        // const staff_name = staff ? staff.name : '';
-        // {staffs.find((staff) => staff.id === attendence.staff_name)?.name}
-        // const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name  
-        return {
-          name: staff.name,
-          position : staff.position,
-          staff_id: staff.staff_id_number,
-          gender: staff.gender,
-          leave_left: staff.yearly_leave_left,
-          // attendencestatus: attendence.attendence_status,
-          // edit: <FontAwesomeIcon icon={faPen} />,
-          edit : <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>  ,
-          delete: (
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={() => onDelete(staff.id)}
-            />
-          ),
-        };
-      });
-      setRecords(data);
-    }, [staffs]);
+  return (
+    <div style={{ padding: '40px', maxWidth: '1300px', margin: '0 auto' }}>
 
-
-    const handleFilter = (e) => {
-      const newData = records.filter(row => {
-    
-        return  row.name.toLowerCase().includes(e.target.value.toLowerCase())
-
-    });
-      setRecords(newData);
-    };
-   
-
-    return(
-        <div className="row justify-content-center mt-3"> 
-          <h1 className="row justify-content-center mt-3">Staff List</h1>
-            <div className="mt-4 col-md-10 m row justify-content-center mb-5">
-                
-        <Button className="middle col-2 mb-4" variant="secondary" href="/addstaff">
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Staff</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Manage staff profiles, smart card status, and leave entitlements.
+          </p>
+        </div>
+        <Link to="/addstaff">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
             Add Staff
-        </Button>
-        <div className="text-end"><input type="text" onChange={handleFilter}/></div>
-            
-          {/* <Table striped bordered hover>
-          <thead>
-              <tr> */}
-                {/* <th scope="col">#</th> */}
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                {/* <th scope="col" className="col-3">Name</th>
-                <th scope="col" className="col-2">Position</th>
-                <th scope="col" className="col-1">Staff Id Number</th>
-                <th scope="col" className="col-1">Gender</th>
-                <th scope="col" className="col-1">Leave Left</th>
-                <th scope="col" className="col-1">Edit</th>
-                <th scope="col" className="col-1">Delete</th> */}
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-              {/* </tr>
+          </Button>
+        </Link>
+      </div>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Staff',  value: staffs.length,                                            color: NAVY },
+          { label: 'Male',         value: staffs.filter(s => s.gender === 'Male').length,            color: '#2563EB' },
+          { label: 'Female',       value: staffs.filter(s => s.gender === 'Female').length,          color: '#DB2777' },
+          { label: 'Green Card',   value: staffs.filter(s => s.smart_card_colour === 'Green').length, color: '#059669' },
+          { label: 'Yellow Card',  value: staffs.filter(s => s.smart_card_colour === 'Yellow').length, color: '#D97706' },
+          { label: 'Red Card',     value: staffs.filter(s => s.smart_card_colour === 'Red').length,   color: '#DC2626' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>{card.value}</div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>All Staff ({filtered.length})</h5>
+          <input
+            type="text"
+            placeholder="Search name, position, staff ID..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '280px', outline: 'none',
+            }}
+          />
+        </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {staffs.length === 0 ? 'No staff added yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Name</th>
+                <th style={{ color: NAVY }}>Position</th>
+                <th style={{ color: NAVY }}>Staff ID</th>
+                <th style={{ color: NAVY }}>Gender</th>
+                <th style={{ color: NAVY }}>Nationality</th>
+                <th style={{ color: NAVY }}>Smart Card</th>
+                <th style={{ color: NAVY }}>Leave Left</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
             </thead>
             <tbody>
-              {staffs.map((staff, index) => {
+              {filtered.map(s => {
+                const cardStyle = CARD_COLOUR[s.smart_card_colour]
                 return (
-                  <tr key={staff.id}>
-                
-                    <td>{staff.name}</td>
-                    <td>{staff.position}</td>
-                    <td>{staff.staff_id_number}</td>
-                    <td>{staff.gender}</td>
-                    <td>{staff.yearly_leave_left}</td>
+                  <tr key={s.id}>
+                    <td style={{ fontWeight: '600' }}>{s.name || '—'}</td>
+                    <td style={{ color: '#666' }}>{s.position || '—'}</td>
+                    <td style={{ color: '#666' }}>{s.staff_id_number || '—'}</td>
+                    <td style={{ color: '#666' }}>{s.gender || '—'}</td>
+                    <td style={{ color: '#666' }}>{s.nationality || '—'}</td>
                     <td>
-                        <Link to={`/editstaff/${staff.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
+                      {cardStyle ? (
+                        <span style={{ backgroundColor: cardStyle.bg, color: cardStyle.color, padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '600' }}>
+                          {s.smart_card_colour}
+                        </span>
+                      ) : <span style={{ color: '#ccc' }}>—</span>}
                     </td>
-                    <td className="delete" onClick={() => onDelete(staff.id)}>
-                      <FontAwesomeIcon icon={faTrash } />
+                    <td style={{ color: '#666', textAlign: 'center' }}>{s.yearly_leave_left ?? '—'}</td>
+                    <td>
+                      <Link to={`/editstaff/${s.id}`} style={{ color: NAVY }}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </Link>
                     </td>
-              
+                    <td>
+                      <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(s.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    </td>
                   </tr>
-                );
+                )
               })}
             </tbody>
-          </Table> */}
-
-          <DataTable 
-                 columns={columns}
-                 data={records}
-                 selectableRows
-                 fixedHeader
-                 pagination
-              >
-
-              </DataTable>
-
-        </div>
+          </Table>
+        )}
+      </div>
     </div>
-
-    )
-
-
+  )
 }

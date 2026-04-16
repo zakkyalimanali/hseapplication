@@ -1,219 +1,194 @@
-import {useEffect , useState} from 'react'
-import ToolBoxTalkAPI from '../../API/ToolBoxTalkAPI'
-import StaffAPI from '../../API/StaffAPI';
-import axios from 'axios'
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-// import { Link , useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
+import { useEffect, useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
-import API_BASE from "../../utils/apiBase";
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import ToolBoxTalkAPI from '../../API/ToolBoxTalkAPI'
+import axios from 'axios'
+import API_BASE from '../../utils/apiBase'
+import AuthContext from '../../context/AuthContext'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
 export default function ToolBoxTalkList() {
-    const [records, setRecords] = useState([]);
-    const [toolBoxTalks , setToolBoxTalks] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [id, setId] = useState(null)
-    // const navigate = useNavigate()
+  const { authTokens } = useContext(AuthContext)
+  const [toolBoxTalks, setToolBoxTalks] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    useEffect(() => {
-        fetchToolBoxTalk()
-        staffData()
-    },[])
+  useEffect(() => {
+    fetchToolBoxTalk()
+    staffData()
+  }, [])
 
-    const fetchToolBoxTalk = () => {
-        ToolBoxTalkAPI.get('/')
-        .then((res) => {
-            setToolBoxTalks(res.data)
-        })
-        .catch(console.log)
-    }
-
-    const staffData = () => {
-      axios.get(`${API_BASE}/hseapp/staff/`)
-      .then((res) => {
-          setStaffs(res.data);
-      }).catch(console.log)
+  const fetchToolBoxTalk = () => {
+    ToolBoxTalkAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setToolBoxTalks(res.data)).catch(console.log)
   }
 
-    const onDelete = (id) => {
-        ToolBoxTalkAPI.delete(`/${id}/`).then((res) => {
-            fetchToolBoxTalk();
-        }).catch(console.log)
-    }
-
-    const columns = [
-      {
-        name: 'id',
-        selector: (row) => row.id,
-        sortable: true,
-        width: '6rem'
-      },
-      {
-        name: 'date',
-        selector: (row) => row.date,
-        sortable: true,
-      },
-      {
-        name: 'topic',
-        selector: (row) => row.topic,
-        sortable: true,
-      },
-      {
-        name: 'project',
-        selector: (row) => row.project,
-        sortable: true,
-      },
-      {
-        name: 'presenter',
-        selector: (row) => row.presenter,
-        sortable: true,
-      },
-      {
-        name: 'edit',
-        selector: (row) => row.edit,
-        width: '6rem'
-      },
-      {
-        name: 'delete',
-        selector: (row) => row.delete,
-        width: '6rem'
-      },
-    ];
-
-    const customStyles = {
-      headCells : {
-        style: {
-          border: '1px solid black',
-  
-        },
-          },
-      cells : {
-        style: {
-          border: '1px solid black'
-        },
-      },
+  const staffData = () => {
+    axios.get(`${API_BASE}/hseapp/staff/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
   }
 
-    useEffect(() => {
-      const data = toolBoxTalks.map((toolBoxTalk) => {
-        // const staff = staffs.find((staff) => staff.id === attendence.staff_id);
-        // const staff_name = staff ? staff.name : '';
-        // {staffs.find((staff) => staff.id === attendence.staff_name)?.name}
-        const person_name = staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name  
-        return {
-          id: toolBoxTalk.id,
-          date: toolBoxTalk.toolbox_date,
-          topic: toolBoxTalk.topic,
-          project:toolBoxTalk.project,
-          presenter: person_name,
-          // attendencestatus: attendence.attendence_status,
-          // edit: <FontAwesomeIcon icon={faPen} />,
-          edit : 
-          // <Link to={`/editincident/${incident.id}`}>
-          // <FontAwesomeIcon icon={faPen } />
-          // </Link>,
-          <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>   ,
-          delete: (
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={() => onDelete(toolBoxTalk.id)}
-            />
-          ),
-        };
-      });
-      setRecords(data);
-    }, [toolBoxTalks, staffs]);
+  const onDelete = (id) => {
+    ToolBoxTalkAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchToolBoxTalk()).catch(console.log)
+  }
 
-    const handleFilter = (e) => {
-      const newData = toolBoxTalks.map((toolBoxTalk) => {
-        const person_name = staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name;
-        return {
-          ...toolBoxTalk,
-          person_name,
-        };
-      }).filter((attendence) => {
-        return attendence.person_name
-          .toLowerCase()
-          .includes(e.target.value.toLowerCase());
-      });
-      setToolBoxTalks(newData);
-    };
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
 
-    return(
-        <div className="row justify-content-center"> 
-          <h1 className="row justify-content-center mt-3">Toolbox Talk List</h1>
-            <div className="mt-4 col-md-10 m row justify-content-center">
-                
-        {/* <Button className="middle col-2 mb-4" variant="secondary" href="/toolboxtalkadd">
-            Add ToolBox Talk
-        </Button> */}
+  const filtered = toolBoxTalks.filter(t => {
+    const q = search.toLowerCase()
+    return (
+      (t.topic || '').toLowerCase().includes(q) ||
+      (t.project || '').toLowerCase().includes(q) ||
+      staffName(t.presenter).toLowerCase().includes(q)
+    )
+  })
 
-        <div className="row justify-content-around">
-        <Button className="middle col-2 mb-4" variant="secondary" href="/toolboxtalkadd">
-            Add ToolBox Talk
-        </Button>
-          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/>
-          </div>
+  return (
+    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Toolbox Talks</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Record and manage daily toolbox talk sessions with your crew.
+          </p>
         </div>
-            
-          {/* <Table striped bordered hover>
-          <thead>
-              <tr> */}
-                {/* <th scope="col">#</th> */}
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                {/* <th scope="col" className="col-1">ID</th>
-                <th scope="col" className="col-2">Date</th>
-                <th scope="col" className="col-3">Topic</th>
-                <th scope="col" className="col-3">Project</th>
-                <th scope="col" className="col-2">Presenter</th> */}
-                {/* <th scope="col" class="d-none d-md-table-cell col-1"></th> */}
-                {/* <th>Edit</th>
-                <th>Delete</th>
+        <Link to="/toolboxtalkadd">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
+            Add Toolbox Talk
+          </Button>
+        </Link>
+      </div>
+
+      {/* Summary cards */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Sessions',  value: toolBoxTalks.length, color: NAVY },
+          { label: 'This Month',
+            value: toolBoxTalks.filter(t => {
+              if (!t.toolbox_date) return false
+              const d = new Date(t.toolbox_date)
+              const now = new Date()
+              return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+            }).length,
+            color: ORANGE },
+          { label: 'Unique Topics',
+            value: new Set(toolBoxTalks.map(t => t.topic).filter(Boolean)).size,
+            color: '#2563EB' },
+          { label: 'Total Crew',
+            value: toolBoxTalks.reduce((sum, t) => sum + (t.crew_number || 0), 0),
+            color: '#059669' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>
+              {card.value}
+            </div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Table card */}
+      <div style={{
+        backgroundColor: 'white', borderRadius: '12px',
+        padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+      }}>
+        {/* Table header with search */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>
+            All Sessions ({filtered.length})
+          </h5>
+          <input
+            type="text"
+            placeholder="Search topic, project, presenter..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '260px', outline: 'none',
+            }}
+          />
+        </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {toolBoxTalks.length === 0 ? 'No toolbox talks recorded yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '14px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Date</th>
+                <th style={{ color: NAVY }}>Topic</th>
+                <th style={{ color: NAVY }}>Project</th>
+                <th style={{ color: NAVY }}>Presenter</th>
+                <th style={{ color: NAVY }}>Supervisor</th>
+                <th style={{ color: NAVY }}>Crew</th>
+                <th style={{ color: NAVY }}>Time</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
               </tr>
             </thead>
             <tbody>
-              {toolBoxTalks.map((toolBoxTalk, index) => {
-                return (
-                  <tr key={toolBoxTalk.id}>
-                
-                    <td>{toolBoxTalk.id}</td>
-                    <td>{toolBoxTalk.toolbox_date}</td>
-                    <td>{toolBoxTalk.topic}</td>
-                    <td>{toolBoxTalk.project}</td>
-                    <td>{staffs.find((staff) => staff.id === toolBoxTalk.presenter)?.name}</td>
-                    <td>
-                        <Link to={`/toolboxtalkedit/${toolBoxTalk.id}`}><FontAwesomeIcon icon={faPen } /></Link>                                            
-                    </td>
-                    <td className="delete" onClick={() => onDelete(toolBoxTalk.id)}>
-                      <FontAwesomeIcon icon={faTrash } />
-                    </td>
-              
-                  </tr>
-                );
-              })}
+              {filtered.map(t => (
+                <tr key={t.id}>
+                  <td style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>
+                    {t.toolbox_date || '—'}
+                  </td>
+                  <td style={{ fontWeight: '600' }}>
+                    {t.topic || '—'}
+                    {t.textbox && (
+                      <div style={{ color: '#888', fontSize: '12px', marginTop: '2px', fontWeight: '400' }}>
+                        {t.textbox.length > 60 ? t.textbox.slice(0, 60) + '…' : t.textbox}
+                      </div>
+                    )}
+                  </td>
+                  <td style={{ color: '#555' }}>{t.project || '—'}</td>
+                  <td>{staffName(t.presenter)}</td>
+                  <td style={{ color: '#666' }}>{staffName(t.supervisor)}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    {t.crew_number != null ? (
+                      <span style={{
+                        backgroundColor: '#EEF2FF', color: '#4F46E5',
+                        padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '600',
+                      }}>
+                        {t.crew_number}
+                      </span>
+                    ) : '—'}
+                  </td>
+                  <td style={{ color: '#666', fontSize: '13px' }}>{t.time || '—'}</td>
+                  <td>
+                    <Link to={`/toolboxtalkedit/${t.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(t.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-          </Table> */}
-
-          {/* <div className="text-end"><input type="text" onChange={handleFilter}/></div> */}
-
-              <DataTable className='table-container mb-5'
-                 customStyles={customStyles}
-                 columns={columns}
-                 data={records}
-                 selectableRows
-                 fixedHeader
-                 pagination
-              >
-
-              </DataTable>
-
-
-        </div>
+          </Table>
+        )}
+      </div>
     </div>
-
-    )
+  )
 }

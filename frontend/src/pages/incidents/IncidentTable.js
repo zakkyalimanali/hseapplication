@@ -1,308 +1,186 @@
-import {useEffect , useState} from 'react'
-import { Button } from 'react-bootstrap';
-import IncidentAPI from '../../API/IncidentAPI';
-import SafetyCardAPI from '../../API/SafetyCardAPI';
-import StaffAPI from '../../API/StaffAPI';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-// import {   } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
-// import AuthContext from '../../context/AuthContext';
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import SafetyCardAPI from '../../API/SafetyCardAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
+
+const STATUS_STYLES = {
+  'Resolved':                  { bg: '#D1FAE5', color: '#059669' },
+  'No Further Action Required':{ bg: '#DBEAFE', color: '#2563EB' },
+  'Ongoing':                   { bg: '#FEF3C7', color: '#D97706' },
+}
 
 export default function IncidentTable() {
-    const [records, setRecords] = useState([]);
-    const [incidents , setIncidents] = useState([])
-    const [safetycards, setSafetyCards] = useState([])
-    // const [selectedIncident , setSelectedIncident] = useState(null)
-    const [staffs , setStaffs] = useState([])
+  const { authTokens } = useContext(AuthContext)
+  const [safetycards, setSafetyCards] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    useEffect(() => {
-        // fetchIncidents();
-        fetchSafetyCards();
-        fetchStaff();
-    },[])
+  useEffect(() => {
+    fetchSafetyCards()
+    fetchStaff()
+  }, [])
 
-    const fetchStaff = () => {
-      StaffAPI.get('/')
-      .then((res) => {
-          setStaffs(res.data)
-      })
-      .catch(console.log)
-  }
-    const fetchSafetyCards = () => {
-      SafetyCardAPI.get('/')
-      .then((res) => {
-          setSafetyCards(res.data)
-      })
-      .catch(console.log)
+  const fetchSafetyCards = () => {
+    SafetyCardAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setSafetyCards(res.data)).catch(console.log)
   }
 
-    // const fetchIncidents = () => {
-    //     IncidentAPI.get('/')
-    //     .then((res) => {
-    //         setIncidents(res.data)
-    //     })
-    //     .catch(console.log) 
-    // }
-
-  //   const onDelete = (id) => {
-  //     IncidentAPI.delete(`/${id}/`).then((res) => {
-  //         fetchIncidents();
-  //     }).catch(console.log)
-  // }
-    const onDelete = (id) => {
-      SafetyCardAPI.delete(`/${id}/`).then((res) => {
-          fetchSafetyCards();
-      }).catch(console.log)
+  const fetchStaff = () => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
   }
 
-    // const selectIncident = (id) => {
-    //     setSelectedIncident(incidents.find((incident) => incident.id === id))
-    // }
+  const onDelete = (id) => {
+    SafetyCardAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchSafetyCards()).catch(console.log)
+  }
 
-    // const clearSelectedIncident = () => {
-    //     setSelectedIncident(null)
-    // };
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
 
-    const customStyles = {
-      headCells : {
-        style: {
-          border: '1px solid black',
-
-        },
-          },
-      cells : {
-        style: {
-          border: '1px solid black'
-        },
-      },
-}
-    
-    
-
-    const columns = [
-      {
-        name: 'Id',
-        selector: (row) => row.id,
-        sortable: true,
-        width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Description',
-        selector: (row) => row.description,
-        sortable: true,
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Date',
-        selector: (row) => row.date,
-        sortable: true,
-        width: '8rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Raised',
-        selector: (row) => row.raised,
-        sortable: true,
-        width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'More Info',
-        selector: (row) => row.more_info,
-        width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Delete',
-        selector: (row) => row.delete,
-        width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-    ];
-
-    useEffect(() => {
-      // const data = incidents.map((incident) => {
-      const data = safetycards.map((incident) => {
-        const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name  
-        return {
-          id: incident.id,
-          description: incident.short_desc,
-          date: incident.date_raised,
-          raised: person_name,
-          more_info : <Link to={`/editincident/${incident.id}`}>
-          <FontAwesomeIcon icon={faPen } />
-          </Link>,
-          delete: (
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={() => onDelete(incident.id)}
-            />
-          ),
-        };
-      });
-      setRecords(data);
-    // }, [incidents, staffs]);
-    }, [safetycards, staffs]);
-
-    // const handleFilter = (e) => {
-    //   const newData = incidents.map((incident) => {
-    //     const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
-    //     return {
-    //       ...incident,
-    //       person_name,
-    //     };
-    //   }).filter((attendence) => {
-    //     return attendence.person_name
-    //       .toLowerCase()
-    //       .includes(e.target.value.toLowerCase());
-    //   });
-    //   setIncidents(newData);
-    // };
-
-    // const handleFilter = (e) => {
-    //   const searchText = e.target.value.toLowerCase();
-      
-    //   if (searchText === '') {
-    //     // If the search text is empty, fetch all incidents again
-    //     // fetchIncidents();
-    //     fetchSafetyCards();
-    //   } else {
-    //     // const newData = incidents.map((incident) => {
-    //     const newData = safetycards.map((incident) => {
-    //       const person_name = staffs.find((staff) => staff.id === incident.raised_by)?.name;
-    //       return {
-    //         ...incident,
-    //         person_name,
-    //       };
-    //     }).filter((attendence) => {
-    //       return attendence.person_name
-    //         .toLowerCase()
-    //         .includes(searchText);
-    //     });
-    //     // setIncidents(newData);
-    //     setSafetyCards(newData);
-    //   }
-    // };
-
-    const handleFilter = (e) => {
-      const searchText = e.target.value.toLowerCase();
-    
-      if (searchText === '') {
-        // If the search text is empty, fetch all incidents again
-        fetchSafetyCards();
-      } else {
-        const newData = safetycards
-          .map((safetycard) => {
-            const person_name = staffs.find(
-              (staff) => staff.id === safetycard.raised_by
-            )?.name;
-            return {
-              ...safetycard,
-              person_name,
-            };
-          })
-          .filter((safetycard) => {
-            const incidentProps = Object.values(safetycard);
-            for (let i = 0; i < incidentProps.length; i++) {
-              if (
-                incidentProps[i] &&
-                incidentProps[i].toString().toLowerCase().includes(searchText)
-              ) {
-                return true; // Return true if a match is found in any property
-              }
-            }
-            return false; // Return false if no match is found in any property
-          });
-        setSafetyCards(newData);
-      }
-    };
-
-
+  const filtered = safetycards.filter(c => {
+    const q = search.toLowerCase()
     return (
-      <div className="row justify-content-center"> 
-      <h1 className="row justify-content-center mt-3">Safety Incident Card List</h1>
-  
-        <div className="mt-4 col-md-10 m row justify-content-center">
-        <div className="row justify-content-around">
-          <Button href="/addincident" variant="secondary" className="col-md-2 mb-4">Add Incident</Button>
-          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
+      (c.short_desc || '').toLowerCase().includes(q) ||
+      (c.what_happened || '').toLowerCase().includes(q) ||
+      (c.location || '').toLowerCase().includes(q) ||
+      staffName(c.raised_by).toLowerCase().includes(q)
+    )
+  })
+
+  return (
+    <div style={{ padding: '40px', maxWidth: '1300px', margin: '0 auto' }}>
+
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Safety Cards</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Record and track safety observations, near misses, and unsafe acts.
+          </p>
+        </div>
+        <Link to="/addincident">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
+            Add Safety Card
+          </Button>
+        </Link>
+      </div>
+
+      {/* Summary cards */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Cards',            value: safetycards.length,                                              color: NAVY },
+          { label: 'Ongoing',                value: safetycards.filter(c => c.status === 'Ongoing').length,          color: '#D97706' },
+          { label: 'Resolved',               value: safetycards.filter(c => c.status === 'Resolved').length,         color: '#059669' },
+          { label: 'No Action Required',     value: safetycards.filter(c => c.status === 'No Further Action Required').length, color: '#2563EB' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>{card.value}</div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Table card */}
+      <div style={{
+        backgroundColor: 'white', borderRadius: '12px',
+        padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>
+            All Cards ({filtered.length})
+          </h5>
+          <input
+            type="text"
+            placeholder="Search description, what happened, location, raised by..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '320px', outline: 'none',
+            }}
+          />
         </div>
 
-              {/* <Table striped bordered hover>
-              <thead>
-                  <tr>
-                    <th scope="col" className="col-1">ID</th>
-                    <th scope="col" className="col-3">Short Desc</th>
-                    <th scope="col" className="col-2">Date Raised</th>
-                    <th scope="col" className="col-2">Raised By</th>
-                    <th scope="col" className="col-1">More Info</th>
-                    <th scope="col" className="col-1">Delete</th>
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {safetycards.length === 0 ? 'No safety cards recorded yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '14px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Date</th>
+                <th style={{ color: NAVY }}>Description</th>
+                <th style={{ color: NAVY }}>Raised By</th>
+                <th style={{ color: NAVY }}>What Happened</th>
+                <th style={{ color: NAVY }}>Location</th>
+                <th style={{ color: NAVY }}>Status</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(c => {
+                const statusStyle = STATUS_STYLES[c.status] || {}
+                return (
+                  <tr key={c.id}>
+                    <td style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>
+                      {c.date_raised || '—'}
+                    </td>
+                    <td style={{ fontWeight: '600', maxWidth: '200px' }}>
+                      {c.short_desc || '—'}
+                    </td>
+                    <td style={{ color: '#555' }}>{staffName(c.raised_by)}</td>
+                    <td style={{ color: '#666', fontSize: '13px', maxWidth: '180px' }}>
+                      {c.what_happened || '—'}
+                    </td>
+                    <td style={{ color: '#666', fontSize: '13px' }}>{c.location || '—'}</td>
+                    <td>
+                      {c.status ? (
+                        <span style={{
+                          backgroundColor: statusStyle.bg || '#f3f4f6',
+                          color: statusStyle.color || '#6b7280',
+                          padding: '2px 8px', borderRadius: '4px',
+                          fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap',
+                        }}>
+                          {c.status}
+                        </span>
+                      ) : <span style={{ color: '#ccc' }}>—</span>}
+                    </td>
+                    <td>
+                      <Link to={`/editincident/${c.id}`} style={{ color: NAVY }}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </Link>
+                    </td>
+                    <td>
+                      <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(c.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {incidents.map((incident, index) => {
-                    return (
-                      <tr key={incident.id}>
-                        <td>{incident.id}</td>
-                        <td>{incident.short_desc}</td>
-
-                        <td>{incident.date_raised}</td> */}
-                        {/* <td>{incident.raised_by}</td> */}
-                        {/* <td>{staffs.find((staff) => staff.id === incident.raised_by)?.name}</td>
-                        <td>
-                            <Link to={`/editincident/${incident.id}`}>
-                            <FontAwesomeIcon icon={faPen } />
-                            </Link>
-                        </td>
-  
-                        <td className="delete" onClick={() => onDelete(incident.id)}> */}
-                          {/* <i class="fa fa-trash" aria-hidden="true"></i> */}
-                          {/* <FontAwesomeIcon icon="check-square" />
-      Your <FontAwesomeIcon icon="coffee" /> is hot and ready! */}
-      {/* <FontAwesomeIcon icon={faTrash } />
-                        </td>
-                      </tr>
-                       );
-                      })}
-                </tbody>
-
-
-              </Table> */}
-              
-              <div>
-              <div className="table-container mb-5">
-                <DataTable 
-                  customStyles={customStyles}
-                  columns={columns}
-                  data={records}
-                  selectableRows
-                  fixedHeader
-                  pagination
-                >
-                </DataTable>
-              </div>
-              </div>
-
-         
-            </div>
-          </div>
-    )
-
+                )
+              })}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </div>
+  )
 }

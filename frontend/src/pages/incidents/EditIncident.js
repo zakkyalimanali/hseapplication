@@ -1,605 +1,445 @@
-import {useEffect , useState , useContext} from 'react'
-import IncidentAPI from '../../API/IncidentAPI'
-import SafetyCardAPI from '../../API/SafetyCardAPI';
-import SafetyCardPhotosAPI from '../../API/SafetyCardPhotosAPI';
-import IncidentEventPhotosAPI from '../../API/IncidentEventPhotosAPI';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-import axios from 'axios'
-import { useParams } from 'react-router';
-import Table from 'react-bootstrap/Table';
-import IncidentEventPhotosAdd from './incidenteventphotos/IncidentEventPhotosAdd';
-import AuthContext from "../../context/AuthContext";
+import { useEffect, useState, useContext } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { Form, Button, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import API_BASE from "../../utils/apiBase";
+import { faArrowLeft, faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import SafetyCardAPI from '../../API/SafetyCardAPI'
+import SafetyCardPhotosAPI from '../../API/SafetyCardPhotosAPI'
+import AuthContext from '../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../utils/apiBase'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
+
+const WHAT_OPTIONS = [
+  '(A) Head Protection not worn', '(B) Eye protection not worn', '(C) Face protection not worn',
+  '(D) Ear protection not worn', '(E) Protective clothing not worn', '(F) Leg/Feet protection not worn',
+  '(G) Hand protection not worn', '(H) PPE in bad condition', '(I) Wrong PPE for the job',
+  '(J) Substandard PPE', '(K) PPE not worn properly', '(L) Respiration protection not worn',
+  '(M) Body Protection not worn', '(N) Wrong tool for the job', '(O) Tools in bad condition',
+  '(P) Tools not inspected', '(Q) Misuse', '(R) Uncertified tools',
+  '(S) Too heavy for manual lifting', '(T) Wrong mechanical manual lifting', '(U) Lifting tool not inspected',
+  '(V) Chemical not properly handled', '(W) Waste not properly disposed', '(X) In danger of struck',
+  '(Y) In danger of striking against', '(Z) In danger of caught by', '(AA) In danger of fall/slip/trip',
+  '(BB) In danger of electrocution', '(CC) In danger of burnt', '(DD) Access obstructed',
+  '(EE) Tools/materials disorganized', '(FF) Poor/Improper roping of', '(GG) Accumulation of rubbish',
+  '(HH) Water is being polluted', '(II) Air being polluted', '(JJ) Too much noise',
+  '(KK) Soil being polluted', '(LL) Poor illumination', '(MM) Work without permission',
+  '(NN) Wrong permit', '(OO) Procedures / Standard not followed', '(PP) Wrong instruction on permit',
+  '(QQ) Permit procedure not followed', '(RR) Inadequate HIP', '(SS) Toolbox talk not given',
+  '(TT) Driving recklessly', '(UU) Not wearing seat belt',
+  '(VV) Road traffic violation - eg. Speeding, no entry & etc', '(WW) Vehicles / Transportation abuse',
+  '(XX) Not inspected for compliance', '(YY) Vehicle defects', '(ZZ) Compliance',
+  '(AAA) Behavior & Attitude',
+]
+
+const WHY_OPTIONS = [
+  '(1) Not Informed', '(2) Language Problem', '(3) Not reading permit',
+  '(4) Wrong interpretation of risk', '(5) Wrong instruction', '(6) No procedure',
+  '(7) Lack of HSE Coaching / training', '(8) Behavior & Attitude (intentionally)',
+  '(9) Negligence', '(10) Working condition', '(11) Working layout',
+  '(12) The design of equipment / tools', '(13) Work habits', '(14) Lack of skill',
+  '(15) Time pressure', '(16) Not requested', '(17) Physical limitations',
+  '(18) Not supplied/available', '(19) Lack of ownership',
+  '(20) Behavior & Attitude (not intentionally)',
+]
+
+const LSR_OPTIONS = [
+  '(1) Work with a valid work permit when required',
+  '(2) Conduct gas test when required',
+  '(3) Verify isolation before work begins and use the specific life protecting equipment',
+  '(4) Obtain authorization before entering a confined space',
+  '(5) Obtain authorization before overriding or disabling safety critical equipment',
+  '(6) Protect yourself against a fall when working at height',
+  '(7) Do not walk under a suspended load',
+  '(8) Do not smoke outside designated smoking area',
+  '(9) No alcohol or drugs while working or driving',
+  '(10) While driving, do not use your phone and do not exceed limit',
+  '(11) Wear your seat belts',
+  '(12) Follow prescribed Journey Management Plan',
+]
 
 export default function EditIncident() {
-    const params = useParams()
-    console.log(params.id);
-    const [short_desc , setShortDesc] = useState('')
-    const [what_happened , setWhatHappened] = useState('')
-    const [why_happened , setWhyHappened] = useState('')
-    const [date_raised , setDateRaised] = useState('')
-    const [raised_by , setRaisedBy] = useState('')
-    const [life_saving_rule , setLifeSavingRule] = useState('')
-    const [findings , setFindings] = useState('')
-    const [incident_date , setIncidentDate] = useState('')
-    const [location , setLocation] = useState('')
-    const [discussion, setDiscussion] = useState('')
-    const [target_date  , setTargetDate] = useState('')
-    const [follow_up , setFollowUp] = useState('')
-    const [follow_up_remarks , setFollowUpRemarks] = useState('')
-    const [status , setStatus] = useState('')
-    // const [photo_image , setPhotoImage] = useState(null)
-    const [id , setId] = useState(null)
-    const [incidents , setIncidents] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [incidenteventphotos , setIncidentEventPhotos] = useState([])
-    // const [safetycardphotos , setSafetyCardPhotos] = useState([])
-    const [responsible_party , setResponsibleParty] = useState('')
-    const {authTokens} = useContext(AuthContext);
-    
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
 
-    useEffect(() => {
-        fetchStaff()
-        // fetchIncidentEventPhoto()
-        fetchSafetyCardPhotos()
-     },[]) 
+  const [short_desc, setShortDesc] = useState('')
+  const [what_happened, setWhatHappened] = useState('')
+  const [why_happened, setWhyHappened] = useState('')
+  const [date_raised, setDateRaised] = useState('')
+  const [raised_by, setRaisedBy] = useState('')
+  const [life_saving_rule, setLifeSavingRule] = useState('')
+  const [findings, setFindings] = useState('')
+  const [incident_date, setIncidentDate] = useState('')
+  const [location, setLocation] = useState('')
+  const [discussion, setDiscussion] = useState('')
+  const [target_date, setTargetDate] = useState('')
+  const [follow_up, setFollowUp] = useState('')
+  const [follow_up_remarks, setFollowUpRemarks] = useState('')
+  const [status, setStatus] = useState('')
+  const [responsible_party, setResponsibleParty] = useState('')
+  const [staffs, setStaffs] = useState([])
+  const [photos, setPhotos] = useState([])
 
-    //  const fetchIncidentEventPhoto = () => {
-    //   IncidentEventPhotosAPI.get('/')
-    //   .then((res) => {
-    //     setIncidentEventPhotos(res.data)
-    //   }).catch(console.log)
-    // }
-     const fetchSafetyCardPhotos = () => {
-      SafetyCardPhotosAPI.get('/')
-      .then((res) => {
-        setIncidentEventPhotos(res.data)
+  // Photo upload state
+  const [photoTitle, setPhotoTitle] = useState('')
+  const [photoDesc, setPhotoDesc] = useState('')
+  const [photoFile, setPhotoFile] = useState(null)
+
+  useEffect(() => {
+    const headers = { Authorization: `Bearer ${authTokens.access}` }
+
+    axios.get(`${API_BASE}/hseapp/safetycard/${params.id}/`, { headers })
+      .then(res => {
+        const d = res.data
+        setShortDesc(d.short_desc || '')
+        setWhatHappened(d.what_happened || '')
+        setWhyHappened(d.why_happened || '')
+        setDateRaised(d.date_raised || '')
+        setRaisedBy(d.raised_by || '')
+        setLifeSavingRule(d.life_saving_rule || '')
+        setFindings(d.findings || '')
+        setIncidentDate(d.incident_date || '')
+        setLocation(d.location || '')
+        setDiscussion(d.discussion || '')
+        setTargetDate(d.target_date || '')
+        setFollowUp(d.follow_up || '')
+        setFollowUpRemarks(d.follow_up_remarks || '')
+        setStatus(d.status || '')
+        setResponsibleParty(d.responsible_party || '')
       }).catch(console.log)
+
+    axios.get(`${API_BASE}/hseapp/staff/`, { headers })
+      .then(res => setStaffs(res.data)).catch(console.log)
+
+    fetchPhotos()
+  }, [params.id])
+
+  const fetchPhotos = () => {
+    SafetyCardPhotosAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setPhotos(res.data)).catch(console.log)
+  }
+
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      short_desc, what_happened, why_happened,
+      raised_by: raised_by || null, date_raised: date_raised || null,
+      life_saving_rule, findings,
+      incident_date: incident_date || null,
+      location, discussion,
+      target_date: target_date || null,
+      follow_up, follow_up_remarks, status, responsible_party,
     }
+    SafetyCardAPI.patch(`/${params.id}/`, item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => {
+      // Reload data after update
+      axios.get(`${API_BASE}/hseapp/safetycard/${params.id}/`, {
+        headers: { Authorization: `Bearer ${authTokens.access}` },
+      }).then(res => {
+        const d = res.data
+        setShortDesc(d.short_desc || ''); setWhatHappened(d.what_happened || '')
+        setWhyHappened(d.why_happened || ''); setDateRaised(d.date_raised || '')
+        setRaisedBy(d.raised_by || ''); setLifeSavingRule(d.life_saving_rule || '')
+        setFindings(d.findings || ''); setIncidentDate(d.incident_date || '')
+        setLocation(d.location || ''); setDiscussion(d.discussion || '')
+        setTargetDate(d.target_date || ''); setFollowUp(d.follow_up || '')
+        setFollowUpRemarks(d.follow_up_remarks || ''); setStatus(d.status || '')
+        setResponsibleParty(d.responsible_party || '')
+      })
+    }).catch(console.log)
+  }
 
+  const onAddPhoto = (e) => {
+    e.preventDefault()
+    const formData = new FormData()
+    formData.append('title', photoTitle)
+    formData.append('description', photoDesc)
+    if (photoFile) formData.append('incident_photo', photoFile)
+    formData.append('incident', params.id)
 
-    useEffect(() => {
-        setId(params.id);
-        dataIncident()
-    },[params.id])
+    SafetyCardPhotosAPI.post('/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authTokens.access}`,
+      },
+    }).then(() => {
+      fetchPhotos()
+      setPhotoTitle(''); setPhotoDesc(''); setPhotoFile(null)
+      e.target.reset()
+    }).catch(console.log)
+  }
 
-     const fetchStaff = () => {
-         axios.get(`${API_BASE}/hseapp/staff/`)
-         .then((res) => {
-             setStaffs(res.data)
-         })
-         .catch(console.log)
-     }
+  const onDeletePhoto = (id) => {
+    SafetyCardPhotosAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchPhotos()).catch(console.log)
+  }
 
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
+  const cardPhotos = photos.filter(p => p.incident === Number(params.id))
 
-    // const dataIncident = () => {
-    //   if (params.id) {
-    //     axios
-    //       .get(`${API_BASE}/hseapp/oneincident/${params.id}/`)
-    //       .then((res) => {
-    //         setIncidents(res.data);
-    //         setShortDesc(res.data.short_desc);
-    //         setWhatHappened(res.data.what_happened);
-    //         setWhyHappened(res.data.why_happened);
-    //         setRaisedBy(res.data.raised_by)
-    //         setDateRaised(res.data.date_raised)
-    //         setLifeSavingRule(res.data.life_saving_rule)
-    //         setFindings(res.data.findings)
-    //         setIncidentDate(res.data.incident_date)
-    //         setLocation(res.data.location)
-    //         setDiscussion(res.data.discussion)
-    //         setTargetDate(res.data.target_date)
-    //         setFollowUp(res.data.follow_up)
-    //         setFollowUpRemarks(res.data.follow_up_remarks)
-    //         setStatus(res.data.status)
-    //         setResponsibleParty(res.data.responsible_party)
-    //         setPhotoImage(res.data.photo_image)
-    //         console.log(incidents)
-    //       })
-    //       .catch(console.log);
-    //   }
-    // };
-    const dataIncident = () => {
-      if (params.id) {
-        axios
-          // .get(`${API_BASE}/hseapp/oneincident/${params.id}/`)
-          .get(`${API_BASE}/hseapp/safetycard/${params.id}/`)
-          .then((res) => {
-            setIncidents(res.data);
-            setShortDesc(res.data.short_desc);
-            setWhatHappened(res.data.what_happened);
-            setWhyHappened(res.data.why_happened);
-            setRaisedBy(res.data.raised_by)
-            setDateRaised(res.data.date_raised)
-            setLifeSavingRule(res.data.life_saving_rule)
-            setFindings(res.data.findings)
-            setIncidentDate(res.data.incident_date)
-            setLocation(res.data.location)
-            setDiscussion(res.data.discussion)
-            setTargetDate(res.data.target_date)
-            setFollowUp(res.data.follow_up)
-            setFollowUpRemarks(res.data.follow_up_remarks)
-            setStatus(res.data.status)
-            setResponsibleParty(res.data.responsible_party)
-            console.log(incidents)
-          })
-          .catch(console.log);
-      }
-    };
-    // const onSubmit = (e) => {
-    //     e.preventDefault();
-    //     let item = {short_desc, raised_by , date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party, photo_image}
-        // IncidentAPI.post('/', item).then(() => dataIncident());
-//         let token = authTokens.access
-//         IncidentAPI.post('/' , item,  {
-//                 headers: {
-//                   'content-type': 'multipart/form-data',
-//                   'Authorization': `Bearer ${token}`
-//                 },
-//                 responseType: 'blob'
-//               })
-//               .then(() => dataIncident())  
-              
-              
+  return (
+    <div style={{ padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
 
-//     }
-// console.log(authTokens)
-    const onSubmit = (e) => {
-        e.preventDefault();
-        let item = {short_desc, raised_by : raised_by|| null, date_raised: date_raised || null  ,findings ,what_happened , why_happened, life_saving_rule, incident_date: incident_date || null, location, discussion, target_date: target_date || null, follow_up, follow_up_remarks, status, responsible_party}
-        // IncidentAPI.post('/', item).then(() => dataIncident());
-        let token = authTokens.access
-        // IncidentAPI.post('/' , item,  {
-        SafetyCardAPI.post('/' , item,  {
-                headers: {
-                  'content-type': 'multipart/form-data',
-                  'Authorization': `Bearer ${token}`
-                },
-                responseType: 'blob'
-              })
-              .then(() => dataIncident())  
-              
-              
-
-    }
-console.log(authTokens)
-
-  
-const onUpdate = (id) => {
-  // let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party,  photo_image};
-  let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
-  let token = authTokens.access
-  // IncidentAPI.patch(`/${id}/`, item , {
-  SafetyCardAPI.patch(`/${id}/`, item , {
-    headers: {
-      'content-type': 'multipart/form-data',
-      'Authorization': `Bearer ${token}`
-    },
-    responseType: 'blob'
-  })
-  .then(() => {
-    setWhatHappened('')
-    setWhyHappened('')
-    setRaisedBy('')
-    setDateRaised('')
-    setLifeSavingRule('')
-    setFindings('')
-    setIncidentDate('')
-    setLocation('')
-    setDiscussion('')
-    setTargetDate('')
-    setFollowUp('')
-    setFollowUpRemarks('')
-    setStatus('')
-    setResponsibleParty('')
-    // setPhotoImage('')
-    setShortDesc(''); // Reset the short_desc state value after update
-    dataIncident();
-  });
-}
-// const onUpdate = (id) => {
-//   let item = {short_desc ,what_happened , why_happened , raised_by, date_raised, life_saving_rule,findings,incident_date , location, discussion , target_date, follow_up , follow_up_remarks , status , responsible_party};
-//   IncidentAPI.patch(`/${id}/`, item)
-//   .then(() => {
-//     setWhatHappened('')
-//     setWhyHappened('')
-//     setRaisedBy('')
-//     setDateRaised('')
-//     setLifeSavingRule('')
-//     setFindings('')
-//     setIncidentDate('')
-//     setLocation('')
-//     setDiscussion('')
-//     setTargetDate('')
-//     setFollowUp('')
-//     setFollowUpRemarks('')
-//     setStatus('')
-//     setResponsibleParty('')
-//     setShortDesc(''); // Reset the short_desc state value after update
-//     dataIncident();
-//   });
-// }
-    const onDelete = (id) => {
-        IncidentAPI.delete(`/${id}/`).then((res) => dataIncident())
-    }
-    function selectIncident(id) {
-        let item = incidents.filter((incident) => incident.id === id)[0];
-        setShortDesc(item.short_desc)
-        setWhatHappened(item.what_happened)
-        setWhyHappened(item.why_happened)
-        setRaisedBy(item.raised_by)
-        setDateRaised(item.date_raised)
-        setLifeSavingRule(item.life_saving_rule)
-        setFindings(item.findings)
-        setIncidentDate(item.incident_date)
-        setLocation(item.location)
-        setDiscussion(item.discussion)
-        setTargetDate(item.target_date)
-        setFollowUp(item.follow_up)
-        setFollowUpRemarks(item.follow_up_remarks)
-        setStatus(item.status)
-        setResponsibleParty(item.responsible_party)
-        // setPhotoImage(item.photo_image)
-        setId(item.id)
-    }
-
-    
-    // const handleImageChange = (e) => {
-    //   setPhotoImage(e.target.files[0]);
-    // };
-
-  //   const onDeleteIncidentPhotos = (id) => {
-  //     IncidentEventPhotosAPI.delete(`/${id}/`).then((res) => {
-  //      fetchIncidentEventPhoto();
-  //      }).catch(console.log)
-  //  }
-  
-    const onDeleteIncidentPhotos = (id) => {
-      SafetyCardPhotosAPI.delete(`/${id}/`).then((res) => {
-       fetchSafetyCardPhotos();
-       }).catch(console.log)
-   }
-  
-
-  return( 
-    <div className="container mt-3">
-      <div className="d-flex justify-content-center">
-        <h1 className="mt-3  mb-3">Update Safety Card</h1>
+      {/* Back + Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/incidenttable" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Safety Cards
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Safety Card</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the details of this safety card record.
+        </p>
       </div>
-      
-        <Form onSubmit={onSubmit} className="update mt-4">
-          <div className="row">
-            <div className='col-md-6'>
-              <div className="row">
-                <div className="col-md-10 ">
-                
-                    <Form.Group className="mb-3" controlId="formName">
-                      <Form.Label>Write a short Description</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        placeholder="Short description"
-                        value={short_desc}
-                        onChange={(e) => setShortDesc(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formPosition">
-                      <Form.Label>What Happened</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={what_happened}
-                        onChange={(e) => setWhatHappened(e.target.value)}
-                      >
-                        <option value=''>------</option>
-                        <option value='(A) Head Protection not worn'>(A) Head Protection not worn</option>
-                        <option value='(B) Eye protection not worn'>(B) Eye protection not worn</option>
-                        <option value='(C) Face protection not worn'>(C) Face protection not worn</option>
-                        <option value='(D) Ear protection not worn'>(D) Ear protection not worn</option>
-                        <option value='(E) Protective clothing not worn'>(E) Protective clothing not worn</option>
-                        <option value='(F) Leg/Feet protection not worn'>(F) Leg/Feet protection not worn</option>
-                        <option value='(G) Hand protection not worn'>(G) Hand protection not worn</option>
-                        <option value='(H) PPE in bad condition'>(H) PPE in bad condition</option>
-                        <option value='(I) Wrong PPE for the job'>(I) Wrong PPE for the job</option>
-                        <option value='(J) Substandard PPE'>(J) Substandard PPE</option>
-                        <option value='(K) PPE not worn properly'>(K) PPE not worn properly</option>
-                        <option value='(L) Respiration protection not worn'>(L) Respiration protection not worn</option>
-                        <option value='(M) Body Protection not worn'>(M) Body Protection not worn</option>
-                        <option value='(N) Wrong tool for the job'>(N) Wrong tool for the job</option>
-                        <option value='(O) Tools in bad condition'>(O) Tools in bad condition</option>
-                        <option value='(P) Tools not inpected'>(P) Tools not inpected</option>
-                        <option value='(Q) Misuse'>(Q) Misuse</option>
-                        <option value='(R) Uncertified tools'>(R) Uncertified tools</option>
-                        <option value='(S) Too heaving for manual lifting'>(S) Too heaving for manual lifting</option>
-                        <option value='(T) Wrong mechanical manual lifting'>(T) Wrong mechanical manual lifting</option>
-                        <option value='(U) Lifting tool not inspected'>(U) Lifting tool not inspected</option>
-                        <option value='(V) Chemical not properly handled'>(V) Chemical not properly handled</option>
-                        <option value='(W) Waste not properly disposed'>(W) Waste not properly disposed</option>
-                        <option value='(X) In danger of struck'>(X) In danger of struck</option>
-                        <option value='(Y) In danger of striking against'>(Y) In danger of striking against</option>
-                        <option value='(Z) In danger of caught by'>(Z) In danger of caught by</option>
-                        <option value='(AA) In danger of fall/slip/trip'>(AA) In danger of fall/slip/trip</option>
-                        <option value='(BB) In danger of electrocution'>(BB) In danger of electrocution</option>
-                        <option value='(CC) In danger of burnt'>(CC) In danger of burnt</option>
-                        <option value='(DD) Access obstructed'>(DD) Access obstructed</option>
-                        <option value='(EE) Tools/materials disorganized'>(EE) Tools/materials disorganized</option>
-                        <option value='(FF) Poor/Improper roping of'>(FF) Poor/Improper roping of</option>
-                        <option value='(GG) Accumulation of rubbish'>(GG) Accumulation of rubbish</option>
-                        <option value='(HH) Water is being polluted'>(HH) Water is being polluted</option>
-                        <option value='(II) Air being polluted'>(II) Air being polluted</option>
-                        <option value='(JJ) Too much noise'>(JJ) Too much noise</option>
-                        <option value='(KK) Soil being polluted'>(KK) Soil being polluted</option>
-                        <option value='(LL) Poor illumination'>(LL) Poor illumination</option>
-                        <option value='(MM) Work without permission'>(MM) Work without permission</option>
-                        <option value='(NN) Wrong permit'>(NN) Wrong permit</option>
-                        <option value='(OO) Procedures / Standard not followed'>(OO) Procedures / Standard not followed</option>
-                        <option value='(PP) Wrong instruction on permit'>(PP) Wrong instruction on permit</option>
-                        <option value='(QQ) Permit procedure not follow'>(QQ) Permit procedure not follow</option>
-                        <option value='(RR) Inadequate HIP'>(RR) Inadequate HIP</option>
-                        <option value='(SS) Toolbox talk not given'>(SS) Toolbox talk not given</option>
-                        <option value='(TT) Driving recklessly'>(TT) Driving recklessly</option>
-                        <option value='(UU) Not wearing seat belt'>(UU) Not wearing seat belt</option>
-                        <option value='(VV) Road traffic violation'>(VV) Road traffic violation - eg. Speeding, no entry & ect</option>
-                        <option value='(WW) Vehicles / Transportation abuse'>(WW) Vehicles / Transportation abuse</option>
-                        <option value='(XX) Not inspected for compliance'>(XX) Not inspected for compliance</option>
-                        <option value='(YY) Vehicle defects'>(YY) Vehicle defects</option>
-                        <option value='(ZZ) Compliance'>(ZZ) Compliance</option>
-                        <option value='(AAA) Behavior & Attitude'>(AAA) Behavior & Attitude</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Why it happened</Form.Label>
-                      <Form.Control
-                        as="select"
-                        placeholder="Why it happened"
-                        value={why_happened}
-                      onChange={(e) => setWhyHappened(e.target.value)}
-                    >
-                        <option value=''>------</option>
-                        <option value='(1) Not Informed'>(1) Not Informed</option>
-                        <option value='(2) Languague Problem'>(2) Languague Problem</option>
-                        <option value='(3) Not reasing permit'>(3) Not reasing permit</option>
-                        <option value='(4) Wrong interpretation of risk'>(4) Wrong interpretation of risk</option>
-                        <option value='(5) Wrong instruction'>(5) Wrong instruction</option>
-                        <option value='(6) No procedure'>(6) No procedure</option>
-                        <option value='(7) Lack of HSE Coaching / training'>(7) Lack of HSE Coaching / training</option>
-                        <option value='(8) Behavior & Attitude (intentionally)'>(8) Behavior & Attitude (intentionally)</option>
-                        <option value='(9) Negligence'>(9) Negligence</option>
-                        <option value='(10) Working condition'>(10) Working condition</option>
-                        <option value='(11) Working layout'>(11) Working layout</option>
-                        <option value='(12) The design of equipment / tools'>(12) The design of equipment / tools</option>
-                        <option value='(13) Work habits'>(13) Work habits</option>
-                        <option value='(14) Lack of skill'>(14) Lack of skill</option>
-                        <option value='(15) Time pressure'>(15) Time pressure</option>
-                        <option value='(16) Not requested'>(16) Not requested</option>
-                        <option value='(17) Physical limitations'>(17) Physical limitations</option>
-                        <option value='(18) Not supplied/available'>(18) Not supplied/available</option>
-                        <option value='(19) Lack of ownership'>(19) Lack of ownership</option>
-                        <option value='(20) Behavior & Attitude (not intentionally)'>(20) Behavior & Attitude (not intentionally)</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Date it happened</Form.Label>
-                      <Form.Control
-                        type="date"
-                        placeholder="Date it happened"
-                        value={date_raised}
-                        //  onChange={(e) => setDateRaised(e.target.value)}
-                        onChange={(e) => {
-                          const selectedDate = e.target.value;
-                          const formattedDate = selectedDate !== "" ? selectedDate : null;
-                          setDateRaised(formattedDate);
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffName">
-                      <Form.Label>Raised by: </Form.Label>
-                      <Form.Control
-                        as ="select"
-                        placeholder="Raised By"
-                        value={raised_by}
-                        onChange={(e) => setRaisedBy(e.target.value)}
-                      >
-                      <option value=''>Select An Option</option>
-                      {staffs.map(staff => {
-                        return <option key={staff.id} value={staff.id}>{staff.name}</option>
-                      })}
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Life Saving Rule</Form.Label>
-                      <Form.Control
-                        as="select"
-                        placeholder="Life Saving Rule"
-                        value={life_saving_rule}
-                        onChange={(e) => setLifeSavingRule(e.target.value)}
-                      >
-                        <option value=''>------</option>
-                        <option value='(1) Work with a valid work permit when required'>(1) Work with a valid work permit when required</option>
-                        <option value='(2) Conduct gas test when required'>(2) Conduct gas test when required</option>
-                        <option value='(3) Verify isolation before work begins and use the specific life protecting equipment'>(3) Verify isolation before work begins and use the specific life protecting equipment</option>
-                        <option value='(4) Obtain authorization before entering a confined space'>(4) Obtain authorization before entering a confined space</option>
-                        <option value='(5) Obatin authorization before overriding or disabiling safety critical equipment'>(5) Obatin authorization before overriding or disabiling safety critical equipment</option>
-                        <option value='(6) Protect yourself against a fall when working at height'>(6) Protect yourself against a fall when working at height</option>
-                        <option value='(7) Do not walk under a suspended load'>(7) Do not walk under a suspended load</option>
-                        <option value='(8) Do not smoke outside designated smoking area'>(8) Do not smoke outside designated smoking area</option>
-                        <option value='(9) No alcohol or drugs while working or driving'>(9) No alcohol or drugs while working or driving</option>
-                        <option value='(10) While driving , do not use your phone and do not exceed limit'>(10) While driving , do not use your phone and do not exceed limit</option>
-                        <option value='(11) Wear your seat belts'>(11) Wear your seat belts</option>
-                        <option value='(12) Follow prescribed Journey Management Plan'>(12) Follow prescribed Journey Management Plan</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Findings</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        placeholder="Findings"
-                        value={findings}
-                        onChange={(e) => setFindings(e.target.value)}
-                      > 
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                        <Form.Label>Status</Form.Label>
-                        <Form.Control
-                          as="select"
-                          placeholder="status"
-                          value={status}
-                          onChange={(e) => setStatus(e.target.value)}
-                        >
-                          <option value=''>------</option>
-                          <option value='No Further Action Required'>No Further Action Required</option>
-                          <option value='Resolved'>Resolved</option>
-                          <option value='Ongoing'>Ongoing</option>
-                        </Form.Control>
-                      </Form.Group>
 
+      {/* Main form */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '32px' }}>
+        <Form onSubmit={onUpdate}>
+          <div className="row">
+
+            {/* Left column */}
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Short Description</Form.Label>
+                <Form.Control
+                  as="textarea" rows={3}
+                  placeholder="Brief description of what was observed..."
+                  value={short_desc} onChange={e => setShortDesc(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>What Happened</Form.Label>
+                <Form.Select value={what_happened} onChange={e => setWhatHappened(e.target.value)}>
+                  <option value="">Select...</option>
+                  {WHAT_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Why It Happened</Form.Label>
+                <Form.Select value={why_happened} onChange={e => setWhyHappened(e.target.value)}>
+                  <option value="">Select...</option>
+                  {WHY_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </Form.Select>
+              </Form.Group>
+
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3">
+                    <Form.Label style={L}>Date Raised</Form.Label>
+                    <Form.Control type="date" value={date_raised} onChange={e => setDateRaised(e.target.value || null)} />
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3">
+                    <Form.Label style={L}>Incident Date</Form.Label>
+                    <Form.Control type="date" value={incident_date} onChange={e => setIncidentDate(e.target.value || null)} />
+                  </Form.Group>
                 </div>
               </div>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Raised By</Form.Label>
+                <Form.Select value={raised_by} onChange={e => setRaisedBy(e.target.value)}>
+                  <option value="">Select staff member...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Life Saving Rule</Form.Label>
+                <Form.Select value={life_saving_rule} onChange={e => setLifeSavingRule(e.target.value)}>
+                  <option value="">Select rule...</option>
+                  {LSR_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                </Form.Select>
+              </Form.Group>
             </div>
-            <div class="col">
+
+            {/* Right column */}
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Location</Form.Label>
+                <Form.Control
+                  type="text" placeholder="Where did this occur?"
+                  value={location} onChange={e => setLocation(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Findings</Form.Label>
+                <Form.Control
+                  as="textarea" rows={3}
+                  placeholder="What was found during investigation..."
+                  value={findings} onChange={e => setFindings(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Discussion</Form.Label>
+                <Form.Control
+                  as="textarea" rows={3}
+                  placeholder="Summary of discussion held..."
+                  value={discussion} onChange={e => setDiscussion(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Status</Form.Label>
+                <Form.Select value={status} onChange={e => setStatus(e.target.value)}>
+                  <option value="">Select status...</option>
+                  <option>Ongoing</option>
+                  <option>Resolved</option>
+                  <option>No Further Action Required</option>
+                </Form.Select>
+              </Form.Group>
+
               <div className="row">
-                <div className="col-md-10 ">
+                <div className="col-md-6">
+                  <Form.Group className="mb-3">
+                    <Form.Label style={L}>Target Date</Form.Label>
+                    <Form.Control type="date" value={target_date} onChange={e => setTargetDate(e.target.value || null)} />
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-3">
+                    <Form.Label style={L}>Follow Up</Form.Label>
+                    <Form.Select value={follow_up} onChange={e => setFollowUp(e.target.value)}>
+                      <option value="">Select...</option>
+                      <option>Yes</option>
+                      <option>No</option>
+                    </Form.Select>
+                  </Form.Group>
+                </div>
+              </div>
 
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Incident Date</Form.Label>
-                      <Form.Control
-                        type="date"
-                        placeholder="Incident Date"
-                        value={incident_date}
-                        //  onChange={(e) => setIncidentDate(e.target.value)}
-                        onChange={(e) => {
-                          const selectedDate = e.target.value;
-                          const formattedDate = selectedDate !== "" ? selectedDate : null;
-                          setIncidentDate(formattedDate);
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Location</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Location"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Discussion</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        placeholder="Discussion"
-                        value={discussion}
-                        onChange={(e) => setDiscussion(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Target Date</Form.Label>
-                      <Form.Control
-                        type="date"
-                        placeholder="Target Date"
-                        value={target_date}
-                        //  onChange={(e) => setTargetDate(e.target.value)}
-                        onChange={(e) => {
-                          const selectedDate = e.target.value;
-                          const formattedDate = selectedDate !== "" ? selectedDate : null;
-                          setTargetDate(formattedDate);
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Follow Up</Form.Label>
-                      <Form.Control
-                        as="select"
-                        placeholder="Follow Up"
-                        value={follow_up}
-                        onChange={(e) => setFollowUp(e.target.value)}
-                      >
-                        <option value=''>------</option>
-                        <option value='Yes'>Yes</option>
-                        <option value='No'>No</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-                      <Form.Label>Follow Up Remarks</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        placeholder="Follow Up Remarks"
-                        value={follow_up_remarks}
-                        onChange={(e) => setFollowUpRemarks(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formName">
-                      <Form.Label>Responsible Party</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter Responsible Party"
-                        value={responsible_party}
-                        onChange={(e) => setResponsibleParty(e.target.value)}
-                      />
-                    </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Follow Up Remarks</Form.Label>
+                <Form.Control
+                  as="textarea" rows={2}
+                  placeholder="Notes on follow-up actions taken..."
+                  value={follow_up_remarks} onChange={e => setFollowUpRemarks(e.target.value)}
+                />
+              </Form.Group>
 
-
-                    
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Responsible Party</Form.Label>
+                <Form.Control
+                  type="text" placeholder="Name of responsible person or team"
+                  value={responsible_party} onChange={e => setResponsibleParty(e.target.value)}
+                />
+              </Form.Group>
             </div>
           </div>
-        </div>
 
-        </div>
-        <IncidentEventPhotosAdd incidentphoto={params.id}/>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Link to="/incidenttable">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Return
+              </Button>
+            </Link>
+          </div>
+        </Form>
+      </div>
 
-              <h3 className="float-left">Incident Photos</h3>
+      {/* Photos section */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <h5 style={{ color: NAVY, fontWeight: '700', marginBottom: '20px' }}>Evidence Photos</h5>
 
-              <Table striped bordered hover className='mt-3'>
-                <thead>
-                    <tr>
-                        <th scope="col" className="col-1">ID</th>
-                        <th scope="col" className="col-2">Title</th>
-                        <th scope="col" className="col-4">Description</th>
-                        <th scope="col" className="col-3">Image</th>
-                        <th scope="col" className="col-1">Edit</th>
-                        <th scope="col" className="col-1">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
+        {/* Upload form */}
+        <Form onSubmit={onAddPhoto} style={{ marginBottom: '28px' }}>
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Photo Title</Form.Label>
+                <Form.Control
+                  type="text" placeholder="e.g. Site observation photo"
+                  value={photoTitle} onChange={e => setPhotoTitle(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Description</Form.Label>
+                <Form.Control
+                  type="text" placeholder="Brief description of photo"
+                  value={photoDesc} onChange={e => setPhotoDesc(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Photo File</Form.Label>
+                <Form.Control type="file" onChange={e => setPhotoFile(e.target.files[0])} />
+              </Form.Group>
+            </div>
+          </div>
+          <Button
+            type="submit"
+            style={{ backgroundColor: NAVY, border: 'none', fontWeight: '600', padding: '8px 24px' }}
+          >
+            Upload Photo
+          </Button>
+        </Form>
 
-                    {incidenteventphotos.filter ((incidenteventphoto) => incidenteventphoto.incident === Number(params.id))
-                      .map((incidenteventphoto) => {  
-                        return (
-                            <tr key={incidenteventphoto.id}>
-                                <td>{incidenteventphoto.id}</td>
-                                <td>{incidenteventphoto.title}</td>
-                                <td>{incidenteventphoto.description}</td>
-                                <td><a href={`${incidenteventphoto.incident_photo}`} download={incidenteventphoto.incident_photo}><div className="d-flex justify-content-center"><img className="col-md-6 " src={incidenteventphoto.incident_photo} alt={incidenteventphoto.incident_photo}/></div></a> 
-                                </td>
-                                <td><Link to={`/incidenteventphotosedit/${incidenteventphoto.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
-                                <td className='delete' onClick={() => onDeleteIncidentPhotos(incidenteventphoto.id)}><FontAwesomeIcon icon={faTrash } /></td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-                </Table>  
-                  <div className="text-center mt-3 pt-3 pb-5">
-                        <Button
-                          variant="success"
-                          type="button"
-                          onClick={(e) => onUpdate(id)}
-                          className="mx-2"
-                        >
-                          Update
-                        </Button>
-                        <Link  to="/incidenttable/">
-                          <Button>Return</Button>
-                        </Link>
-                      </div>
-      </Form>
+        {/* Photos table */}
+        {cardPhotos.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '24px 0', margin: 0 }}>
+            No photos uploaded yet.
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '14px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Title</th>
+                <th style={{ color: NAVY }}>Description</th>
+                <th style={{ color: NAVY }}>Photo</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cardPhotos.map(p => (
+                <tr key={p.id}>
+                  <td style={{ fontWeight: '600' }}>{p.title || '—'}</td>
+                  <td style={{ color: '#666' }}>{p.description || '—'}</td>
+                  <td>
+                    {p.incident_photo ? (
+                      <a href={p.incident_photo} download>
+                        <img
+                          src={p.incident_photo}
+                          alt={p.title}
+                          style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '6px' }}
+                        />
+                      </a>
+                    ) : <span style={{ color: '#ccc' }}>—</span>}
+                  </td>
+                  <td>
+                    <Link to={`/incidenteventphotosedit/${p.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDeletePhoto(p.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
     </div>
   )
 }
-

@@ -1,278 +1,190 @@
-import {useState , useEffect, useContext} from 'react'
-import JobSafetyAnalysisAPI from '../../API/JobSafetyAnalysisAPI';
-import JobSafetyEquipmentAPI from '../../API/JobSafetyEquipmentAPI';
-import StaffAPI from '../../API/StaffAPI';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import axios from 'axios';
-import { Link , useNavigate } from 'react-router-dom';
-import AuthContext from "../../context/AuthContext";
-import Table from 'react-bootstrap/Table';
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
-import JobSafetyEquipmentAdd from './jobsafetyequipment/JobSafetyEquipmentAdd';
-import { useParams } from 'react-router-dom';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import JobSafetyAnalysisAPI from '../../API/JobSafetyAnalysisAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
 
-function JobSafetyAnalysisAdd() {
-    // for APIs
-    const [staffs , setStaffs] = useState([])
-    const [jobsafetyanalysises , setJobSafetyAnalysises ] = useState([])
-    const [jobsafetyequipments , setJobSafetyEquipments] = useState([])
-    // for varibales
-    const [job_title , setJobTitle] = useState('')
-    const [jsa_id , setJsaId] = useState('')
-    const [job_performer , setJobPerformer] = useState('')
-    const [supervisor , setSupervisor] = useState('')
-    const [analysis_by , setAnalysisBy] = useState('')
-    const [company , setCompany] = useState('')
-    const [location , setLocation] = useState('')
-    const [department , setDepartment ] = useState('')
-    const [reviewed_by , setReviewedBy] = useState('')
-    const [date_raised , setDateRaised] = useState('')
-    const [id , setId] = useState(null)
-    const params = useParams()
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-    // for Others
-    const navigate = useNavigate()
+export default function JobSafetyAnalysisAdd() {
+  const { authTokens } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     setId(params.id)
-    // },[params.id])
+  const [staffs, setStaffs] = useState([])
+  const [job_title, setJobTitle] = useState('')
+  const [jsa_id, setJsaId] = useState('')
+  const [job_performer, setJobPerformer] = useState('')
+  const [supervisor, setSupervisor] = useState('')
+  const [analysis_by, setAnalysisBy] = useState('')
+  const [reviewed_by, setReviewedBy] = useState('')
+  const [company, setCompany] = useState('')
+  const [location, setLocation] = useState('')
+  const [department, setDepartment] = useState('')
+  const [date_raised, setDateRaised] = useState('')
 
-    useEffect(() => {
-        fetchStaff()
-        fetchJobSafetyAnalysis()
-        // fetchJobSafetyEquipment()
-    },[]) 
+  useEffect(() => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [])
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const item = {
+      job_title,
+      jsa_id,
+      job_performer: job_performer || null,
+      supervisor: supervisor || null,
+      analysis_by: analysis_by || null,
+      reviewed_by: reviewed_by || null,
+      company,
+      location,
+      department,
+      date_raised: date_raised || null,
     }
+    JobSafetyAnalysisAPI.post('/', item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate('/jobsafetyanalysislist')).catch(console.log)
+  }
 
-    const fetchJobSafetyAnalysis = () => {
-        JobSafetyAnalysisAPI.get('/')
-        .then((res) => {
-            setJobSafetyAnalysises(res.data)
-        })
-        .catch(console.log)
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
-    const fetchJobSafetyEquipment = () => {
-      JobSafetyEquipmentAPI.get('/')
-      .then((res) => {
-        setJobSafetyEquipments(res.data)
-      })
-      .catch(console.log)
-    }
-
-    // const jobPerformerValue = job_performer === '' ? null : job_performer;
-
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            job_title,
-            jsa_id,
-            // job_performer : jobPerformerValue,
-            job_performer : job_performer || null,
-            supervisor : supervisor || null,
-            analysis_by : analysis_by || null,
-            company,
-            location,
-            department,
-            reviewed_by : reviewed_by || null,
-            date_raised : date_raised || null, 
-        }
-        navigate(-1);
-        JobSafetyAnalysisAPI.post('/', item).then(() => fetchJobSafetyAnalysis())
-        .catch((error) => {
-          console.log("Error:", error);
-        })
-
-    }
-
-
+  const StaffSelect = ({ label, value, onChange }) => (
+    <Form.Group className="mb-3">
+      <Form.Label style={L}>{label}</Form.Label>
+      <Form.Select value={value} onChange={onChange}>
+        <option value="">Select staff member...</option>
+        {staffs.map(s => <option key={s.id} value={s.id}>{s.name} ({s.position})</option>)}
+      </Form.Select>
+    </Form.Group>
+  )
 
   return (
-    <div className="container pb-5">
+    <div style={{ padding: '40px', maxWidth: '860px', margin: '0 auto' }}>
+
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/jobsafetyanalysislist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to JSA List
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>New Job Safety Analysis</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Create a new JSA record before adding job steps, equipment, and hazards.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onSubmit}>
+
           <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left mt-3">Create a JSA</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Date Raised</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Date Raised"
-                    value={date_raised}
-                    onChange={(e) => {
-                        const selectedDate = e.target.value;
-                        const formattedDate = selectedDate !== "" ? selectedDate : null;
-                        setDateRaised(formattedDate);
-                      }}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Job Title</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Job Title"
-                    value={job_title}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>JSA Id</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="JSA Id"
-                    value={jsa_id}
-                    onChange={(e) => setJsaId(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Job Performer</Form.Label>
-                  <Form.Control
-                    as ="select"
-                    placeholder="Job Performer"
-                    value={job_performer}
-                    onChange={(e) => setJobPerformer(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Supervisor</Form.Label>
-                  <Form.Control
-                    as ="select"
-                    placeholder="Supervisor"
-                    value={supervisor}
-                    onChange={(e) => setSupervisor(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Analysed By</Form.Label>
-                  <Form.Control
-                    as ="select"
-                    placeholder="Analysed By"
-                    value={analysis_by}
-                    onChange={(e) => setAnalysisBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Reviewed By</Form.Label>
-                  <Form.Control
-                    as ="select"
-                    placeholder="Reviewed By"
-                    value={reviewed_by}
-                    onChange={(e) => setReviewedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Company</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Company"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Location</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
-                </Form.Group>
-                
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Department</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Department"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                  />
-                </Form.Group>
-
-                {/* <JobSafetyEquipmentAdd jobsafetyanalysis = {params.id}/>
-
-                <h3 className="float-left">Safety Equipment</h3>
-
-                <Table striped bordered hover className='mt-3'>
-                  <thead>
-                    <tr>
-                      <th scope="col" className="col-1">ID</th>
-                      <th scope="col" className="col-1">Safety Equipment</th>
-                      <th scope="col" className="col-1">Edit</th>
-                      <th scope="col" className="col-1">Delete</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {jobsafetyequipments.filter((jobsafetyequipment) => jobsafetyequipment.job_safety_analysis === Number(params.id))
-                    .map((jobsafetyequipment) => {
-                      return (
-                        <tr key={jobsafetyequipment.id}>
-                          <td>{jobsafetyequipment.id}</td>
-                          <td>{jobsafetyequipment.safety_equipment}</td>
-                          <td>Edit</td>
-                          <td>Delete</td>
-
-                        </tr>
-                      )
-                    })
-                    
-                    }
-                  </tbody>
-
-                </Table> */}
-
-                <div className="mt-3 float-right">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={willSubmitTheEntryIntoDatabase}
-                    className="mx-2"
-                  >
-                    Save
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Job Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. Hot Work, Confined Space Entry..."
+                  value={job_title}
+                  onChange={e => setJobTitle(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>JSA ID</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. JSA-2024-001"
+                  value={jsa_id}
+                  onChange={e => setJsaId(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Date Raised</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={date_raised}
+                  onChange={e => setDateRaised(e.target.value || '')}
+                />
+              </Form.Group>
+            </div>
           </div>
-        </div>
+
+          <div className="row">
+            <div className="col-md-6">
+              <StaffSelect label="Job Performer" value={job_performer} onChange={e => setJobPerformer(e.target.value)} />
+            </div>
+            <div className="col-md-6">
+              <StaffSelect label="Supervisor" value={supervisor} onChange={e => setSupervisor(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-6">
+              <StaffSelect label="Analysed By" value={analysis_by} onChange={e => setAnalysisBy(e.target.value)} />
+            </div>
+            <div className="col-md-6">
+              <StaffSelect label="Reviewed By" value={reviewed_by} onChange={e => setReviewedBy(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Company</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Company name"
+                  value={company}
+                  onChange={e => setCompany(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Work location"
+                  value={location}
+                  onChange={e => setLocation(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-4">
+                <Form.Label style={L}>Department</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Department"
+                  value={department}
+                  onChange={e => setDepartment(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              disabled={!job_title}
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save JSA
+            </Button>
+            <Link to="/jobsafetyanalysislist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
+          </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default JobSafetyAnalysisAdd

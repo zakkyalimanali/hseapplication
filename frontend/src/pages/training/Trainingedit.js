@@ -1,150 +1,170 @@
-import React , {useState, useEffect} from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import TrainingAPI from '../../API/TrainingAPI'
 import StaffAPI from '../../API/StaffAPI'
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext'
 import axios from 'axios'
-import API_BASE from "../../utils/apiBase";
+import API_BASE from '../../utils/apiBase'
 
-function Trainingedit() {
-    const params = useParams()
-    const [trainingsLists , setTrainingsList] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [staff_name , setStaffName] = useState('')
-    const [training_date , setTrainingDate] = useState('')
-    const [training_expiry , setTrainingExpiry] = useState('')
-    const [training , setTraining] = useState('')
-    const [training_provider, setTrainingProvider] = useState('')
-    const [id , setId] = useState(null)
-    
-    useEffect(() => {
-        fetchTraining()
-        setId(params.id)
-    }, [params.id])
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-    useEffect(() => {
-        fetchStaff()
-    },[])
+function expiryStatus(expiryDate) {
+  if (!expiryDate) return null
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const expiry = new Date(expiryDate)
+  const diffDays = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24))
+  if (diffDays < 0)   return { label: 'Expired',       bg: '#FEE2E2', color: '#DC2626' }
+  if (diffDays <= 30) return { label: 'Expiring Soon',  bg: '#FEF3C7', color: '#D97706' }
+  return               { label: 'Valid',               bg: '#D1FAE5', color: '#059669' }
+}
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data);
-        }).catch(console.log)
+export default function Trainingedit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
+
+  const [staff_name, setStaffName] = useState('')
+  const [training, setTraining] = useState('')
+  const [training_provider, setTrainingProvider] = useState('')
+  const [training_date, setTrainingDate] = useState('')
+  const [training_expiry, setTrainingExpiry] = useState('')
+  const [staffs, setStaffs] = useState([])
+
+  useEffect(() => {
+    const headers = { Authorization: `Bearer ${authTokens.access}` }
+
+    axios.get(`${API_BASE}/hseapp/training/${params.id}/`, { headers })
+      .then(res => {
+        const d = res.data
+        setStaffName(d.staff_name || '')
+        setTraining(d.training || '')
+        setTrainingProvider(d.training_provider || '')
+        setTrainingDate(d.training_date || '')
+        setTrainingExpiry(d.training_expiry || '')
+      }).catch(console.log)
+
+    StaffAPI.get('/', { headers })
+      .then(res => setStaffs(res.data)).catch(console.log)
+  }, [params.id])
+
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      staff_name: staff_name || null,
+      training,
+      training_provider,
+      training_date: training_date || null,
+      training_expiry: training_expiry || null,
     }
+    TrainingAPI.patch(`/${params.id}/`, item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate('/traininglist')).catch(console.log)
+  }
 
-    const fetchTraining = () => {
-        axios.get(`${API_BASE}/hseapp/training/${params.id}/`)
-        .then((res) => {
-            setTrainingsList(res.data)
-            setTrainingDate(res.data.training_date)
-            setTrainingExpiry(res.data.training_expiry)
-            setTrainingProvider(res.data.training_provider)
-            setTraining(res.data.training)
-            setStaffName(res.data.staff_name)
-        })
-        .catch(console.log)
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
+  const status = expiryStatus(training_expiry)
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        let item = {staff_name, training_date, training_expiry, training, training_provider};
-        TrainingAPI.post('/', item).then(() => fetchTraining())
-    }
-
-    const onUpdate = (id) => {
-        let item = {staff_name, training_date, training_expiry, training, training_provider};
-        TrainingAPI.patch(`/${id}/`, item).then(() => {
-            setStaffName('')
-            setTrainingDate('')
-            setTraining('')
-            setTrainingExpiry('')
-            setTrainingProvider('')
-            setTrainingsList()
-        }
-        )
-    } 
-
-    
   return (
-    <div className="container mt-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left">Create a new Staff</h3>
-              
-              <Form onSubmit={onSubmit} className="mt-4">
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Staff Name</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Staff Name"
-                    value={staff_name}
-                    onChange={(e) => setStaffName(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Training"
-                    value={training}
-                    onChange={(e) => setTraining(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training Provider</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Training Provider"
-                    value={training_provider}
-                    onChange={(e) => setTrainingProvider(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Training Date"
-                    value={training_date}
-                    onChange={(e) => setTrainingDate(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Training Expiry</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Training Expiry"
-                    value={training_expiry}
-                    onChange={(e) => setTrainingExpiry(e.target.value)}
-                  />
-                </Form.Group>
-                <div className="mt-3 float-right">
-              <Link to="/traininglist/">
-                <Button
-                  variant="success"
-                  type="button"
-                  onClick={(e) => onUpdate(id)}
-                  className="mx-2"
-                >
-                  Update
-                </Button>
-              </Link>
-            </div>
-
-                </Form>
-            </div>
+      {/* Back + Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/traininglist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Training Records
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Training Record</h2>
+          {status && (
+            <span style={{
+              backgroundColor: status.bg, color: status.color,
+              padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: '700',
+            }}>
+              {status.label}
+            </span>
+          )}
         </div>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update this staff training certification.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Staff Member</Form.Label>
+            <Form.Select value={staff_name} onChange={e => setStaffName(e.target.value)}>
+              <option value="">Select staff member...</option>
+              {staffs.map(s => (
+                <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Training / Certification</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="e.g. Working at Heights, First Aid, HAZMAT..."
+              value={training}
+              onChange={e => setTraining(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Training Provider</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="e.g. Red Cross, NIOSH, Internal..."
+              value={training_provider}
+              onChange={e => setTrainingProvider(e.target.value)}
+            />
+          </Form.Group>
+
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group className="mb-4">
+                <Form.Label style={L}>Training Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={training_date}
+                  onChange={e => setTrainingDate(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-6">
+              <Form.Group className="mb-4">
+                <Form.Label style={L}>Expiry Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={training_expiry}
+                  onChange={e => setTrainingExpiry(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Link to="/traininglist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
+          </div>
+
+        </Form>
+      </div>
     </div>
   )
 }
-
-export default Trainingedit

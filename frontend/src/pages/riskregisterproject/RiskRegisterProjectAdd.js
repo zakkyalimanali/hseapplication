@@ -1,125 +1,92 @@
-import {useState , useEffect, useContext} from 'react'
-import RiskRegisterProjectAPI from '../../API/RiskRegisterProjectAPI';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import axios from 'axios';
-import { Link , useNavigate } from 'react-router-dom';
-import StaffAPI from '../../API/StaffAPI';
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import RiskRegisterProjectAPI from '../../API/RiskRegisterProjectAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
 
-import React from 'react'
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function RiskRegisterProjectAdd() {
-    const [riskregisterprojects , setRiskRegisterProjects] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [project_name , setProjectName] = useState('')
-    const [raised_by , setRaisedBy] = useState('')
-    // const [reviewed_by , setReviewedBy] = useState('')
-    const navigate = useNavigate()
+export default function RiskRegisterProjectAdd() {
+  const { authTokens } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchRiskRegisterProject()
-        fetchStaff()
-    },[])
-    
-    const fetchRiskRegisterProject = () => {
-        RiskRegisterProjectAPI.get('/')
-        .then((res) => {
-            setRiskRegisterProjects(res.data)
-        })
-        .catch(console.log)
-    }
+  const [project_name, setProjectName] = useState('')
+  const [raised_by, setRaisedBy] = useState('')
+  const [staffs, setStaffs] = useState([])
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
+  useEffect(() => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [])
 
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            project_name,
-            raised_by : raised_by || null,
-            // reviewed_by: reviewed_by || null,
-        }
-        navigate(-1);
-        RiskRegisterProjectAPI.post('/', item).then(()=> 
-            fetchRiskRegisterProject())
-            .catch((error) => {
-                console.log("Error:", error);
-              })
-    }
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const item = { project_name, raised_by: raised_by || null }
+    RiskRegisterProjectAPI.post('/', item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate('/riskregisterprojectlist')).catch(console.log)
+  }
 
-
-
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
   return (
-    <div className="container mt-5 pb-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left mt-5">Create a New Permit To Work</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Project Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Project Name"
-                    value={project_name}
-                    onChange={(e) => setProjectName(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Raised By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Raised By"
-                    value={raised_by}
-                    onChange={(e) => setRaisedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-                  </Form.Control>
-                </Form.Group>
-                {/* <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Reviewed By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Reviewed By"
-                    value={reviewed_by}
-                    onChange={(e) => setReviewedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-                  </Form.Control>
-                </Form.Group> */}
-                
-        
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
-                
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/riskregisterprojectlist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Risk Register
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>New Project</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Create a new project to begin adding risk entries.
+        </p>
+      </div>
 
-                <div className="mt-3 float-right">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={willSubmitTheEntryIntoDatabase}
-                    className="mx-2"
-                  >
-                    Save
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onSubmit}>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Project Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="e.g. Site A Expansion, Pipeline Project 2024..."
+              value={project_name}
+              onChange={e => setProjectName(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Raised By</Form.Label>
+            <Form.Select value={raised_by} onChange={e => setRaisedBy(e.target.value)}>
+              <option value="">Select staff member...</option>
+              {staffs.map(s => (
+                <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              disabled={!project_name}
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Project
+            </Button>
+            <Link to="/riskregisterprojectlist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
           </div>
-        </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default RiskRegisterProjectAdd

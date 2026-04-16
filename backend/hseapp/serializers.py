@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard, SafetyCardPhotos
+from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard, SafetyCardPhotos, SafeWorkPractice, HseAudit, EmergencyPlan, RiskManagement, Report, WorkplaceRule, RiskMitigation
 # from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
@@ -263,4 +263,37 @@ class SafetyCardPhotosSerializer(serializers.ModelSerializer):
     #     rep['name'] = instance.raised_by.name
     #     return rep
 
+class SafeWorkPracticeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SafeWorkPractice
+        fields = '__all__'
 
+class HseAuditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HseAudit
+        fields = '__all__'
+
+class EmergencyPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmergencyPlan
+        fields = '__all__'
+
+class RiskManagementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RiskManagement
+        fields = '__all__'
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = '__all__'
+
+class WorkplaceRuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkplaceRule
+        fields = '__all__'
+
+class RiskMitigationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RiskMitigation
+        fields = '__all__'

@@ -1,354 +1,167 @@
-import React, {useState, useEffect} from 'react'
-import RiskRegisterAPI from '../../../API/RiskRegisterAPI';
-import axios from 'axios'
-
-// react-router-dom items
-import { Link , useNavigate} from 'react-router-dom';
-
-// bootstrap itms
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-
-// fontawesome items
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import RiskRegisterAPI from '../../../API/RiskRegisterAPI'
+import StaffAPI from '../../../API/StaffAPI'
+import AuthContext from '../../../context/AuthContext'
 
-// DataTable items
-import DataTable from 'react-data-table-component'
-import StaffAPI from '../../../API/StaffAPI';
+const NAVY = '#1B2B4B'
 
-function RiskRegisterList() {
-    const [riskregisters , setRiskRegisters] = useState([])
-    const [staffs, setStaffs] = useState([])
-    const [records, setRecords] = useState([]);
-    
-
-    useEffect(() => {
-        fetchRiskRegister()
-        fetchStaff()
-    },[])
-
-    const fetchRiskRegister = () => {
-        RiskRegisterAPI.get('/')
-        .then((res) => {
-            setRiskRegisters(res.data);
-        }).catch(console.log)
-    }
-
-    const fetchStaff = () => {
-      StaffAPI.get('/')
-      .then((res) => {
-        setStaffs(res.data);
-      }).catch(console.log)
-    }
-
-    const deleteRisk = (id) => {
-      RiskRegisterAPI.delete(`/${id}`).then((res) => {
-        fetchRiskRegister();
-
-      }).catch(console.log)
-    }
-
-    const customStyles = {
-      headCells : {
-        style: {
-          border: '1px solid black',
-    
-        },
-          },
-      cells : {
-        style: {
-          border: '1px solid black'
-        },
-      },
-    }
-
-    const columns = [
-      {
-        name: 'Id',
-        selector: (row) => row.id,
-        sortable: true,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Date Raised',
-        selector: (row) => row.date_raised,
-        sortable: true,
-        // width: '8rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Date Reviewed',
-        selector: (row) => row.date_reviewed,
-        sortable: true,
-        // width: '8rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Raised By',
-        selector: (row) => row.raised_by,
-        sortable: true,
-        // width: '8rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Reviwed By',
-        selector: (row) => row.reviewed_by,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Risk Description',
-        selector: (row) => row.risk_description,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Likelihood Of Risk',
-        selector: (row) => row.likelihood_of_risk,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Impact Of Risk',
-        selector: (row) => row.impact_of_risk,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Severity',
-        selector: (row) => row.severity,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Responsible Party',
-        selector: (row) => row.responsible_party,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Mitigating Action',
-        selector: (row) => row.mitigating_action,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Contingency Action',
-        selector: (row) => row.contingency_action,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Progress On Actions',
-        selector: (row) => row.progress_on_actions,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Status',
-        selector: (row) => row.status,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'More Info',
-        selector: (row) => row.more_info,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Delete',
-        selector: (row) => row.delete,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-    ];
-
-    useEffect(() => {
-      const data = riskregisters.map((riskregister) => {
-        const raised_by = staffs.find((staff) => staff.id === riskregister.raised_by)?.name  
-        const reviewed_by = staffs.find((staff) => staff.id === riskregister.reviewed_by)?.name  
-        return {
-          id: riskregister.id,
-          date_raised : riskregister.date_raised ,
-          date_reviewed : riskregister.date_reviewed,
-          textbrief : riskregister.textbrief,
-          raised_by : raised_by,
-          reviewed_by : reviewed_by,
-          risk_description : riskregister.risk_description,
-          likelihood_of_risk : riskregister.likelihood_of_risk,
-          impact_of_risk : riskregister.impact_of_risk,
-          severity : riskregister.severity,
-          responsible_party : riskregister.responsible_party,
-          mitigating_action : riskregister.mitigating_action,
-          contingency_action : riskregister.contingency_action,
-          progress_on_actions : riskregister.progress_on_actions,
-          status : riskregister.status,
-          more_info : <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-          // more_info : "More Info",
-          delete: (
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={() => deleteRisk(riskregister.id)}
-            />
-          ),
-          // delete: "Delete",
-    
-        }
-      })
-      setRecords(data);
-    }, [riskregisters])
-    
-
-
-  return (
-    // <div className="container mt-5">
-    //     <div className="row">
-    //     {/* This is for the title */}
-    //     <h1 className="row justify-content-center mt-3">Risk Register</h1>
-        
-    //       <div className= "col-md-4"></div>
-    //       <div className="col-md-4 "></div>
-    //   <Table striped bordered hover className='mt-3'>
-    //     {/* This is for the table heading */}
-    //       <thead>
-    //           <tr>
-    //             <th scope="col" className="col-1">ID</th>
-    //             <th scope="col" className="col-2">Date Raised</th>
-    //             <th scope="col" className="col-2">Risk Description</th>
-    //              <th scope="col" className="col-1">Likelihood Of Risk</th> 
-    //             <th scope="col" className="col-1">Impact Of Risk</th>
-    //             <th scope="col" className="col-1">Severity</th>
-    //             <th scope="col" className="col-1">Owner</th>
-    //             <th scope="col" className="col-1">Mitigating Action</th>
-    //             <th scope="col" className="col-1">Contingency Action</th>
-    //             <th scope="col" className="col-1">Progress On Actions</th>
-    //             <th scope="col" className="col-1">Status</th>
-    //             <th scope="col" className="col-1">Edit</th>
-    //             <th scope="col" className="col-1">Delete</th>
-    //           </tr>
-    //         </thead>
-    //         {/* This is for the table body, this takes the incidentinvestigation from above and then uses maps so that each entry can be displayed */}
-    //         <tbody>
-
-    //           {riskregisters.map((riskregister) => {
-    //             return (
-    //               <tr key={riskregister.id}>
-                    
-                
-    //                 <td>{riskregister.id}</td>
-    //                 <td>{riskregister.date_raised}</td>
-    //                 <td>{riskregister.risk_description}</td>
-    //                 <td>{riskregister.likelihood_of_risk}</td>
-    //                 <td>{riskregister.impact_of_risk}</td>
-    //                 <td>{riskregister.severity}</td>
-    //                 <td>{riskregister.owner}</td>
-    //                 <td>{riskregister.mitigating_action}</td>
-    //                 <td>{riskregister.contingency_action}</td>
-    //                 <td>{riskregister.progress_on_actions}</td>
-    //                 <td>{riskregister.status}</td>
-    //                 <td>
-    //                     <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-
-    //                 </td>
-    //                 {/* <td></td> */}
-    //                 <td className="delete" onClick={() => deleteRisk(riskregister.id)}>
-    //                   <FontAwesomeIcon icon={faTrash } />
-    //                 </td>
-              
-    //               </tr>
-    //             );
-    //           })}
-              
-    //         </tbody>
-    //       </Table> 
-    //       <div className="text-center">
-    //           <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/riskregisteradd">
-    //             Add Risk
-    //         </Button>
-    //       </div>
-
-    //           </div>
-    // </div>
-    <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-5">Project (insert project name here) Risk Register</h1>
-      
-      <div className="mt-4 col-md-10 m row justify-content-center">
-      <div className="row justify-content-around">
-      <Button href="/riskregisteradd" variant="secondary" className="mb-4 col-md-2">
-                      Add Risk
-      </Button>
-
-        {/* <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button> */}
-        {/* <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div> */}
-      </div>
-
-       
-  
-            <div>
-            <div className="table-container mb-5">
-              <DataTable 
-                customStyles={customStyles}
-                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                //  className='stripe'
-                columns={columns}
-                data={records}
-                selectableRows
-                fixedHeader
-                pagination
-              >
-              </DataTable>
-            </div>
-            </div>
-
-       
-          </div>
-        </div>
-  )
+const SEVERITY_STYLES = {
+  Critical: { bg: '#FEE2E2', color: '#DC2626' },
+  High:     { bg: '#FEE2E2', color: '#DC2626' },
+  Medium:   { bg: '#FEF3C7', color: '#D97706' },
+  Low:      { bg: '#D1FAE5', color: '#059669' },
 }
 
-export default RiskRegisterList
+function severityBadge(val) {
+  if (!val) return null
+  const key = Object.keys(SEVERITY_STYLES).find(k => val.toLowerCase() === k.toLowerCase())
+  return key ? SEVERITY_STYLES[key] : null
+}
+
+export default function RiskRegisterList() {
+  const { authTokens } = useContext(AuthContext)
+  const [risks, setRisks] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    fetchRisks()
+    fetchStaff()
+  }, [])
+
+  const fetchRisks = () => {
+    RiskRegisterAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setRisks(res.data)).catch(console.log)
+  }
+
+  const fetchStaff = () => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }
+
+  const onDelete = (id) => {
+    RiskRegisterAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchRisks()).catch(console.log)
+  }
+
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
+
+  const filtered = risks.filter(r => {
+    const q = search.toLowerCase()
+    return (
+      (r.risk_description || '').toLowerCase().includes(q) ||
+      (r.severity || '').toLowerCase().includes(q) ||
+      (r.responsible_party || '').toLowerCase().includes(q) ||
+      (r.status || '').toLowerCase().includes(q)
+    )
+  })
+
+  return (
+    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+
+      <div style={{ marginBottom: '32px' }}>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>All Risk Entries</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          View all risk entries across all projects.
+        </p>
+      </div>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Risks', value: risks.length, color: NAVY },
+          { label: 'Critical / High', value: risks.filter(r => ['critical','high'].includes((r.severity||'').toLowerCase())).length, color: '#DC2626' },
+          { label: 'Medium', value: risks.filter(r => (r.severity||'').toLowerCase() === 'medium').length, color: '#D97706' },
+          { label: 'Low', value: risks.filter(r => (r.severity||'').toLowerCase() === 'low').length, color: '#059669' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>{card.value}</div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>All Risks ({filtered.length})</h5>
+          <input
+            type="text"
+            placeholder="Search risk, severity, status..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '280px', outline: 'none',
+            }}
+          />
+        </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {risks.length === 0 ? 'No risk entries found.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Risk Description</th>
+                <th style={{ color: NAVY }}>Likelihood</th>
+                <th style={{ color: NAVY }}>Impact</th>
+                <th style={{ color: NAVY }}>Severity</th>
+                <th style={{ color: NAVY }}>Responsible</th>
+                <th style={{ color: NAVY }}>Status</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(r => {
+                const badge = severityBadge(r.severity)
+                return (
+                  <tr key={r.id}>
+                    <td style={{ fontWeight: '600', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {r.risk_description || '—'}
+                    </td>
+                    <td style={{ color: '#666' }}>{r.likelihood_of_risk || '—'}</td>
+                    <td style={{ color: '#666' }}>{r.impact_of_risk || '—'}</td>
+                    <td>
+                      {badge ? (
+                        <span style={{ backgroundColor: badge.bg, color: badge.color, padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '600' }}>
+                          {r.severity}
+                        </span>
+                      ) : <span style={{ color: '#666' }}>{r.severity || '—'}</span>}
+                    </td>
+                    <td style={{ color: '#666' }}>{r.responsible_party || '—'}</td>
+                    <td style={{ color: '#666' }}>{r.status || '—'}</td>
+                    <td>
+                      <Link to={`/riskregisteredit/${r.id}`} style={{ color: NAVY }}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </Link>
+                    </td>
+                    <td>
+                      <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(r.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </div>
+  )
+}

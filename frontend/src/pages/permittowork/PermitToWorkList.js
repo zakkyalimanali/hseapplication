@@ -1,224 +1,139 @@
-import {useEffect , useState} from 'react'
-import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import PermitToWorkAPI from '../../API/PermitToWorkAPI';
-// import StaffAPI from '../../API/StaffAPI';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table';
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-// import {   } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import PermitToWorkAPI from '../../API/PermitToWorkAPI'
+import AuthContext from '../../context/AuthContext'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function PermitToWorkList() {
-  const [records, setRecords] = useState([]);
-  const [permittoworks , setPermitToWorks] = useState([])
-  // const [staffs , setStaffs] = useState([])
+export default function PermitToWorkList() {
+  const { authTokens } = useContext(AuthContext)
+  const [permits, setPermits] = useState([])
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
-    fetchPermitToWork()
-    // fetchStaff()
-  },[])
+    fetchPermits()
+  }, [])
 
-  const fetchPermitToWork = () => {
-    PermitToWorkAPI.get('/')
-    .then((res) => {
-      setPermitToWorks(res.data)
-    })
-    .catch(console.log)
+  const fetchPermits = () => {
+    PermitToWorkAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setPermits(res.data)).catch(console.log)
   }
-
-  // const fetchStaff = () => {
-  //   StaffAPI.get('/')
-  //   .then((res) => {
-  //     setStaffs(res.data)
-  //   })
-  //   .catch(console.log)
-  // }
 
   const onDelete = (id) => {
-    PermitToWorkAPI.delete(`/${id}/`).then((res) => {
-        fetchPermitToWork();
-    }).catch(console.log)
-}
-
-const customStyles = {
-  headCells : {
-    style: {
-      border: '1px solid black',
-
-    },
-      },
-  cells : {
-    style: {
-      border: '1px solid black'
-    },
-  },
-}
-
-const columns = [
-  {
-    name: 'Id',
-    selector: (row) => row.id,
-    sortable: true,
-    // width: '6rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Permit Number',
-    selector: (row) => row.permit_number,
-    sortable: true,
-    // width: '8rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Location ',
-    selector: (row) => row.location_of_work,
-    sortable: true,
-    // width: '8rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Nature of Work',
-    selector: (row) => row.nature_of_work,
-    sortable: true,
-    // width: '12rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Work Start',
-    selector: (row) => row.work_start,
-    sortable: true,
-    // width: '12rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Work Completed',
-    selector: (row) => row.work_completed,
-    sortable: true,
-    // width: '12rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'More Info',
-    selector: (row) => row.more_info,
-    // width: '6rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-  {
-    name: 'Delete',
-    selector: (row) => row.delete,
-    // width: '6rem'
-    // style: {
-    //   background: 'rgba(251,212,124, 0.5)',
-    // },
-  },
-];
-
-useEffect(() => {
-  const data = permittoworks.map((permittowork) => {
-    return {
-      id: permittowork.id,
-      permit_number: permittowork.permit_number,
-      location_of_work: permittowork.location_of_work,
-      nature_of_work: permittowork.nature_of_work,
-      work_start: permittowork.work_start,
-      work_completed: permittowork.work_completed,
-      // more_info : <Link to={`/editincident/${incident.id}`}>
-      more_info : <Link to={`/permittoworkedit/${permittowork.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-      delete: (
-        <FontAwesomeIcon
-          icon={faTrash}
-          onClick={() => onDelete(permittowork.id)}
-        />
-      ),
-    };
-  });
-  setRecords(data);
-}, [permittoworks]);
-
-
-const handleFilter = (e) => {
-  const searchText = e.target.value.toLowerCase();
-  
-  if (searchText === '') {
-    // If the search text is empty, fetch all incidents again
-    fetchPermitToWork();
-  } else {
-    const newData = records.filter(row => {
-   
-      // return row.permit_number.toLowerCase().includes(e.target.value.toLowerCase()), row.location_of_work.toLowerCase().includes(e.target.value.toLowerCase())
-      
-      // const permitNumberMatch = row.permit_number.toLowerCase().includes(searchText);
-      // const locationMatch = row.location_of_work.toLowerCase().includes(searchText);
-
-      // return permitNumberMatch || locationMatch
-      for (let key in row) {
-        if (row[key] && row[key].toString().toLowerCase().includes(searchText)) {
-          return true; // Return true if a match is found in any field
-        }
-      }
-      return false;
-      })
-      
-        // permittowork,
-
-    setPermitToWorks(newData);
+    PermitToWorkAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchPermits()).catch(console.log)
   }
-};
 
+  const filtered = permits.filter(p => {
+    const q = search.toLowerCase()
+    return (
+      (p.permit_number || '').toLowerCase().includes(q) ||
+      (p.location_of_work || '').toLowerCase().includes(q) ||
+      (p.nature_of_work || '').toLowerCase().includes(q)
+    )
+  })
 
-
+  const activeCount = permits.filter(p => !p.work_completed).length
 
   return (
-    <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-3">Permit To Work List</h1>
-      {/* <Button href="/addincident" variant="secondary" className="ms-10 mt-4 col-md-2 m">
-                      Add Incident
-      </Button> */}
-      <div className="mt-4 col-md-10 m row justify-content-center">
-      <div className="row justify-content-around">
-        <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button>
-        <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
+    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Permit to Work</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Manage work permits, hazards, controls, and authorisation signatures.
+          </p>
+        </div>
+        <Link to="/permittoworkadd">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
+            Add Permit to Work
+          </Button>
+        </Link>
       </div>
 
-       
-  
-            <div>
-            <div className="table-container mb-5">
-              <DataTable 
-                customStyles={customStyles}
-                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                //  className='stripe'
-                columns={columns}
-                data={records}
-                selectableRows
-                fixedHeader
-                pagination
-              >
-              </DataTable>
-            </div>
-            </div>
-
-       
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Permits', value: permits.length, color: NAVY },
+          { label: 'Active / Open', value: activeCount, color: '#D97706' },
+          { label: 'Completed', value: permits.length - activeCount, color: '#059669' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>{card.value}</div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
           </div>
+        ))}
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>All Permits ({filtered.length})</h5>
+          <input
+            type="text"
+            placeholder="Search permit number, location, nature..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '300px', outline: 'none',
+            }}
+          />
         </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {permits.length === 0 ? 'No permits added yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Permit Number</th>
+                <th style={{ color: NAVY }}>Location of Work</th>
+                <th style={{ color: NAVY }}>Nature of Work</th>
+                <th style={{ color: NAVY }}>Work Start</th>
+                <th style={{ color: NAVY }}>Work Completed</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(p => (
+                <tr key={p.id}>
+                  <td style={{ fontWeight: '600' }}>{p.permit_number || '—'}</td>
+                  <td style={{ color: '#666' }}>{p.location_of_work || '—'}</td>
+                  <td style={{ color: '#666', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.nature_of_work || '—'}</td>
+                  <td style={{ color: '#666', whiteSpace: 'nowrap' }}>{p.work_start || '—'}</td>
+                  <td style={{ color: '#666', whiteSpace: 'nowrap' }}>{p.work_completed || '—'}</td>
+                  <td>
+                    <Link to={`/permittoworkedit/${p.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(p.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </div>
   )
 }
-
-export default PermitToWorkList

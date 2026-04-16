@@ -1,151 +1,96 @@
-import {useEffect , useState} from 'react'
-import StaffAPI from '../../../API/StaffAPI'
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import AttendeesAPI from '../../../API/AttendeesAPI'
-import SiteVisitAPI from '../../../API/SiteVisitAPI'
+import StaffAPI from '../../../API/StaffAPI'
+import AuthContext from '../../../context/AuthContext'
 import axios from 'axios'
-import { useParams } from 'react-router'
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router'
-import API_BASE from "../../../utils/apiBase";
+import API_BASE from '../../../utils/apiBase'
 
-function AttendeesEdit(props) {
-    const params = useParams()
-    const [staffs , setStaffs] = useState([])
-    const [names , setNames] = useState([])
-    const [siteVisits, setSiteVisits] = useState([])
-    const [staff_name , setStaffName] = useState('')
-    const [id, setId] = useState(null)
-    // const [visit , setVisit] = useState('')
-    const visit = props.sitevisit
-    const navigate = useNavigate()
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-    useEffect(() => {
-        fetchAttendees()
-        setId(params.id)
+export default function AttendeesEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
 
-    },[params.id]) 
+  const [staff_name, setStaffName] = useState('')
+  const [visitId, setVisitId] = useState(null)
+  const [staffs, setStaffs] = useState([])
 
-    useEffect(() => {
-        fetchVisits()
-        fetchStaff()
-      },[])
+  useEffect(() => {
+    const headers = { Authorization: `Bearer ${authTokens.access}` }
 
-      const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
-    
-      const fetchAttendees = () => {
-        axios.get(`${API_BASE}/hseapp/staffadd/${params.id}/`)
-        .then((res) => {
-          setNames(res.data)
-          // setVisit(res.data.visit)
-          setStaffName(res.data.staff_name)
-        })
-        .catch(console.log)
-      }
+    axios.get(`${API_BASE}/hseapp/staffadd/${params.id}/`, { headers })
+      .then(res => {
+        setStaffName(res.data.staff_name || '')
+        setVisitId(res.data.visit)
+      }).catch(console.log)
 
+    StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [params.id])
 
-    const fetchVisits = () => {
-    SiteVisitAPI.get('/')
-    .then((res) => {
-        setSiteVisits(res.data)
-    })
-    .catch(console.log)
-    }
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = { visit: visitId, staff_name }
+    AttendeesAPI.patch(`/${params.id}/`, item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        let item = {visit, staff_name }
-        AttendeesAPI.post('/', item).then(() => fetchAttendees());
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
-    const onUpdate = (id) => {
-        let item = {visit , staff_name}
-        AttendeesAPI.patch(`/${id}/`, item).then(() => { 
-            // setVisit('')
-            setStaffName('')
-            fetchAttendees()
-          }
-        )
-        navigate(-1)
-      }
-
-      const onDelete = (id) => {
-        AttendeesAPI.delete(`/${id}/`).then((res) => {
-            fetchAttendees();
-        }).catch(console.log)
-    }
-    
   return (
-    <div className="container mt-5">
-    <div className="row">
-      <div className= "col-md-4"></div>
-      <div className="col-md-4 ">
-        <h3 className="float-left">Create new Site Visit</h3>
-        
-        <Form onSubmit={onSubmit} className="mt-4">
-          {/* <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Visit</Form.Label>
-            <Form.Control
-              as="select"
-              placeholder="Visit"
-              value={visit}
-              onChange={(e) => setVisit(e.target.value)}
-            >
-              <option value=''>Select An Option</option>
-              {siteVisits.map(siteVisit => {
-            return <option key={siteVisit.id} value={siteVisit.id}>{siteVisit.inspection_date} / {siteVisit.location}</option>
-          })}
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
+      {/* Back + Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Site Visit
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Attendee</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the attendee for this site visit.
+        </p>
+      </div>
 
-            </Form.Control>
-          </Form.Group> */}
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Staff</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Staff Name"
-                    value={staff_name}
-                    onChange={(e) => setStaffName(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name}</option>
-                })}
-                  </Form.Control>
-                </Form.Group>
-          
-          <div className="mt-3 float-right">
-            {/* <Button
-              variant="primary"
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Staff Member</Form.Label>
+            <Form.Select value={staff_name} onChange={e => setStaffName(e.target.value)}>
+              <option value="">Select staff member...</option>
+              {staffs.map(s => (
+                <option key={s.id} value={s.id}>{s.name} {s.position ? `(${s.position})` : ''}</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
               type="submit"
-              onClick={onSubmit}
-              className="mx-2"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
             >
-              Save
-            </Button> */}
-            {/* <Link to="/sitevisitlist/"> */}
-            {/* <Link to={`/sitevisitedit/${visit}/`}> */}
-          <Button
-            variant="success"
-            type="button"
-            onClick={(e) => onUpdate(id)}
-            className="mx-2"
-          >
-            Update
-          </Button>
-        {/* </Link> */}
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
+            </Button>
           </div>
-        </Form>    
-      </div>            
+
+        </Form>
+      </div>
     </div>
-  </div>
   )
 }
-
-export default AttendeesEdit

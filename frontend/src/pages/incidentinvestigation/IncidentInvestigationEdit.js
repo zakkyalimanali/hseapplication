@@ -1,636 +1,510 @@
-import React , {useEffect , useState} from 'react'
-import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
-import IncidentFactorsAPI from '../../API/IncidentFactorsAPI';
-
-import StaffAPI from '../../API/StaffAPI';
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import Incidentfactorsadd from './incidentfactors/Incidentfactorsadd';
-import IncidentPhotosAdd from './incidentphotos/IncidentPhotosAdd'
-// Others 
-import { useNavigate } from 'react-router'
-import IncidentPhotosAPI from '../../API/IncidentPhotosAPI';
-import API_BASE from "../../utils/apiBase";
+import { faArrowLeft, faTrash, faPen, faPlus, faImage } from '@fortawesome/free-solid-svg-icons'
+import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
+import IncidentFactorsAPI from '../../API/IncidentFactorsAPI'
+import IncidentPhotosAPI from '../../API/IncidentPhotosAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../utils/apiBase'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function IncidentInvestigationEdit() {
-  const [incidentinvestigations , setIncidentInvestigations] = useState([])
-  const [incidentfactors , setIncidentFactors] = useState([])
-  const [incidentphotos , setIncidentPhotos] = useState([])
-  const [staffs , setStaffs] = useState([])
+export default function IncidentInvestigationEdit() {
+  const { authTokens } = useContext(AuthContext)
   const params = useParams()
-  const [investigator , setInvestigator] = useState('')
-  const [date_of_incident , setDateOfIncident] = useState('')
-  const [location_of_incident , setLocationOfIncident] = useState('')
+  const navigate = useNavigate()
+
+  // Main form fields
+  const [investigator, setInvestigator] = useState('')
+  const [date_of_incident, setDateOfIncident] = useState('')
+  const [location_of_incident, setLocationOfIncident] = useState('')
   const [task_performed, setTaskPerformed] = useState('')
   const [what_happened, setWhatHappened] = useState('')
   const [team_member_one, setTeamMemberOne] = useState('')
   const [team_member_two, setTeamMemberTwo] = useState('')
   const [team_member_three, setTeamMemberThree] = useState('')
   const [team_member_four, setTeamMemberFour] = useState('')
-  const [summary_of_remedial_action , setSummaryOfRemedialAction] = useState('')
-  const [summary_of_incident_investigation , setSummaryOfIncidentInvestigation] = useState('')
-  const navigate = useNavigate()
-  const[id , setId] = useState(null)
+  const [summary_of_remedial_action, setSummaryOfRemedialAction] = useState('')
+  const [summary_of_incident_investigation, setSummaryOfIncidentInvestigation] = useState('')
+
+  // Reference data
+  const [staffs, setStaffs] = useState([])
+  const [incidentFactors, setIncidentFactors] = useState([])
+  const [incidentPhotos, setIncidentPhotos] = useState([])
+
+  // Incident factor add form
+  const [newFactor, setNewFactor] = useState('')
+  const [newFactorType, setNewFactorType] = useState('')
+  const [newFactorAction, setNewFactorAction] = useState('')
+  const [newFactorWho, setNewFactorWho] = useState('')
+  const [newFactorWhen, setNewFactorWhen] = useState('')
+  const [newFactorCompletion, setNewFactorCompletion] = useState('')
+
+  // Photo add form
+  const [newPhotoTitle, setNewPhotoTitle] = useState('')
+  const [newPhotoDesc, setNewPhotoDesc] = useState('')
+  const [newPhotoFile, setNewPhotoFile] = useState(null)
+
+  const headers = { Authorization: `Bearer ${authTokens.access}` }
 
   useEffect(() => {
-    fetchIncidentInvestigation()
-    setId(params.id)
-  },[params.id]) 
+    axios.get(`${API_BASE}/hseapp/incidentinvestigation/${params.id}/`, { headers })
+      .then(res => {
+        const d = res.data
+        setInvestigator(d.investigator || '')
+        setDateOfIncident(d.date_of_incident || '')
+        setLocationOfIncident(d.location_of_incident || '')
+        setTaskPerformed(d.task_performed || '')
+        setWhatHappened(d.what_happened || '')
+        setTeamMemberOne(d.team_member_one || '')
+        setTeamMemberTwo(d.team_member_two || '')
+        setTeamMemberThree(d.team_member_three || '')
+        setTeamMemberFour(d.team_member_four || '')
+        setSummaryOfRemedialAction(d.summary_of_remedial_action || '')
+        setSummaryOfIncidentInvestigation(d.summary_of_incident_investigation || '')
+      }).catch(console.log)
 
-  useEffect(() => {
-    fetchStaff()
-    fetchIncidentFactor()
-    fetchIncidentPhoto()
-  },[])
+    StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+    fetchFactors()
+    fetchPhotos()
+  }, [params.id])
 
-  const fetchIncidentPhoto = () => {
-    IncidentPhotosAPI.get('/')
-    .then((res) => {
-      setIncidentPhotos(res.data)
-    })
-    .catch(console.log)
+  const fetchFactors = () => {
+    IncidentFactorsAPI.get('/', { headers }).then(res => setIncidentFactors(res.data)).catch(console.log)
   }
 
-  const fetchIncidentInvestigation = () => {
-    axios.get(`${API_BASE}/hseapp/incidentinvestigation/${params.id}/`)
-    .then((res) => {
-      setIncidentInvestigations(res.data)
-      setInvestigator(res.data.investigator)
-      setDateOfIncident(res.data.date_of_incident)
-      setLocationOfIncident(res.data.location_of_incident)
-      setTaskPerformed(res.data.task_performed)
-      setWhatHappened(res.data.what_happened)
-      setTeamMemberOne(res.data.team_member_one)
-      setTeamMemberTwo(res.data.team_member_two)
-      setTeamMemberThree(res.data.team_member_three)
-      setTeamMemberFour(res.data.team_member_four)
-      setSummaryOfRemedialAction(res.data.summary_of_remedial_action)
-      setSummaryOfIncidentInvestigation(res.data.summary_of_incident_investigation)
-    })
-    .catch(console.log)
+  const fetchPhotos = () => {
+    IncidentPhotosAPI.get('/', { headers }).then(res => setIncidentPhotos(res.data)).catch(console.log)
   }
 
-  const fetchStaff =() => {
-    StaffAPI.get('/')
-    .then((res) => {
-        setStaffs(res.data)
-    })
-    .catch(console.log)
-  }
-
-  const fetchIncidentFactor = () => {
-    IncidentFactorsAPI.get('/')
-    .then((res) => {
-        setIncidentFactors(res.data)
-    })
-    .catch(console.log)
-  }
-
-  const onSubmit = (e) => {
-        e.preventDefault();
-        let item = {investigator , date_of_incident , location_of_incident , task_performed, what_happened, team_member_one, team_member_two, team_member_three , team_member_four, summary_of_remedial_action, summary_of_incident_investigation}
-        IncidentInvestigationAPI.post('/', item).then(() => fetchIncidentInvestigation());
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      investigator: investigator || null,
+      date_of_incident: date_of_incident || null,
+      location_of_incident,
+      task_performed,
+      what_happened,
+      team_member_one: team_member_one || null,
+      team_member_two: team_member_two || null,
+      team_member_three: team_member_three || null,
+      team_member_four: team_member_four || null,
+      summary_of_remedial_action,
+      summary_of_incident_investigation,
     }
-
-  const onUpdate = (id) => {
-        let item = {investigator , date_of_incident , location_of_incident , task_performed, what_happened, team_member_one, team_member_two, team_member_three , team_member_four, summary_of_remedial_action, summary_of_incident_investigation}
-        IncidentInvestigationAPI.patch(`/${id}/`, item).then(() => { 
-          setInvestigator('')
-          setDateOfIncident('')
-          setLocationOfIncident('')
-          setTaskPerformed('')
-          setWhatHappened('')
-          setTeamMemberOne('')
-          setTeamMemberTwo('')
-          setTeamMemberThree('')
-          setTeamMemberFour('')
-          setSummaryOfRemedialAction('')
-          setSummaryOfIncidentInvestigation('')
-          fetchIncidentInvestigation()
-        }
-      )
-    }
-
-    const onDelete = (id) => {
-      IncidentFactorsAPI.delete(`/${id}/`).then((res) => {
-       fetchIncidentFactor();
-       }).catch(console.log)
-   }
-   
-   const onDeleteIncidentPhotos = (id) => {
-    IncidentPhotosAPI.delete(`/${id}/`).then((res) => {
-     fetchIncidentPhoto();
-     }).catch(console.log)
- }
-
-   const returnToPreviousIncidentInvestigationListPage = () => {
-    navigate(-1)
+    IncidentInvestigationAPI.patch(`/${params.id}/`, item, { headers })
+      .then(() => navigate('/incidentinvestigationlist'))
+      .catch(console.log)
   }
-  
+
+  const onAddFactor = (e) => {
+    e.preventDefault()
+    if (!newFactor) return
+    const item = {
+      incidentinvestigation: Number(params.id),
+      factor: newFactor,
+      type_of_factor: newFactorType,
+      action_taken: newFactorAction,
+      who_will_fix: newFactorWho || null,
+      when_will_fix: newFactorWhen || null,
+      planned_completion_date: newFactorCompletion || null,
+    }
+    IncidentFactorsAPI.post('/', item, { headers })
+      .then(() => {
+        setNewFactor(''); setNewFactorType(''); setNewFactorAction('')
+        setNewFactorWho(''); setNewFactorWhen(''); setNewFactorCompletion('')
+        fetchFactors()
+      }).catch(console.log)
+  }
+
+  const onDeleteFactor = (id) => {
+    IncidentFactorsAPI.delete(`/${id}/`, { headers }).then(() => fetchFactors()).catch(console.log)
+  }
+
+  const onAddPhoto = (e) => {
+    e.preventDefault()
+    if (!newPhotoFile) return
+    const formData = new FormData()
+    formData.append('incidentinvestigation', params.id)
+    formData.append('title', newPhotoTitle)
+    formData.append('description', newPhotoDesc)
+    formData.append('incident_photo', newPhotoFile)
+    IncidentPhotosAPI.post('/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => {
+      setNewPhotoTitle(''); setNewPhotoDesc(''); setNewPhotoFile(null)
+      const fi = document.getElementById('photo-file-input')
+      if (fi) fi.value = ''
+      fetchPhotos()
+    }).catch(console.log)
+  }
+
+  const onDeletePhoto = (id) => {
+    IncidentPhotosAPI.delete(`/${id}/`, { headers }).then(() => fetchPhotos()).catch(console.log)
+  }
+
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
+  const visitFactors = incidentFactors.filter(f => f.incidentinvestigation === Number(params.id))
+  const visitPhotos = incidentPhotos.filter(p => p.incidentinvestigation === Number(params.id))
+
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
+  const SectionTitle = ({ children, count, countColor = '#2563EB', countBg = '#DBEAFE' }) => (
+    <h5 style={{ color: NAVY, fontWeight: '700', marginBottom: '20px' }}>
+      {children}
+      {count !== undefined && (
+        <span style={{ marginLeft: '10px', fontSize: '13px', fontWeight: '600', color: countColor, backgroundColor: countBg, padding: '2px 8px', borderRadius: '6px' }}>
+          {count}
+        </span>
+      )}
+    </h5>
+  )
+
+  const StaffSelect = ({ label, value, onChange }) => (
+    <Form.Group className="mb-3">
+      <Form.Label style={L}>{label}</Form.Label>
+      <Form.Select value={value} onChange={onChange}>
+        <option value="">Select staff member...</option>
+        {staffs.map(s => (
+          <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+        ))}
+      </Form.Select>
+    </Form.Group>
+  )
 
   return (
-    <div className="container mt-3">
-      <h3 className="d-flex justify-content-center mt-3">Create a New Incident Investigation</h3>
-        <Form onSubmit={onSubmit} className="mt-4">
-      <div className="row">
-        <div className='col-md-6'>
+    <div style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
+
+      {/* Back + Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/incidentinvestigationlist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Investigations
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Incident Investigation</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update investigation details, contributing factors, and evidence photos.
+        </p>
+      </div>
+
+      {/* Main Investigation Form */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+        <SectionTitle>Investigation Details</SectionTitle>
+        <Form onSubmit={onUpdate}>
           <div className="row">
-            <div className="col-md-10 ">
-              <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Investigator</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Investigator"
-                    value={investigator}
-                    onChange={(e) => setInvestigator(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+            <div className="col-md-5">
+              <h6 style={{ color: '#666', fontWeight: '600', marginBottom: '12px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Investigation Team</h6>
+              <StaffSelect label="Investigator (Lead)" value={investigator} onChange={e => setInvestigator(e.target.value)} />
+              <StaffSelect label="Team Member 1" value={team_member_one} onChange={e => setTeamMemberOne(e.target.value)} />
+              <StaffSelect label="Team Member 2" value={team_member_two} onChange={e => setTeamMemberTwo(e.target.value)} />
+              <StaffSelect label="Team Member 3" value={team_member_three} onChange={e => setTeamMemberThree(e.target.value)} />
+              <StaffSelect label="Team Member 4" value={team_member_four} onChange={e => setTeamMemberFour(e.target.value)} />
+            </div>
 
-                  </Form.Control>
+            <div className="col-md-7">
+              <h6 style={{ color: '#666', fontWeight: '600', marginBottom: '12px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Incident Details</h6>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Location of Incident</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Where did the incident occur?"
+                  value={location_of_incident}
+                  onChange={e => setLocationOfIncident(e.target.value)}
+                />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member One</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member One"
-                    value={team_member_one}
-                    onChange={(e) => setTeamMemberOne(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Two</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Two"
-                    value={team_member_two}
-                    onChange={(e) => setTeamMemberTwo(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Date of Incident</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={date_of_incident}
+                  onChange={e => setDateOfIncident(e.target.value)}
+                />
+              </Form.Group>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Three</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Three"
-                    value={team_member_three}
-                    onChange={(e) => setTeamMemberThree(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Task Being Performed</Form.Label>
+                <Form.Control
+                  as="textarea" rows={3}
+                  placeholder="Describe the task being performed..."
+                  value={task_performed}
+                  onChange={e => setTaskPerformed(e.target.value)}
+                />
+              </Form.Group>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Four</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Four"
-                    value={team_member_four}
-                    onChange={(e) => setTeamMemberFour(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-
-                  </Form.Control>
-                </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>What Happened</Form.Label>
+                <Form.Control
+                  as="textarea" rows={4}
+                  placeholder="Describe what happened..."
+                  value={what_happened}
+                  onChange={e => setWhatHappened(e.target.value)}
+                />
+              </Form.Group>
+            </div>
           </div>
-        </div>
-        </div>
-        <div class="col">
-        <div className="row">
-          <div className="col-md-10 ">
-          <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Location of Incident</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Location of Incident"
-                    value={location_of_incident}
-                    onChange={(e) => setLocationOfIncident(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Task Performed</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Task Performed"
-                    value={task_performed}
-                    onChange={(e) => setTaskPerformed(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>What Happened</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="What Happened"
-                    value={what_happened}
-                    onChange={(e) => setWhatHappened(e.target.value)}
-                  />
-                </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Date of Incident</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Date of Incident"
-                    value={date_of_incident}
-                    onChange={(e) => setDateOfIncident(e.target.value)}
-                  />
-                </Form.Group>
+          <hr style={{ margin: '24px 0', borderColor: '#f0f0f0' }} />
 
+          <h6 style={{ color: '#666', fontWeight: '600', marginBottom: '12px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Summaries</h6>
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Summary of Remedial Action</Form.Label>
+                <Form.Control
+                  as="textarea" rows={4}
+                  placeholder="Summary of actions taken to remedy the situation..."
+                  value={summary_of_remedial_action}
+                  onChange={e => setSummaryOfRemedialAction(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Summary of Incident Investigation</Form.Label>
+                <Form.Control
+                  as="textarea" rows={4}
+                  placeholder="Overall summary of the investigation findings..."
+                  value={summary_of_incident_investigation}
+                  onChange={e => setSummaryOfIncidentInvestigation(e.target.value)}
+                />
+              </Form.Group>
+            </div>
           </div>
-        </div>
-        </div>
-        
 
-      </div>
-
-      {/* <div className="col-md-12">
-      
-      </div> */}
-      <div className="col-md-12">
-        <div className="row">
-
-      <IncidentPhotosAdd  incidentinvestigation = {params.id}/>  
-
-      <h3 className="float-left">Incident Photos</h3>
-
-      <Table striped bordered hover className='mt-3'>
-                <thead>
-                    <tr>
-                        <th scope="col" className="col-1">ID</th>
-                        <th scope="col" className="col-1">Title</th>
-                        <th scope="col" className="col-1">Description</th>
-                        <th scope="col" className="col-3">Image</th>
-                        <th scope="col" className="col-1">Edit</th>
-                        <th scope="col" className="col-1">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {incidentphotos.filter ((incidentphoto) => incidentphoto.incidentinvestigation === Number(params.id))
-                      .map((incidentphoto) => {  
-                        return (
-                            <tr key={incidentphoto.id}>
-                                <td>{incidentphoto.id}</td>
-                                <td>{incidentphoto.title}</td>
-                                <td>{incidentphoto.description}</td>
-                                {/* <td>{hsemanagement.context}</td> */}
-                                <td><a href={`${incidentphoto.incident_photo}`} download={incidentphoto.incident_photo}><img className="col-12" src={incidentphoto.incident_photo} alt={incidentphoto.incident_photo}/></a> 
-                             
-                                  {/* <a href={`${incidentphoto.incident_photo}`} download={incidentphoto.incident_photo}>Download</a> */}
-                                </td>
-                                <td><Link to={`/incidentphotosedit/${incidentphoto.id}`}><FontAwesomeIcon icon={faPen } /></Link></td>
-
-                                <td className='delete' onClick={() => onDeleteIncidentPhotos(incidentphoto.id)}><FontAwesomeIcon icon={faTrash } /></td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-        </Table>  
-
-      <Incidentfactorsadd incidentinvestigation = {params.id}/>   
-
-      <h3 className="float-left">Incident Factors</h3>
-      <Table striped bordered hover className='mt-3'>
-                <thead>
-                    <tr>
-
-                      <th scope="col" className="col-1">ID</th>
-                      <th scope="col" className="col-2">Factor</th>
-                      <th scope="col" className="col-2">Type </th>
-                      <th scope="col" className="col-3">Action Taken</th> 
-                      <th scope="col" className="col-2">Who fix</th> 
-                      <th scope="col" className="col-1">When fix</th> 
-                      <th scope="col" className="col-1">Complete By</th> 
-                      <th>Edit</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* {siteHazards.map((siteHazard, index) => { */}
-                    {/* This is the get the invidual incident factors for that incident , this works by filtering the by the id of the incidentinvestigation*/}
-                    {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
-                    .map((incidentfactor) => {
-                      return (
-                        <tr key={incidentfactor.id}>
-                          
-                      
-                          <td>{incidentfactor.id}</td>
-                          <td>{incidentfactor.factor}</td>
-                          <td>{incidentfactor.type_of_factor}</td>
-                          <td>{incidentfactor.action_taken}</td>
-                          <td>{incidentfactor.who_will_fix}</td>
-                          <td>{incidentfactor.when_will_fix}</td>
-                          <td>{incidentfactor.planned_completion_date}</td>
-                          {/* <td>{incidentfactor.factor}</td> */}
-                         
-                          <td>
-                              <Link to={`/incidentfactorsedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-                              {/* <Button onClick= {toogleShown}>Edit</Button>                                           */}
-                          </td>
-                          <td className="delete" onClick={() => onDelete(incidentfactor.id)}>
-                            <FontAwesomeIcon icon={faTrash } />
-                          </td>
-                    
-                        </tr>
-                      );
-                    })}
-                    
-                  </tbody>
-                </Table> 
-
-
-
-      <Form.Group className="mb-3 mt-3" controlId="formName">
-                  <Form.Label>Summary of Remedial Action</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Summary of Remedial Action"
-                    value={summary_of_remedial_action}
-                    onChange={(e) => setSummaryOfRemedialAction(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Summary of Incident Investigation</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Summary of Incident Investigation"
-                    value={summary_of_incident_investigation}
-                    onChange={(e) => setSummaryOfIncidentInvestigation(e.target.value)}
-                  />
-                </Form.Group>
-      </div>
-      </div>
-    
-      <div className="col mt-3 mb-3">
-                {/* <Link to="/incidentinvestigationlist/"> */}
-                  <Button
-                    variant="warning"
-                    type="button"
-                    onClick={(e) => onUpdate(id)}
-                    className="mx-2 mb-3"
-                  >
-                    Update
-                  </Button>
-                  <Button
-                  variant="success"
-                  type="button"       
-                  className="mx-2 mb-3"
-                  onClick={(e) => returnToPreviousIncidentInvestigationListPage()}
-                >
-                  Go Back
-                </Button>
-                {/* </Link> */}
-                
-              </div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Link to="/incidentinvestigationlist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
+          </div>
         </Form>
-          {/* <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left">Create a New Incident Investigation</h3>
-              
-              <Form onSubmit={onSubmit} className="mt-4">
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Investigator</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Investigator"
-                    value={investigator}
-                    onChange={(e) => setInvestigator(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+      </div>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member One</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member One"
-                    value={team_member_one}
-                    onChange={(e) => setTeamMemberOne(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+      {/* Incident Factors Section */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+        <SectionTitle count={visitFactors.length} countColor="#D97706" countBg="#FEF3C7">
+          Contributing Factors
+        </SectionTitle>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Two</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Two"
-                    value={team_member_two}
-                    onChange={(e) => setTeamMemberTwo(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+        <Form onSubmit={onAddFactor} style={{ marginBottom: '20px' }}>
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Factor</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Describe the contributing factor..."
+                  value={newFactor}
+                  onChange={e => setNewFactor(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Type of Factor</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. Human, Equipment, Environmental..."
+                  value={newFactorType}
+                  onChange={e => setNewFactorType(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Action Taken</Form.Label>
+            <Form.Control
+              as="textarea" rows={2}
+              placeholder="Describe the corrective action taken..."
+              value={newFactorAction}
+              onChange={e => setNewFactorAction(e.target.value)}
+            />
+          </Form.Group>
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Who Will Fix It</Form.Label>
+                <Form.Select value={newFactorWho} onChange={e => setNewFactorWho(e.target.value)}>
+                  <option value="">Select staff member...</option>
+                  {staffs.map(s => (
+                    <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>When Will It Be Fixed</Form.Label>
+                <Form.Control type="date" value={newFactorWhen} onChange={e => setNewFactorWhen(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Planned Completion Date</Form.Label>
+                <Form.Control type="date" value={newFactorCompletion} onChange={e => setNewFactorCompletion(e.target.value)} />
+              </Form.Group>
+            </div>
+          </div>
+          <Button
+            type="submit"
+            style={{ backgroundColor: NAVY, border: 'none', fontWeight: '600', padding: '8px 20px' }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '6px' }} />
+            Add Factor
+          </Button>
+        </Form>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Three</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Three"
-                    value={team_member_three}
-                    onChange={(e) => setTeamMemberThree(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+        {visitFactors.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '20px 0', margin: 0, fontSize: '14px' }}>
+            No contributing factors recorded yet.
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Factor</th>
+                <th style={{ color: NAVY }}>Type</th>
+                <th style={{ color: NAVY }}>Action Taken</th>
+                <th style={{ color: NAVY }}>Who</th>
+                <th style={{ color: NAVY }}>Fix By</th>
+                <th style={{ color: NAVY }}>Completion</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visitFactors.map(f => (
+                <tr key={f.id}>
+                  <td style={{ fontWeight: '600' }}>{f.factor || '—'}</td>
+                  <td style={{ color: '#666' }}>{f.type_of_factor || '—'}</td>
+                  <td style={{ color: '#666', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.action_taken || '—'}</td>
+                  <td style={{ color: '#666' }}>{staffName(f.who_will_fix)}</td>
+                  <td style={{ color: '#666', whiteSpace: 'nowrap' }}>{f.when_will_fix || '—'}</td>
+                  <td style={{ color: '#666', whiteSpace: 'nowrap' }}>{f.planned_completion_date || '—'}</td>
+                  <td>
+                    <Link to={`/incidentfactorsedit/${f.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDeleteFactor(f.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
 
-                  </Form.Control>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Team Member Four</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Team Member Four"
-                    value={team_member_four}
-                    onChange={(e) => setTeamMemberFour(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+      {/* Incident Photos Section */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <SectionTitle count={visitPhotos.length}>
+          <FontAwesomeIcon icon={faImage} style={{ marginRight: '8px', color: '#9CA3AF' }} />
+          Evidence Photos
+        </SectionTitle>
 
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Location of Incident</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Location of Incident"
-                    value={location_of_incident}
-                    onChange={(e) => setLocationOfIncident(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Task Performed</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Task Performed"
-                    value={task_performed}
-                    onChange={(e) => setTaskPerformed(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>What Happened</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="What Happened"
-                    value={what_happened}
-                    onChange={(e) => setWhatHappened(e.target.value)}
-                  />
-                </Form.Group>
+        <Form onSubmit={onAddPhoto} style={{ marginBottom: '20px' }}>
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Photo Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. Damage at scene..."
+                  value={newPhotoTitle}
+                  onChange={e => setNewPhotoTitle(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Brief description..."
+                  value={newPhotoDesc}
+                  onChange={e => setNewPhotoDesc(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Photo File</Form.Label>
+                <Form.Control
+                  id="photo-file-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={e => setNewPhotoFile(e.target.files[0])}
+                />
+              </Form.Group>
+            </div>
+          </div>
+          <Button
+            type="submit"
+            disabled={!newPhotoFile}
+            style={{ backgroundColor: NAVY, border: 'none', fontWeight: '600', padding: '8px 20px' }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '6px' }} />
+            Upload Photo
+          </Button>
+        </Form>
 
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Date of Incident</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Date of Incident"
-                    value={date_of_incident}
-                    onChange={(e) => setDateOfIncident(e.target.value)}
-                  />
-                </Form.Group>
+        {visitPhotos.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '20px 0', margin: 0, fontSize: '14px' }}>
+            No photos uploaded yet.
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Photo</th>
+                <th style={{ color: NAVY }}>Title</th>
+                <th style={{ color: NAVY }}>Description</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visitPhotos.map(p => (
+                <tr key={p.id}>
+                  <td>
+                    <a href={p.incident_photo} target="_blank" rel="noreferrer">
+                      <img src={p.incident_photo} alt={p.title} style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                    </a>
+                  </td>
+                  <td style={{ fontWeight: '600' }}>{p.title || '—'}</td>
+                  <td style={{ color: '#666' }}>{p.description || '—'}</td>
+                  <td>
+                    <Link to={`/incidentphotosedit/${p.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDeletePhoto(p.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
 
-                <Incidentfactorsadd incidentinvestigation = {params.id}/>
-
-                
-
-
-
-
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Summary of Remedial Action</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Summary of Remedial Action"
-                    value={summary_of_remedial_action}
-                    onChange={(e) => setSummaryOfRemedialAction(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Summary of Incident Investigation</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={5}
-                    placeholder="Summary of Incident Investigation"
-                    value={summary_of_incident_investigation}
-                    onChange={(e) => setSummaryOfIncidentInvestigation(e.target.value)}
-                  />
-                </Form.Group>
-
-
-      
-                <div className="mt-3 float-right">
-                <Link to="/incidentinvestigationlist/">
-                  <Button
-                    variant="success"
-                    type="button"
-                    onClick={(e) => onUpdate(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </Link>
-                
-              </div>
-              </Form>    
-              
-            </div>            
-          </div> */}
-          {/* <Table striped bordered hover className='mt-3'>
-                <thead>
-                    <tr>
-
-                      <th scope="col" className="col-1">ID</th>
-                      <th scope="col" className="col-2">Factor</th>
-                      <th scope="col" className="col-2">Type </th>
-                      <th scope="col" className="col-3">Action Taken</th> 
-                      <th scope="col" className="col-2">Who fix</th> 
-                      <th scope="col" className="col-1">When fix</th> 
-                      <th scope="col" className="col-1">Complete By</th> 
-                      <th>Edit</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-           
-
-                    {incidentfactors.filter ((incidentfactor) => incidentfactor.incidentinvestigation === Number(params.id))
-                    .map((incidentfactor) => {
-                      return (
-                        <tr key={incidentfactor.id}>
-                          
-                      
-                          <td>{incidentfactor.id}</td>
-                          <td>{incidentfactor.factor}</td>
-                          <td>{incidentfactor.type_of_factor}</td>
-                          <td>{incidentfactor.action_taken}</td>
-                          <td>{incidentfactor.who_will_fix}</td>
-                          <td>{incidentfactor.when_will_fix}</td>
-                          <td>{incidentfactor.planned_completion_date}</td>
-       
-                         
-                          <td>
-                              <Link to={`/incidentfactorsedit/${incidentfactor.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-               
-                          </td>
-                          <td className="delete" onClick={() => onDelete(incidentfactor.id)}>
-                            <FontAwesomeIcon icon={faTrash } />
-                          </td>
-                    
-                        </tr>
-                      );
-                    })}
-                    
-                  </tbody>
-                </Table>  */}
-        </div>
+    </div>
   )
 }
-
-export default IncidentInvestigationEdit

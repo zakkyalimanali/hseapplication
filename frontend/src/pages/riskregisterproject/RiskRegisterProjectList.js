@@ -1,196 +1,148 @@
-import React, {useState, useEffect} from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
 import RiskRegisterProjectAPI from '../../API/RiskRegisterProjectAPI'
 import StaffAPI from '../../API/StaffAPI'
-import {  Button } from 'react-bootstrap';
-import { Link} from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-// import {   } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
+import AuthContext from '../../context/AuthContext'
 
-function RiskRegisterProjectList() {
-  const [riskregisterprojects , setRiskRegisterProjects] = useState([])
-  const [staffs , setStaffs] = useState([])
-  const [records, setRecords] = useState([]);
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-    useEffect(() => {
-        fetchStaff()
-        fetchRiskRegisterProject()
-    },[])
+export default function RiskRegisterProjectList() {
+  const { authTokens } = useContext(AuthContext)
+  const [projects, setProjects] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    const fetchRiskRegisterProject = () => {
-        RiskRegisterProjectAPI.get('/')
-        .then((res) => {
-            setRiskRegisterProjects(res.data)
-        })
-        .catch(console.log)
-    }
+  useEffect(() => {
+    fetchProjects()
+    fetchStaff()
+  }, [])
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
-
-    const onDelete = (id) => {
-        RiskRegisterProjectAPI.delete(`/${id}/`).then((res) => {
-            fetchRiskRegisterProject();
-        }).catch(console.log)
-    }
-  
-  const customStyles = {
-    headCells : {
-      style: {
-        border: '1px solid black',
-  
-      },
-        },
-    cells : {
-      style: {
-        border: '1px solid black'
-      },
-    },
+  const fetchProjects = () => {
+    RiskRegisterProjectAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setProjects(res.data)).catch(console.log)
   }
 
-  const columns = [
-    {
-      name: 'Id',
-      selector: (row) => row.id,
-      sortable: true,
-      // width: '6rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Project Name',
-      selector: (row) => row.project_name,
-      sortable: true,
-      // width: '8rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Date Raised ',
-      selector: (row) => row.date_raised ,
-      sortable: true,
-      // width: '8rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Date Reviewed',
-      selector: (row) => row.date_reviewed,
-      sortable: true,
-      // width: '12rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Raised By',
-      selector: (row) => row.raised_by,
-      sortable: true,
-      // width: '12rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Reviewed By',
-      selector: (row) => row.reviewed_by,
-      sortable: true,
-      // width: '12rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'More Info',
-      selector: (row) => row.more_info,
-      // width: '6rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-    {
-      name: 'Delete',
-      selector: (row) => row.delete,
-      // width: '6rem'
-      // style: {
-      //   background: 'rgba(251,212,124, 0.5)',
-      // },
-    },
-  ];
+  const fetchStaff = () => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }
 
+  const onDelete = (id) => {
+    RiskRegisterProjectAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchProjects()).catch(console.log)
+  }
 
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
 
-useEffect(() => {
-const data = riskregisterprojects.map((riskregisterproject) => {
-  const raised_by = staffs.find((staff) => staff.id === riskregisterproject.raised_by)?.name  
-  const reviewed_by = staffs.find((staff) => staff.id === riskregisterproject.reviewed_by)?.name   
-return {
-  id: riskregisterproject.id,
-  project_name : riskregisterproject.project_name,
-  date_raised : riskregisterproject.date_raised,
-  date_reviewed : riskregisterproject.date_reviewed,
-  raised_by : raised_by,
-  reviewed_by  : reviewed_by ,
-  more_info : <Link to={`/riskregisterprojectedit/${riskregisterproject.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-  // more_info : "More Info",
-  delete: (
-    <FontAwesomeIcon
-      icon={faTrash}
-      onClick={() => onDelete(riskregisterproject.id)}
-    />
-  ),
-  // delete: "Delete",
-
-}
-})
-setRecords(data);
-}, [riskregisterprojects , ])
+  const filtered = projects.filter(p => {
+    const q = search.toLowerCase()
+    return (
+      (p.project_name || '').toLowerCase().includes(q) ||
+      staffName(p.raised_by).toLowerCase().includes(q) ||
+      staffName(p.reviewed_by).toLowerCase().includes(q)
+    )
+  })
 
   return (
-    <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-3">Project List</h1>
-      
-      <div className="mt-4 col-md-10 m row justify-content-center">
-      <div className="row justify-content-around">
-      <Button href="/riskregisterprojectadd" variant="secondary" className="mb-4 col-md-2">
-                      Add Project
-      </Button>
+    <div style={{ padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
 
-        {/* <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button> */}
-        {/* <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div> */}
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Risk Register</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Manage project-level risk registers and individual risk entries.
+          </p>
+        </div>
+        <Link to="/riskregisterprojectadd">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
+            Add Project
+          </Button>
+        </Link>
       </div>
 
-       
-  
-            <div>
-            <div className="table-container mb-5">
-              <DataTable 
-                customStyles={customStyles}
-                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                //  className='stripe'
-                columns={columns}
-                data={records}
-                selectableRows
-                fixedHeader
-                pagination
-              >
-              </DataTable>
-            </div>
-            </div>
-
-       
-          </div>
+      {/* Summary card */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        <div style={{
+          backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+        }}>
+          <div style={{ fontSize: '28px', fontWeight: '800', color: NAVY }}>{projects.length}</div>
+          <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>Total Projects</div>
         </div>
+      </div>
+
+      {/* Table card */}
+      <div style={{
+        backgroundColor: 'white', borderRadius: '12px',
+        padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>All Projects ({filtered.length})</h5>
+          <input
+            type="text"
+            placeholder="Search project, raised by..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '280px', outline: 'none',
+            }}
+          />
+        </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {projects.length === 0 ? 'No projects added yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '14px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Project Name</th>
+                <th style={{ color: NAVY }}>Raised By</th>
+                <th style={{ color: NAVY }}>Reviewed By</th>
+                <th style={{ color: NAVY }}>Date Raised</th>
+                <th style={{ color: NAVY }}>Date Reviewed</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(p => (
+                <tr key={p.id}>
+                  <td style={{ fontWeight: '600' }}>{p.project_name || '—'}</td>
+                  <td style={{ color: '#666', fontSize: '13px' }}>{staffName(p.raised_by)}</td>
+                  <td style={{ color: '#666', fontSize: '13px' }}>{staffName(p.reviewed_by)}</td>
+                  <td style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>{p.date_raised || '—'}</td>
+                  <td style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>{p.date_reviewed || '—'}</td>
+                  <td>
+                    <Link to={`/riskregisterprojectedit/${p.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(p.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </div>
   )
 }
-
-export default RiskRegisterProjectList

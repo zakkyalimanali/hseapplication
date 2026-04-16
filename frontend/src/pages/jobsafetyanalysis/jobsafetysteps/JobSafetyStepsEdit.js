@@ -1,169 +1,92 @@
-import React , {useEffect , useState} from 'react'
-import JobSafetyAnalysisAPI from '../../../API/JobSafetyAnalysisAPI';
-import JobSafetyEquipmentAPI from '../../../API/JobSafetyEquipmentAPI';
-import JobSafetyStepsAPI from '../../../API/JobSafetyStepsAPI';
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import JobSafetyStepsAPI from '../../../API/JobSafetyStepsAPI'
+import AuthContext from '../../../context/AuthContext'
+import API_BASE from '../../../utils/apiBase'
 
-// Others 
-import { useNavigate } from 'react-router'
-import { useParams } from 'react-router-dom';
-import API_BASE from "../../../utils/apiBase";
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function JobSafetyStepsEdit(props) {
-    const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
-    const [jobsafetysteps , setJobSafetySteps] = useState([])
-    const job_safety_analysis = props.jobsafetyanalysis
-    const [job_steps , setJobSteps] = useState('')
-    // const [hazards , setHazards] = useState('')
-    // const [controls , setControls] = useState('')
-    const [id , setId] = useState(null)
-    const navigate  = useNavigate()
-    const params = useParams()
+export default function JobSafetyStepsEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchJobSafetySteps()
-        setId(params.id)
-    },[params.id]) 
+  const [job_safety_analysis, setJobSafetyAnalysis] = useState(null)
+  const [job_steps, setJobSteps] = useState('')
 
-    // const fetchJobSafetySteps = () => {
-    //     axios.get(`${API_BASE}/hseapp/jobsafetysteps/${params.id}`)
-    //     .then((res) => {
-    //         setJobSafetySteps(res.data)
-    //         setJobSteps(res.data.job_steps)
-    //         setHazards(res.data.hazards)
-    //         setControls(res.data.controls)
-    //     })
-    //     .catch(console.log)
-    // }
+  useEffect(() => {
+    const h = { Authorization: `Bearer ${authTokens.access}` }
+    axios.get(`${API_BASE}/hseapp/jobsafetysteps/${params.id}/`, { headers: h })
+      .then(res => {
+        setJobSafetyAnalysis(res.data.job_safety_analysis)
+        setJobSteps(res.data.job_steps || '')
+      }).catch(console.log)
+  }, [params.id])
 
-    const fetchJobSafetySteps = () => {
-        axios.get(`${API_BASE}/hseapp/jobsafetysteps/${params.id}`)
-        .then((res) => {
-            setJobSafetySteps(res.data)
-            setJobSteps(res.data.job_steps)
-        })
-        .catch(console.log)
-    }
+  const onUpdate = (e) => {
+    e.preventDefault()
+    JobSafetyStepsAPI.patch(`/${params.id}/`, {
+      job_steps,
+      job_safety_analysis,
+    }, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
-    useEffect(() => {
-        fetchJobSafetyAnalysis()
-    },[]) 
-
-    const fetchJobSafetyAnalysis = () => {
-        JobSafetyAnalysisAPI.get('/')
-        .then((res) => {
-            setJobSafetyAnalysises(res.data)
-        })
-        .catch(console.log)
-    }
-
-    // const willSubmitTheEntryIntoDatabase = (e) => {
-    //     e.preventDefault()
-    //     let item = {
-    //         job_steps,
-    //         hazards,
-    //         controls,
-    //         job_safety_analysis
-    //     }
-    //     navigate(0)
-    //     JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
-    // }
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            job_steps,
-            job_safety_analysis
-        }
-        navigate(0)
-        JobSafetyStepsAPI.post('/', item).then(() => fetchJobSafetySteps())
-    }
-
-    // const updateEntryToDatabase = (id) => {
-    //     let item = {
-    //         job_steps,
-    //         hazards,
-    //         controls,
-    //         job_safety_analysis
-    //     }
-    //     JobSafetyStepsAPI.patch(`/${id}/`, item).then(() => {
-    //         setJobSteps('')
-    //         setHazards('')
-    //         setControls('')
-    //         fetchJobSafetySteps()
-    //     })
-    //     navigate(-1)
-    // }
-    const updateEntryToDatabase = (id) => {
-        let item = {
-            job_steps,
-            job_safety_analysis
-        }
-        JobSafetyStepsAPI.patch(`/${id}/`, item).then(() => {
-            setJobSteps('')
-            fetchJobSafetySteps()
-        })
-        navigate(-1)
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
   return (
-    <div className="container mt-5">
-    <div className="row">
-      <div className= "col-md-12"></div>
-      <div className="col-md-12 ">
-        <h3 className="float-left">Create a Job Steps</h3>
-        
-        <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-        className="mt-4">
-          
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Job Steps</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Job Steps"
-              value={job_steps}
-              onChange={(e) => setJobSteps(e.target.value)}
-            />
-          </Form.Group>
-          {/* <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Hazards</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Hazards"
-              value={hazards}
-              onChange={(e) => setHazards(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Controls</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Controls"
-              value={controls}
-              onChange={(e) => setControls(e.target.value)}
-            />
-          </Form.Group> */}
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
-          <div className="mt-3 float-right">
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to JSA
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Job Step</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the job step description.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Job Step</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Describe the job step..."
+              value={job_steps}
+              onChange={e => setJobSteps(e.target.value)}
+            />
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
             <Button
-              variant="primary"
-              type="button"
-              onClick= {(e) => updateEntryToDatabase(id)}
-              className="mx-2"
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
             >
-              Update
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
             </Button>
           </div>
-        </Form>    
-      </div>            
+
+        </Form>
+      </div>
     </div>
-  </div>
   )
 }
-
-export default JobSafetyStepsEdit

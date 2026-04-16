@@ -1,208 +1,168 @@
-import React , {useState , useEffect} from 'react'
-
-// APIs imports
-import IncidentFactorsAPI from '../../../API/IncidentFactorsAPI'
-import IncidentInvestigationAPI from '../../../API/IncidentInvestigationAPI'
-import StaffAPI from '../../../API/StaffAPI'
-import axios from 'axios'
-
-// from bootstrap 
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-
-// from react router
-import { Link} from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-
-// from fontawesome
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import IncidentFactorsAPI from '../../../API/IncidentFactorsAPI'
+import StaffAPI from '../../../API/StaffAPI'
+import AuthContext from '../../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../../utils/apiBase'
 
-// Others 
-import { useNavigate } from 'react-router'
-import API_BASE from "../../../utils/apiBase";
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-
-// We props from the incident investigation edit page so that we can get the corrent incident investigation page
-function Incidentfactorsedit(props) {
-  // useParams set up
+export default function Incidentfactorsedit() {
+  const { authTokens } = useContext(AuthContext)
   const params = useParams()
-
-  // setting up the useState([]) for the apis 
-  const [incidentfactors , setIncidentFactors ] = useState([])
-  const [incidentinvestigations , setIncidentInvestigations] = useState([])
-  const [staffs , setStaffs] = useState([])
-
-  // setting up the useState('') to link the models from the backend 
-  const [factor , setFactor] = useState('')
-  const [type_of_factor , setTypeOfFactor] = useState('')
-  const [action_taken , setActionTaken] = useState('')
-  const [who_will_fix , setWhoWillFix] = useState('')
-  const [when_will_fix , setWhenWillFix] = useState('')
-  const [planned_completion_date, setPlannedCompletionDate] = useState('')
-  const [id , setId] = useState(null)
-
-  // setting up the incident investigation linked to the incident investigation edit page
-  console.log(props)
-  const incidentinvestigation = props.incidentinvestigation
-
-  // others
   const navigate = useNavigate()
 
-  // this is so that the fetchIncidentFactor can be called if there is a change on the params which is the individual factor 
-  useEffect(() => {
-    fetchIncidentFactor()
-    setId(params.id)
-    
-  },[params.id]) 
+  const [factor, setFactor] = useState('')
+  const [type_of_factor, setTypeOfFactor] = useState('')
+  const [action_taken, setActionTaken] = useState('')
+  const [who_will_fix, setWhoWillFix] = useState('')
+  const [when_will_fix, setWhenWillFix] = useState('')
+  const [planned_completion_date, setPlannedCompletionDate] = useState('')
+  const [incidentinvestigation, setIncidentInvestigation] = useState(null)
+  const [staffs, setStaffs] = useState([])
 
   useEffect(() => {
-    fetchIncidentInvestigation()
-    fetchStaff()
-  },[])
+    const h = { Authorization: `Bearer ${authTokens.access}` }
 
-  // this fetchs the incident factors api, it uses params.id so that the unique entry can be retrived
-  // after the then((res) => {}) allows the items inside to be filled up with their existing extries
-  const fetchIncidentFactor = () => {
-    axios.get(`${API_BASE}/hseapp/incidentfactors/${params.id}/`)
-    .then((res) => {
-      setIncidentFactors(res.data)
-      setFactor(res.data.factor)
-      setTypeOfFactor(res.data.type_of_factor)
-      setActionTaken(res.data.action_taken)
-      setWhoWillFix(res.data.who_will_fix)
-      setWhenWillFix(res.data.when_will_fix)
-      setPlannedCompletionDate(res.data.planned_completion_date)
-    })
-    .catch(console.log)
-  }
-  
-  const fetchIncidentInvestigation = () => {
-    IncidentInvestigationAPI.get('/')
-    .then((res) => {
-      setIncidentInvestigations(res.data)
-    })
-    .catch(console.log)
-  }
+    axios.get(`${API_BASE}/hseapp/incidentfactors/${params.id}/`, { headers: h })
+      .then(res => {
+        const d = res.data
+        setFactor(d.factor || '')
+        setTypeOfFactor(d.type_of_factor || '')
+        setActionTaken(d.action_taken || '')
+        setWhoWillFix(d.who_will_fix || '')
+        setWhenWillFix(d.when_will_fix || '')
+        setPlannedCompletionDate(d.planned_completion_date || '')
+        setIncidentInvestigation(d.incidentinvestigation)
+      }).catch(console.log)
 
-  const fetchStaff = () => {
-    StaffAPI.get('/')
-    .then((res) => {
-      setStaffs(res.data)
-    })
-    .catch(console.log)
-  }
-  
-  const whenSubmitButtonIsClickedToAddFactor = (e) => {
-    e.preventDefault();
-    let item = {factor , type_of_factor , action_taken , who_will_fix , when_will_fix, planned_completion_date, incidentinvestigation }
-    navigate(0);
-    IncidentFactorsAPI.post('/', item).then(() => fetchIncidentFactor());
-}
+    StaffAPI.get('/', { headers: h }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [params.id])
 
-const updateButtonIsClickToUpdateFactorEntry = (id) => {
-  let item = {factor , type_of_factor , action_taken , who_will_fix , when_will_fix, planned_completion_date, incidentinvestigation }
-  IncidentFactorsAPI.patch(`/${id}/`, item).then(() => { 
-      setFactor('')
-      setTypeOfFactor('')
-      setActionTaken('')
-      setWhoWillFix('')
-      setWhenWillFix('')
-      setPlannedCompletionDate('')
-      fetchIncidentFactor()
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      incidentinvestigation,
+      factor,
+      type_of_factor,
+      action_taken,
+      who_will_fix: who_will_fix || null,
+      when_will_fix: when_will_fix || null,
+      planned_completion_date: planned_completion_date || null,
     }
-  )
-  navigate(-1)
-}
+    IncidentFactorsAPI.patch(`/${params.id}/`, item, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
-  
   return (
-    <div className="container mt-5">
-    <div className="row">
-        <h3 className="float-left">Create new Site Hazard</h3>
-        
-        <Form onSubmit={whenSubmitButtonIsClickedToAddFactor} className="mt-4">
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Factor</Form.Label>
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
+
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Investigation
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Contributing Factor</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the contributing factor and corrective action details.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Factor</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Factor"
+              placeholder="Describe the contributing factor..."
               value={factor}
-              onChange={(e) => setFactor(e.target.value)}
+              onChange={e => setFactor(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Type Of Factor</Form.Label>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Type of Factor</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Type Of Factor"
+              placeholder="e.g. Human, Equipment, Environmental..."
               value={type_of_factor}
-              onChange={(e) => setTypeOfFactor(e.target.value)}
+              onChange={e => setTypeOfFactor(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Action Taken</Form.Label>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Action Taken</Form.Label>
             <Form.Control
               as="textarea"
-              rows={5}
-              placeholder="Action Taken"
+              rows={4}
+              placeholder="Describe the corrective action taken..."
               value={action_taken}
-              onChange={(e) => setActionTaken(e.target.value)}
+              onChange={e => setActionTaken(e.target.value)}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Who Will Fix It</Form.Label>
-            <Form.Control
-              as="select"
-              placeholder="Who Will Fix It"
-              value={who_will_fix }
-              onChange={(e) => setWhoWillFix(e.target.value)}
-            >
-              <option value=''>Select An Option</option>
-          {staffs.map(staff => {
-            return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-          })}
-
-            </Form.Control>
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Who Will Fix It</Form.Label>
+            <Form.Select value={who_will_fix} onChange={e => setWhoWillFix(e.target.value)}>
+              <option value="">Select staff member...</option>
+              {staffs.map(s => (
+                <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-          <Form.Label>When will it be fix</Form.Label>
-          <Form.Control
-            type="date"
-            placeholder="When will it be fix"
-            value={when_will_fix}
-            onChange={(e) => setWhenWillFix(e.target.value)}
-          />
-        </Form.Group>
-          <Form.Group className="mb-3" controlId="formStaffIdNumber=">
-          <Form.Label>Planned Completion Date</Form.Label>
-          <Form.Control
-            type="date"
-            placeholder="Planned Completion Date"
-            value={planned_completion_date }
-            onChange={(e) => setPlannedCompletionDate(e.target.value)}
-          />
-        </Form.Group>
-
-          <div className="mt-3 mb-3">
-            <Button
-                  variant="success"
-                  type="button"
-                  onClick={(e) => updateButtonIsClickToUpdateFactorEntry (id)}
-                  className="mx-2"
-                >
-                  Update
-            </Button>
-            
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group className="mb-4">
+                <Form.Label style={L}>When Will It Be Fixed</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={when_will_fix}
+                  onChange={e => setWhenWillFix(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-6">
+              <Form.Group className="mb-4">
+                <Form.Label style={L}>Planned Completion Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={planned_completion_date}
+                  onChange={e => setPlannedCompletionDate(e.target.value)}
+                />
+              </Form.Group>
+            </div>
           </div>
-        </Form>    
-      </div>            
-    {/* </div> */}
-  </div>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
+            </Button>
+          </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default Incidentfactorsedit

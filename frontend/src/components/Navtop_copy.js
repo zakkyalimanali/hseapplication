@@ -64,12 +64,14 @@ export default function Navtop() {
             <NavDropdown.Item as={NavLink} to="permittowork">Permit to Work</NavDropdown.Item>
             <NavDropdown.Item as={NavLink} to="jobsafetyanalysis">Job Safety Analysis</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item as={NavLink} to="stats" style={{ color: '#aaa' }}>Statistics (In Progress)</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="safeworkpracticelist" style={{ color: '#aaa' }}>Safe Work Practice (In Progress)</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="hseauditlist" style={{ color: '#aaa' }}>HSE Audit (In Progress)</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="emergencyplanlist" style={{ color: '#aaa' }}>Emergency Plan (In Progress)</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="riskmanagementlist" style={{ color: '#aaa' }}>Risk Management (In Progress)</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="reportinglist" style={{ color: '#aaa' }}>Reporting (In Progress)</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="stats">Statistics</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="safeworkpracticelist">Safe Work Practice</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="hseauditlist">HSE Audit</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="emergencyplanlist">Emergency Plan</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="riskmanagementlist">Risk Management</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="reportinglist">Reporting</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="workplaceruleslist">Workplace Rules</NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="riskmitigationlist">Risk Mitigation</NavDropdown.Item>
           </NavDropdown>
 
           {/* Staff Dropdown */}

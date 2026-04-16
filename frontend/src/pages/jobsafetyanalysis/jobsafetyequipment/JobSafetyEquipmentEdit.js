@@ -1,113 +1,92 @@
-import React , {useEffect , useState} from 'react'
-import JobSafetyAnalysisAPI from '../../../API/JobSafetyAnalysisAPI';
-import JobSafetyEquipmentAPI from '../../../API/JobSafetyEquipmentAPI';
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import JobSafetyEquipmentAPI from '../../../API/JobSafetyEquipmentAPI'
+import AuthContext from '../../../context/AuthContext'
+import API_BASE from '../../../utils/apiBase'
 
-// Others 
-import { useNavigate } from 'react-router'
-import { useParams } from 'react-router-dom';
-import API_BASE from "../../../utils/apiBase";
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function JobSafetyEquipmentEdit(props) {
-    const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
-    const [jobsafetyequipments , setJobSafetyEquipments] = useState([])
-    const job_safety_analysis = props.jobsafetyanalysis
-    const [safety_equipment , setSafetyEquipment] = useState('')
-    const [id , setId] = useState(null)
-    const navigate  = useNavigate()
-    console.log(props)
-    const params = useParams()
+export default function JobSafetyEquipmentEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchJobSafetyEquipment()
-        setId(params.id)
-    },[params.id])
+  const [job_safety_analysis, setJobSafetyAnalysis] = useState(null)
+  const [safety_equipment, setSafetyEquipment] = useState('')
 
-    const fetchJobSafetyEquipment = () => {
-        axios.get(`${API_BASE}/hseapp/jobsafetyequipment/${params.id}`)
-        .then((res) => {
-            setJobSafetyEquipments(res.data)
-            setSafetyEquipment(res.data.safety_equipment)
-        })
-        .catch(console.log)
-    }
+  useEffect(() => {
+    const h = { Authorization: `Bearer ${authTokens.access}` }
+    axios.get(`${API_BASE}/hseapp/jobsafetyequipment/${params.id}/`, { headers: h })
+      .then(res => {
+        setJobSafetyAnalysis(res.data.job_safety_analysis)
+        setSafetyEquipment(res.data.safety_equipment || '')
+      }).catch(console.log)
+  }, [params.id])
 
-    useEffect(() => {
-        fetchJobSafetyAnalysis()
-    },[])
+  const onUpdate = (e) => {
+    e.preventDefault()
+    JobSafetyEquipmentAPI.patch(`/${params.id}/`, {
+      safety_equipment,
+      job_safety_analysis,
+    }, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
-    const fetchJobSafetyAnalysis = () => {
-        JobSafetyAnalysisAPI.get('/')
-        .then((res) => {
-            setJobSafetyAnalysises(res.data)
-        })
-        .catch(console.log)
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            safety_equipment, 
-            job_safety_analysis
-        }
-        navigate(0);
-        JobSafetyEquipmentAPI.post('/', item).then(() => fetchJobSafetyEquipment())
-    }
-
-    const updateButtonIsClickToUpdateEquipmentEntry = (id) => {
-        let item = {
-            safety_equipment, 
-            job_safety_analysis
-        }
-        JobSafetyEquipmentAPI.patch(`/${id}/`, item).then(() => { 
-            setSafetyEquipment('')
-            fetchJobSafetyEquipment()
-          }
-        )
-        navigate(-1)
-      }
-      
   return (
-    <div className="container mt-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left">Up date PPE</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Safety Equipment</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Safety Equipment"
-                    value={safety_equipment}
-                    onChange={(e) => setSafetyEquipment(e.target.value)}
-                  />
-                </Form.Group>
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
-                <div className="mt-3 float-right">
-                  <Button
-                    variant="primary"
-                    type="button"
-                    onClick={(e) => updateButtonIsClickToUpdateEquipmentEntry(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to JSA
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Safety Equipment</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the safety equipment entry.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Safety Equipment</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="e.g. Hard hat, Safety harness, Gloves..."
+              value={safety_equipment}
+              onChange={e => setSafetyEquipment(e.target.value)}
+            />
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
+            </Button>
           </div>
-        </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default JobSafetyEquipmentEdit

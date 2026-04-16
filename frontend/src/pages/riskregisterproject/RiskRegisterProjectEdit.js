@@ -1,468 +1,386 @@
-import React , {useEffect , useState} from 'react'
-// APIS
-import RiskRegisterProjectAPI from '../../API/RiskRegisterProjectAPI';
-import StaffAPI from '../../API/StaffAPI';
-import RiskRegisterAPI from '../../API/RiskRegisterAPI';
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-import RiskRegisterAdd from './riskregister/RiskRegisterAdd';
-import { Link , useNavigate} from 'react-router-dom';
+import { faArrowLeft, faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import RiskRegisterProjectAPI from '../../API/RiskRegisterProjectAPI'
+import RiskRegisterAPI from '../../API/RiskRegisterAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../utils/apiBase'
 
-// DataTable items
-import DataTable from 'react-data-table-component'
-import API_BASE from "../../utils/apiBase";
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-
-function RiskRegisterProjectEdit() {
-    const [riskregisterprojects , setRiskRegisterProjects] = useState([])
-    const [riskregisters , setRiskRegisters] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [project_name , setProjectName] = useState('')
-    const [raised_by , setRaisedBy] = useState('')
-    const [reviewed_by , setReviewedBy] = useState('')
-    const [id , setId] = useState(null)
-    const [records, setRecords] = useState([]);
-    const navigate = useNavigate()
-    const params = useParams()
-
-    useEffect( () => {
-        fetchStaff()
-        fetchRiskRegister()
-    },[])
-
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
-
-    const fetchRiskRegister = () => {
-        RiskRegisterAPI.get('/')
-        .then((res) => {
-            setRiskRegisters(res.data);
-        }).catch(console.log)
-    }
-
-
-    useEffect(() => {
-        fetchRiskRegisterProject()
-        setId(params.id)
-    },[params.id]) 
-
-    const fetchRiskRegisterProject = () => {
-        axios.get(`${API_BASE}/hseapp/riskregisterproject/${params.id}`)
-        .then((res) => {
-            setRiskRegisterProjects(res.data)
-            setProjectName(res.data.project_name)
-            setRaisedBy(res.data.raised_by)
-            setReviewedBy(res.data.reviewed_by)
-        })
-        .catch(console.log)
-    }
-
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            project_name,
-            raised_by : raised_by || null,
-            reviewed_by: reviewed_by || null,
-        }
-        navigate(-1);
-        RiskRegisterProjectAPI.post('/', item).then(()=> 
-            fetchRiskRegisterProject())
-            .catch((error) => {
-                console.log("Error:", error);
-              })
-    }
-
-    const toUpdateDatabaseInfo = (id) => {
-        let item = {
-            project_name,
-            raised_by : raised_by || null,
-            reviewed_by: reviewed_by || null,
-        }
-    RiskRegisterProjectAPI.patch(`/${id}/`, item).then(() => {
-        setProjectName('')
-        setRaisedBy('')
-        setReviewedBy('')
-        fetchRiskRegisterProject()
-    })
-    navigate(-1)
-    }
-
-    const deleteRisk = (id) => {
-        RiskRegisterAPI.delete(`/${id}`).then((res) => {
-          fetchRiskRegister();
-  
-        }).catch(console.log)
-      }
-
-    const customStyles = {
-        headCells : {
-          style: {
-            border: '1px solid black',
-      
-          },
-            },
-        cells : {
-          style: {
-            border: '1px solid black'
-          },
-        },
-      }
-  
-      const columns = [
-        {
-          name: 'Id',
-          selector: (row) => row.id,
-          sortable: true,
-          
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Date Raised',
-          selector: (row) => row.date_raised,
-          sortable: true,
-          // width: '8rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Date Reviewed',
-          selector: (row) => row.date_reviewed,
-          sortable: true,
-          // width: '8rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Raised By',
-          selector: (row) => row.raised_by,
-          sortable: true,
-          // width: '8rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Reviwed By',
-          selector: (row) => row.reviewed_by,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Risk Description',
-          selector: (row) => row.risk_description,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Likelihood Of Risk',
-          selector: (row) => row.likelihood_of_risk,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Impact Of Risk',
-          selector: (row) => row.impact_of_risk,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Severity',
-          selector: (row) => row.severity,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Responsible Party',
-          selector: (row) => row.responsible_party,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Mitigating Action',
-          selector: (row) => row.mitigating_action,
-          sortable: true,
-          width: '12rem',
-          cell: (row) => (
-            <div style={{ wordWrap: 'break-word', width: '150px' }}>
-              {row.mitigating_action}
-            </div>
-          ),
- 
-        },
-        {
-          name: 'Contingency Action',
-          selector: (row) => row.contingency_action,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Progress On Actions',
-          selector: (row) => row.progress_on_actions,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Status',
-          selector: (row) => row.status,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'More Info',
-          selector: (row) => row.more_info,
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Delete',
-          selector: (row) => row.delete,
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-      ];
-
-    //   useEffect(() => {
-    //     // const data = riskregisters.map((riskregister) => {
-    //     const data = riskregisters.filter((riskregister) => riskregister.project_name === Number(params.id).map((riskregister))) 
-
-
-    //       const raised_by = staffs.find((staff) => staff.id === riskregister.raised_by)?.name  
-    //       const reviewed_by = staffs.find((staff) => staff.id === riskregister.reviewed_by)?.name  
-          
-    //       return {
-    //         id: riskregister.id,
-    //         date_raised : riskregister.date_raised ,
-    //         date_reviewed : riskregister.date_reviewed,
-    //         textbrief : riskregister.textbrief,
-    //         raised_by : raised_by,
-    //         reviewed_by : reviewed_by,
-    //         risk_description : riskregister.risk_description,
-    //         likelihood_of_risk : riskregister.likelihood_of_risk,
-    //         impact_of_risk : riskregister.impact_of_risk,
-    //         severity : riskregister.severity,
-    //         responsible_party : riskregister.responsible_party,
-    //         mitigating_action : riskregister.mitigating_action,
-    //         contingency_action : riskregister.contingency_action,
-    //         progress_on_actions : riskregister.progress_on_actions,
-    //         status : riskregister.status,
-    //         // more_info : <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-    //         more_info : "More Info",
-    //         delete: (
-    //           <FontAwesomeIcon
-    //             icon={faTrash}
-    //             onClick={() => deleteRisk(riskregister.id)}
-    //           />
-    //         ),
-    //         // delete: "Delete",
-      
-    //       }
-    //     })
-    //     setRecords(data);
-    //   }, [riskregisters])
-
-    useEffect(() => {
-        const data = riskregisters
-          .filter((riskregister) => riskregister.project_name === Number(params.id))
-          .map((riskregister) => {
-            const raised_by = staffs.find((staff) => staff.id === riskregister.raised_by)?.name;
-            const reviewed_by = staffs.find((staff) => staff.id === riskregister.reviewed_by)?.name;
-      
-            return {
-              id: riskregister.id,
-              date_raised: riskregister.date_raised,
-              date_reviewed: riskregister.date_reviewed,
-              textbrief: riskregister.textbrief,
-              raised_by: raised_by,
-              reviewed_by: reviewed_by,
-              risk_description: riskregister.risk_description,
-              likelihood_of_risk: riskregister.likelihood_of_risk,
-              impact_of_risk: riskregister.impact_of_risk,
-              severity: riskregister.severity,
-              responsible_party: riskregister.responsible_party,
-              mitigating_action: riskregister.mitigating_action,
-              contingency_action: riskregister.contingency_action,
-              progress_on_actions: riskregister.progress_on_actions,
-              status: riskregister.status,
-              more_info: <Link to={`/riskregisteredit/${riskregister.id}`}><FontAwesomeIcon icon={faPen} /></Link>,
-              delete: (
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => deleteRisk(riskregister.id)}
-                />
-              ),
-            };
-          });
-      
-        setRecords(data);
-      }, [riskregisters, params.id]);
-
-
-      const handleFilter = (e) => {
-        const searchText = e.target.value.toLowerCase();
-      
-        if (searchText === '') {
-          // If the search text is empty, fetch all incidents again
-          fetchRiskRegister();
-        } else {
-          const newData = riskregisters
-            .map((riskregister) => {
-              const person_raised = staffs.find(
-                (staff) => staff.id === riskregister.raised_by
-              )?.name;
-              const person_reviewed = staffs.find(
-                (staff) => staff.id === riskregister.reviewed_by
-              )?.name;
-              return {
-                ...riskregister,
-                person_raised,
-                person_reviewed,
-              };
-            })
-            .filter((riskregister) => {
-              const incidentProps = Object.values(riskregister);
-              for (let i = 0; i < incidentProps.length; i++) {
-                if (
-                  incidentProps[i] &&
-                  incidentProps[i].toString().toLowerCase().includes(searchText)
-                ) {
-                  return true; // Return true if a match is found in any property
-                }
-              }
-              return false; // Return false if no match is found in any property
-            });
-          setRiskRegisters(newData);
-        }
-      };
-  
-
-
-  return (
-    <div className="container mt-3 pb-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="d-flex justify-content-center mt-3">Edit Project</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Project Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Project Name"
-                    value={project_name}
-                    onChange={(e) => setProjectName(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Raised By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Raised By"
-                    value={raised_by}
-                    onChange={(e) => setRaisedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Reviewed By</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Reviewed By"
-                    value={reviewed_by}
-                    onChange={(e) => setReviewedBy(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
-                  </Form.Control>
-                </Form.Group>
-                
-        
-
-                
-
-                <div className="mt-3 float-right">
-                <Button
-                    variant="warning"
-                    type="button"
-                    onClick={(e) => toUpdateDatabaseInfo(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
-          </div>
-          <RiskRegisterAdd projectlist = {params.id}/>
-
-          <div className="table-container mb-5 mt-5">
-          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
-              <DataTable 
-                customStyles={customStyles}
-                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                //  className='stripe'
-                columns={columns}
-                data={records}
-                selectableRows
-                fixedHeader
-                pagination
-              >
-              </DataTable>
-            </div>
-        </div>
-  )
+const SEVERITY_STYLES = {
+  Critical: { bg: '#FEE2E2', color: '#DC2626' },
+  High:     { bg: '#FEE2E2', color: '#DC2626' },
+  Medium:   { bg: '#FEF3C7', color: '#D97706' },
+  Low:      { bg: '#D1FAE5', color: '#059669' },
 }
 
-export default RiskRegisterProjectEdit
+function severityBadge(val) {
+  if (!val) return null
+  const key = Object.keys(SEVERITY_STYLES).find(k => val.toLowerCase() === k.toLowerCase())
+  if (!key) return null
+  return SEVERITY_STYLES[key]
+}
+
+export default function RiskRegisterProjectEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
+
+  // Project form
+  const [project_name, setProjectName] = useState('')
+  const [raised_by, setRaisedBy] = useState('')
+  const [reviewed_by, setReviewedBy] = useState('')
+
+  // Reference data
+  const [staffs, setStaffs] = useState([])
+  const [risks, setRisks] = useState([])
+
+  // Add risk form
+  const [newRaisedBy, setNewRaisedBy] = useState('')
+  const [newReviewedBy, setNewReviewedBy] = useState('')
+  const [newRiskDesc, setNewRiskDesc] = useState('')
+  const [newLikelihood, setNewLikelihood] = useState('')
+  const [newImpact, setNewImpact] = useState('')
+  const [newSeverity, setNewSeverity] = useState('')
+  const [newResponsible, setNewResponsible] = useState('')
+  const [newMitigating, setNewMitigating] = useState('')
+  const [newContingency, setNewContingency] = useState('')
+  const [newProgress, setNewProgress] = useState('')
+  const [newStatus, setNewStatus] = useState('')
+  const [search, setSearch] = useState('')
+
+  const headers = { Authorization: `Bearer ${authTokens.access}` }
+
+  useEffect(() => {
+    axios.get(`${API_BASE}/hseapp/riskregisterproject/${params.id}/`, { headers })
+      .then(res => {
+        const d = res.data
+        setProjectName(d.project_name || '')
+        setRaisedBy(d.raised_by || '')
+        setReviewedBy(d.reviewed_by || '')
+      }).catch(console.log)
+
+    StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+    fetchRisks()
+  }, [params.id])
+
+  const fetchRisks = () => {
+    RiskRegisterAPI.get('/', { headers }).then(res => setRisks(res.data)).catch(console.log)
+  }
+
+  const onUpdate = (e) => {
+    e.preventDefault()
+    const item = {
+      project_name,
+      raised_by: raised_by || null,
+      reviewed_by: reviewed_by || null,
+    }
+    RiskRegisterProjectAPI.patch(`/${params.id}/`, item, { headers })
+      .then(() => navigate('/riskregisterprojectlist'))
+      .catch(console.log)
+  }
+
+  const onAddRisk = (e) => {
+    e.preventDefault()
+    if (!newRiskDesc) return
+    const item = {
+      project_name: Number(params.id),
+      raised_by: newRaisedBy || null,
+      reviewed_by: newReviewedBy || null,
+      risk_description: newRiskDesc,
+      likelihood_of_risk: newLikelihood,
+      impact_of_risk: newImpact,
+      severity: newSeverity,
+      responsible_party: newResponsible,
+      mitigating_action: newMitigating,
+      contingency_action: newContingency,
+      progress_on_actions: newProgress,
+      status: newStatus,
+    }
+    RiskRegisterAPI.post('/', item, { headers })
+      .then(() => {
+        setNewRaisedBy(''); setNewReviewedBy(''); setNewRiskDesc('')
+        setNewLikelihood(''); setNewImpact(''); setNewSeverity('')
+        setNewResponsible(''); setNewMitigating(''); setNewContingency('')
+        setNewProgress(''); setNewStatus('')
+        fetchRisks()
+      }).catch(console.log)
+  }
+
+  const onDeleteRisk = (id) => {
+    RiskRegisterAPI.delete(`/${id}/`, { headers }).then(() => fetchRisks()).catch(console.log)
+  }
+
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
+
+  const projectRisks = risks.filter(r => r.project_name === Number(params.id))
+  const filtered = projectRisks.filter(r => {
+    const q = search.toLowerCase()
+    return (
+      (r.risk_description || '').toLowerCase().includes(q) ||
+      (r.severity || '').toLowerCase().includes(q) ||
+      (r.responsible_party || '').toLowerCase().includes(q) ||
+      (r.status || '').toLowerCase().includes(q)
+    )
+  })
+
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
+
+  return (
+    <div style={{ padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
+
+      {/* Back + Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/riskregisterprojectlist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to Risk Register
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Project</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update project details and manage risk entries.
+        </p>
+      </div>
+
+      {/* Project Form */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+        <h5 style={{ color: NAVY, fontWeight: '700', marginBottom: '20px' }}>Project Details</h5>
+        <Form onSubmit={onUpdate}>
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Project Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Project name..."
+                  value={project_name}
+                  onChange={e => setProjectName(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Raised By</Form.Label>
+                <Form.Select value={raised_by} onChange={e => setRaisedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Reviewed By</Form.Label>
+                <Form.Select value={reviewed_by} onChange={e => setReviewedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Link to="/riskregisterprojectlist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
+          </div>
+        </Form>
+      </div>
+
+      {/* Add Risk Form */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+        <h5 style={{ color: NAVY, fontWeight: '700', marginBottom: '20px' }}>
+          Add Risk Entry
+        </h5>
+        <Form onSubmit={onAddRisk}>
+          <div className="row">
+            <div className="col-md-12">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Risk Description</Form.Label>
+                <Form.Control
+                  as="textarea" rows={2}
+                  placeholder="Describe the risk..."
+                  value={newRiskDesc}
+                  onChange={e => setNewRiskDesc(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Likelihood</Form.Label>
+                <Form.Control type="text" placeholder="e.g. High, Medium, Low" value={newLikelihood} onChange={e => setNewLikelihood(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Impact</Form.Label>
+                <Form.Control type="text" placeholder="e.g. High, Medium, Low" value={newImpact} onChange={e => setNewImpact(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Severity</Form.Label>
+                <Form.Select value={newSeverity} onChange={e => setNewSeverity(e.target.value)}>
+                  <option value="">Select...</option>
+                  <option>Critical</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Status</Form.Label>
+                <Form.Control type="text" placeholder="e.g. Open, Closed" value={newStatus} onChange={e => setNewStatus(e.target.value)} />
+              </Form.Group>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Responsible Party</Form.Label>
+                <Form.Control type="text" placeholder="Who is responsible?" value={newResponsible} onChange={e => setNewResponsible(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Raised By</Form.Label>
+                <Form.Select value={newRaisedBy} onChange={e => setNewRaisedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Reviewed By</Form.Label>
+                <Form.Select value={newReviewedBy} onChange={e => setNewReviewedBy(e.target.value)}>
+                  <option value="">Select...</option>
+                  {staffs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </Form.Select>
+              </Form.Group>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Mitigating Action</Form.Label>
+                <Form.Control type="text" placeholder="Action to reduce risk..." value={newMitigating} onChange={e => setNewMitigating(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Contingency Action</Form.Label>
+                <Form.Control type="text" placeholder="Fallback action..." value={newContingency} onChange={e => setNewContingency(e.target.value)} />
+              </Form.Group>
+            </div>
+            <div className="col-md-4">
+              <Form.Group className="mb-3">
+                <Form.Label style={L}>Progress on Actions</Form.Label>
+                <Form.Control type="text" placeholder="Current progress..." value={newProgress} onChange={e => setNewProgress(e.target.value)} />
+              </Form.Group>
+            </div>
+          </div>
+          <Button
+            type="submit"
+            disabled={!newRiskDesc}
+            style={{ backgroundColor: NAVY, border: 'none', fontWeight: '600', padding: '8px 20px' }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '6px' }} />
+            Add Risk
+          </Button>
+        </Form>
+      </div>
+
+      {/* Risks Table */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>
+            Risk Entries
+            <span style={{ marginLeft: '10px', fontSize: '13px', fontWeight: '600', color: '#D97706', backgroundColor: '#FEF3C7', padding: '2px 8px', borderRadius: '6px' }}>
+              {projectRisks.length}
+            </span>
+          </h5>
+          <input
+            type="text"
+            placeholder="Search risks..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '240px', outline: 'none',
+            }}
+          />
+        </div>
+
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '30px 0', margin: 0, fontSize: '14px' }}>
+            {projectRisks.length === 0 ? 'No risks added to this project yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Risk Description</th>
+                <th style={{ color: NAVY }}>Likelihood</th>
+                <th style={{ color: NAVY }}>Impact</th>
+                <th style={{ color: NAVY }}>Severity</th>
+                <th style={{ color: NAVY }}>Responsible</th>
+                <th style={{ color: NAVY }}>Status</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(r => {
+                const badge = severityBadge(r.severity)
+                return (
+                  <tr key={r.id}>
+                    <td style={{ fontWeight: '600', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {r.risk_description || '—'}
+                    </td>
+                    <td style={{ color: '#666' }}>{r.likelihood_of_risk || '—'}</td>
+                    <td style={{ color: '#666' }}>{r.impact_of_risk || '—'}</td>
+                    <td>
+                      {badge ? (
+                        <span style={{ backgroundColor: badge.bg, color: badge.color, padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '600' }}>
+                          {r.severity}
+                        </span>
+                      ) : <span style={{ color: '#666' }}>{r.severity || '—'}</span>}
+                    </td>
+                    <td style={{ color: '#666' }}>{r.responsible_party || '—'}</td>
+                    <td style={{ color: '#666' }}>{r.status || '—'}</td>
+                    <td>
+                      <Link to={`/riskregisteredit/${r.id}`} style={{ color: NAVY }}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </Link>
+                    </td>
+                    <td>
+                      <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDeleteRisk(r.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        )}
+      </div>
+
+    </div>
+  )
+}

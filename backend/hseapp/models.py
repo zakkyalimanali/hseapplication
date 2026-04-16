@@ -199,6 +199,190 @@ class HSERefrences(models.Model):
     def __str__(self):
         return self.title
     
+class WorkplaceRule(models.Model):
+    CATEGORY_CHOICES = [
+        ('General Safety', 'General Safety'),
+        ('PPE', 'PPE'),
+        ('Fire Safety', 'Fire Safety'),
+        ('Chemical Handling', 'Chemical Handling'),
+        ('Electrical Safety', 'Electrical Safety'),
+        ('Working at Heights', 'Working at Heights'),
+        ('Confined Spaces', 'Confined Spaces'),
+        ('Manual Handling', 'Manual Handling'),
+        ('Other', 'Other'),
+    ]
+    title = models.CharField(max_length=200, null=True, blank=True)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    consequence = models.TextField(null=True, blank=True)
+    effective_date = models.DateField(null=True, blank=True)
+    document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+
+class RiskMitigation(models.Model):
+    PRIORITY_CHOICES = [
+        ('Critical', 'Critical'),
+        ('High', 'High'),
+        ('Medium', 'Medium'),
+        ('Low', 'Low'),
+    ]
+    STATUS_CHOICES = [
+        ('Open', 'Open'),
+        ('In Progress', 'In Progress'),
+        ('Completed', 'Completed'),
+        ('Verified', 'Verified'),
+    ]
+    risk_title = models.CharField(max_length=200, null=True, blank=True)
+    mitigation_action = models.TextField(null=True, blank=True)
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, null=True, blank=True)
+    responsible_person = models.CharField(max_length=100, null=True, blank=True)
+    target_date = models.DateField(null=True, blank=True)
+    completion_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.risk_title or ''
+
+
+class Report(models.Model):
+    REPORT_TYPE_CHOICES = [
+        ('Incident', 'Incident Report'),
+        ('Audit', 'Audit Report'),
+        ('Training', 'Training Report'),
+        ('Risk', 'Risk Report'),
+        ('Site Visit', 'Site Visit Report'),
+        ('Permit to Work', 'Permit to Work Report'),
+        ('Custom', 'Custom Report'),
+    ]
+    title = models.CharField(max_length=200, null=True, blank=True)
+    report_type = models.CharField(max_length=50, choices=REPORT_TYPE_CHOICES, null=True, blank=True)
+    period_from = models.DateField(null=True, blank=True)
+    period_to = models.DateField(null=True, blank=True)
+    generated_by = models.CharField(max_length=100, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+class RiskManagement(models.Model):
+    LIKELIHOOD_CHOICES = [
+        ('1', 'Rare'),
+        ('2', 'Unlikely'),
+        ('3', 'Possible'),
+        ('4', 'Likely'),
+        ('5', 'Almost Certain'),
+    ]
+    CONSEQUENCE_CHOICES = [
+        ('1', 'Insignificant'),
+        ('2', 'Minor'),
+        ('3', 'Moderate'),
+        ('4', 'Major'),
+        ('5', 'Catastrophic'),
+    ]
+    CATEGORY_CHOICES = [
+        ('Physical', 'Physical'),
+        ('Chemical', 'Chemical'),
+        ('Biological', 'Biological'),
+        ('Ergonomic', 'Ergonomic'),
+        ('Psychosocial', 'Psychosocial'),
+        ('Environmental', 'Environmental'),
+        ('Other', 'Other'),
+    ]
+    STATUS_CHOICES = [
+        ('Open', 'Open'),
+        ('In Progress', 'In Progress'),
+        ('Closed', 'Closed'),
+    ]
+    title = models.CharField(max_length=200, null=True, blank=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)
+    hazard_description = models.TextField(null=True, blank=True)
+    likelihood = models.CharField(max_length=2, choices=LIKELIHOOD_CHOICES, null=True, blank=True)
+    consequence = models.CharField(max_length=2, choices=CONSEQUENCE_CHOICES, null=True, blank=True)
+    existing_controls = models.TextField(null=True, blank=True)
+    additional_controls = models.TextField(null=True, blank=True)
+    responsible_person = models.CharField(max_length=100, null=True, blank=True)
+    target_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Open', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+class EmergencyPlan(models.Model):
+    PLAN_TYPE_CHOICES = [
+        ('Fire', 'Fire'),
+        ('Medical', 'Medical'),
+        ('Chemical Spill', 'Chemical Spill'),
+        ('Natural Disaster', 'Natural Disaster'),
+        ('Evacuation', 'Evacuation'),
+        ('Other', 'Other'),
+    ]
+    STATUS_CHOICES = [
+        ('Draft', 'Draft'),
+        ('Active', 'Active'),
+        ('Under Review', 'Under Review'),
+        ('Archived', 'Archived'),
+    ]
+    title = models.CharField(max_length=200, null=True, blank=True)
+    plan_type = models.CharField(max_length=50, choices=PLAN_TYPE_CHOICES, null=True, blank=True)
+    location = models.CharField(max_length=200, null=True, blank=True)
+    responsible_person = models.CharField(max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    procedures = models.TextField(null=True, blank=True)
+    assembly_point = models.CharField(max_length=200, null=True, blank=True)
+    emergency_contacts = models.TextField(null=True, blank=True)
+    last_reviewed = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Draft', null=True, blank=True)
+    document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+class HseAudit(models.Model):
+    AUDIT_TYPE_CHOICES = [
+        ('Internal', 'Internal'),
+        ('External', 'External'),
+        ('Regulatory', 'Regulatory'),
+        ('Surprise', 'Surprise'),
+    ]
+    STATUS_CHOICES = [
+        ('Open', 'Open'),
+        ('In Progress', 'In Progress'),
+        ('Closed', 'Closed'),
+    ]
+    title = models.CharField(max_length=200, null=True, blank=True)
+    audit_type = models.CharField(max_length=50, choices=AUDIT_TYPE_CHOICES, null=True, blank=True)
+    audit_date = models.DateField(null=True, blank=True)
+    auditor = models.CharField(max_length=100, null=True, blank=True)
+    location = models.CharField(max_length=200, null=True, blank=True)
+    findings = models.TextField(null=True, blank=True)
+    corrective_actions = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Open', null=True, blank=True)
+    document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+class SafeWorkPractice(models.Model):
+    title = models.CharField(max_length=200, null=True, blank=True)
+    category = models.CharField(max_length=100, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    document = models.FileField(upload_to='post_documents', null=True, blank=True)
+    created_on = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
 class RiskRegisterProject(models.Model):
     project_name = models.CharField(max_length=300, null=True, blank=True)
     date_raised = models.DateField(auto_now_add=True ,null=True, blank=True)

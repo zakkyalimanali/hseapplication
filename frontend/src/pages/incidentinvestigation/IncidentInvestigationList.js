@@ -1,382 +1,167 @@
-// React dependences
-import React , {useState , useEffect} from 'react'
-// API from backend
-import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
-import StaffAPI from '../../API/StaffAPI';
-import axios from 'axios'
-
-// react-router-dom items
-import { Link , useNavigate} from 'react-router-dom';
-
-// bootstrap itms
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-
-// fontawesome items
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
+import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
 
-// DataTable items
-import DataTable from 'react-data-table-component'
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-// This function's main role is to show a table of incident investigations and to lead to links for adding and editing incident investigations
-function IncidentInvestigationList() {
-    // setting up the useStates which allow you to change state and allow functionality
-    // The 'useState([])' is used to initiate for the API
-    const [incidentinvestigations , setIncidentInvestigations] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const[id , setId] = useState(null)
-    const [records, setRecords] = useState([]);
+export default function IncidentInvestigationList() {
+  const { authTokens } = useContext(AuthContext)
+  const [investigations, setInvestigations] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    // The useEffect() here allows for the functions inside them to be called once
-    useEffect(() => {
-        fetchIncidentInvestigation()
-        fetchStaff()
-    },[]) 
+  useEffect(() => {
+    fetchInvestigations()
+    fetchStaff()
+  }, [])
 
-    // the function get the url from the backend which allows its data to be used in the frontend
-    const fetchIncidentInvestigation = () => {
-        IncidentInvestigationAPI.get('/')
-        .then((res) => {
-            setIncidentInvestigations(res.data)
-        })
-        .catch(console.log)
-    }
-
-    // The fetchStaff is so that staff names can be called
-    const fetchStaff =() => {
-      StaffAPI.get('/')
-      .then((res) => {
-          setStaffs(res.data)
-      })
-      .catch(console.log)
+  const fetchInvestigations = () => {
+    IncidentInvestigationAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setInvestigations(res.data)).catch(console.log)
   }
 
-    const forDeletingIncidentInvestigationEntries = (id) => {
-       IncidentInvestigationAPI.delete(`/${id}/`).then((res) => {
-        fetchIncidentInvestigation();
-        }).catch(console.log)
-    }
+  const fetchStaff = () => {
+    StaffAPI.get('/', {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(res => setStaffs(res.data)).catch(console.log)
+  }
 
-    const customStyles = {
-      headCells : {
-        style: {
-          border: '1px solid black',
+  const onDelete = (id) => {
+    IncidentInvestigationAPI.delete(`/${id}/`, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => fetchInvestigations()).catch(console.log)
+  }
 
-        },
-          },
-      cells : {
-        style: {
-          border: '1px solid black'
-        },
-      },
-}
-      // id : {
-      //   style: {
-      //     width: '10px'
-      //   }
-      // }
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
 
-    
-      // rows : {
-      //   style: {
-      //     backgroundColor: 'lightgray' 
-      //   }
-      // }
-    
+  const today = new Date()
+  const thisMonth = investigations.filter(i => {
+    if (!i.date_of_incident) return false
+    const d = new Date(i.date_of_incident)
+    return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth()
+  })
 
-    const columns = [
-      {
-        name: 'Id',
-        selector: (row) => row.id,
-        sortable: true,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'What Happened',
-        selector: (row) => row.what_happened,
-        sortable: true,
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Task Performed',
-        selector: (row) => row.task_performed,
-        sortable: true,
-        // width: '8rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Investigator',
-        selector: (row) => row.investigator,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Location',
-        selector: (row) => row.location_of_incident,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Date of Incident',
-        selector: (row) => row.date_of_incident,
-        sortable: true,
-        // width: '12rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'More Info',
-        selector: (row) => row.more_info,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-      {
-        name: 'Delete',
-        selector: (row) => row.delete,
-        // width: '6rem'
-        // style: {
-        //   background: 'rgba(251,212,124, 0.5)',
-        // },
-      },
-    ];
+  const filtered = investigations.filter(i => {
+    const q = search.toLowerCase()
+    return (
+      (i.what_happened || '').toLowerCase().includes(q) ||
+      (i.task_performed || '').toLowerCase().includes(q) ||
+      (i.location_of_incident || '').toLowerCase().includes(q) ||
+      staffName(i.investigator).toLowerCase().includes(q)
+    )
+  })
 
-    useEffect(() => {
-      const data = incidentinvestigations.map((incidentinvestigation) => {
-        // const staff = staffs.find((staff) => staff.id === attendence.staff_id);
-        // const staff_name = staff ? staff.name : '';
-        // {staffs.find((staff) => staff.id === attendence.staff_name)?.name}
-        const person_name = staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.name  
-        return {
-          id: incidentinvestigation.id,
-          what_happened: incidentinvestigation.what_happened,
-          task_performed: incidentinvestigation.task_performed,
-          investigator: person_name,
-          location_of_incident: incidentinvestigation.location_of_incident,
-          date_of_incident: incidentinvestigation.date_of_incident,
-          more_info : <Link to={`/incidentinvestigationedit/${incidentinvestigation.id}`}>
-          <FontAwesomeIcon icon={faPen } />
-          </Link>,
-          delete: (
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={() => forDeletingIncidentInvestigationEntries(incidentinvestigation.id)}
-            />
-          ),
-        };
-      });
-      setRecords(data);
-    }, [incidentinvestigations, staffs]);
-
-    // const handleFilter = (e) => {
-    //   const searchText = e.target.value.toLowerCase();
-      
-    //   if (searchText === '') {
-    //     // If the search text is empty, fetch all incidents again
-    //     fetchIncidentInvestigation();
-    //   } else {
-    //     const newData = incidentinvestigations.map((incidentinvestigation) => {
-    //       const person_name = staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.name;
-    //       return {
-    //         ...incidentinvestigation,
-    //         person_name,
-    //       };
-    //     }).filter((attendence) => {
-    //       return attendence.person_name
-    //         .toLowerCase()
-    //         .includes(searchText);
-    //     });
-    //     setIncidentInvestigations(newData);
-    //   }
-    // };
-
-    // const handleFilter = (e) => {
-    //   const newData = incidentinvestigations.map((incidentinvestigation) => {
-    //     const person_name = staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.name;
-    //     return {
-    //       ...incidentinvestigation,
-    //       person_name,
-    //     };
-    //   }).filter((attendence) => {
-    //     return attendence.person_name
-    //       .toLowerCase()
-    //       .includes(e.target.value.toLowerCase());
-    //   });
-    //   setIncidentInvestigations(newData);
-    // };
-
-    // const handleFilter = (e) => {
-    //   const searchText = e.target.value.toLowerCase();
-      
-    //   if (searchText === '') {
-    //     // If the search text is empty, fetch all incidents again
-    //     fetchPermitToWork();
-    //   } else {
-    //     const newData = records.filter(row => {
-       
-    //       // return row.permit_number.toLowerCase().includes(e.target.value.toLowerCase()), row.location_of_work.toLowerCase().includes(e.target.value.toLowerCase())
-          
-    //       // const permitNumberMatch = row.permit_number.toLowerCase().includes(searchText);
-    //       // const locationMatch = row.location_of_work.toLowerCase().includes(searchText);
-    
-    //       // return permitNumberMatch || locationMatch
-    //       for (let key in row) {
-    //         if (row[key] && row[key].toString().toLowerCase().includes(searchText)) {
-    //           return true; // Return true if a match is found in any field
-    //         }
-    //       }
-    //       return false;
-    //       })
-          
-    //         // permittowork,
-    
-    //     setPermitToWorks(newData);
-    //   }
-    // };
-    
-    const handleFilter = (e) => {
-      const searchText = e.target.value.toLowerCase();
-    
-      if (searchText === '') {
-        // If the search text is empty, fetch all incidents again
-        fetchIncidentInvestigation();
-      } else {
-        const newData = incidentinvestigations
-          .map((incidentinvestigation) => {
-            const person_name = staffs.find(
-              (staff) => staff.id === incidentinvestigation.investigator
-            )?.name;
-            return {
-              ...incidentinvestigation,
-              person_name,
-            };
-          })
-          .filter((incidentinvestigation) => {
-            const incidentProps = Object.values(incidentinvestigation);
-            for (let i = 0; i < incidentProps.length; i++) {
-              if (
-                incidentProps[i] &&
-                incidentProps[i].toString().toLowerCase().includes(searchText)
-              ) {
-                return true; // Return true if a match is found in any property
-              }
-            }
-            return false; // Return false if no match is found in any property
-          });
-        setIncidentInvestigations(newData);
-      }
-    };
-
-
-
-    // the return function is for the html stuff
   return (
-    // //  fix this below 
-    // <div className="container mt-5">
-    //     <div className="row">
-    //     {/* This is for the title */}
-    //     <h1 className="row justify-content-center mt-3">Incident Investigation</h1>
-    //       <div className= "col-md-4"></div>
-    //       <div className="col-md-4 "></div>
-    //   <Table striped bordered hover className='mt-3'>
-    //     {/* This is for the table heading */}
-    //       <thead>
-    //           <tr>
-    //             <th scope="col" className="col-1">ID</th>
-    //             <th scope="col" className="col-2">What Happened</th>
-    //             <th scope="col" className="col-2">Task Performed</th>
-    //             <th scope="col" className="col-2">Investigator</th>
-    //             <th scope="col" className="col-3">Location</th>
-    //             <th scope="col" className="col-3">Date of Incident</th> 
-    //             <th scope="col" className="col-1">Edit</th>
-    //             <th scope="col" className="col-1">Delete</th>
-    //           </tr>
-    //         </thead>
-    //         {/* This is for the table body, this takes the incidentinvestigation from above and then uses maps so that each entry can be displayed */}
-    //         <tbody>
+    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
 
-    //           {incidentinvestigations.map((incidentinvestigation) => {
-    //             return (
-    //               <tr key={incidentinvestigation.id}>
-                    
-                
-    //                 <td>{incidentinvestigation.id}</td>
-    //                 <td>{incidentinvestigation.what_happened}</td>
-    //                 <td>{incidentinvestigation.task_performed}</td>
-    //                 <td>{staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.name} ({staffs.find((staff) => staff.id === incidentinvestigation.investigator)?.position} ) </td>
-    //                 {/* <td>{incidentinvestigation.investigator}</td> */}
-    //                 <td>{incidentinvestigation.location_of_incident}</td>
-    //                 <td>{incidentinvestigation.date_of_incident}</td>
-               
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Incident Investigations</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            Record and manage formal incident investigation reports.
+          </p>
+        </div>
+        <Link to="/incidentinvestigationadd">
+          <Button style={{ backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px 20px' }}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '8px' }} />
+            Add Investigation
+          </Button>
+        </Link>
+      </div>
 
+      {/* Summary cards */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: '16px', marginBottom: '32px',
+      }}>
+        {[
+          { label: 'Total Investigations', value: investigations.length, color: NAVY },
+          { label: 'This Month',           value: thisMonth.length,      color: '#2563EB' },
+        ].map(card => (
+          <div key={card.label} style={{
+            backgroundColor: 'white', borderRadius: '10px', padding: '20px 16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: card.color }}>{card.value}</div>
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
 
-
-
-    //                 <td>
-    //                     <Link to={`/incidentinvestigationedit/${incidentinvestigation.id}`}><FontAwesomeIcon icon={faPen } /></Link>  
-
-    //                 </td>
-    //                 <td className="delete" onClick={() => forDeletingIncidentInvestigationEntries(incidentinvestigation.id)}>
-    //                   <FontAwesomeIcon icon={faTrash } />
-    //                 </td>
-              
-    //               </tr>
-    //             );
-    //           })}
-              
-    //         </tbody>
-    //       </Table> 
-    //       <Button className="middle col-2 mb-4 mt-3" variant="secondary" href="/incidentinvestigationadd">
-    //         Add Incident Investigation
-    //     </Button>
-
-    //           </div>
-    // </div>
-    <div className="row justify-content-center"> 
-      <h1 className="row justify-content-center mt-3">Incident Investigation</h1>
-        <div className="mt-4 col-md-10 m row justify-content-center">
-        <div className="row justify-content-around">
-          <Button href="/incidentinvestigationadd" variant="secondary" className="col-md-2 mb-4">Add Incident Investigation</Button>
-          <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div>
+      {/* Table card */}
+      <div style={{
+        backgroundColor: 'white', borderRadius: '12px',
+        padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+          <h5 style={{ color: NAVY, fontWeight: '700', margin: 0 }}>
+            All Records ({filtered.length})
+          </h5>
+          <input
+            type="text"
+            placeholder="Search investigator, location, incident..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              border: '1.5px solid #e5e7eb', borderRadius: '8px',
+              padding: '7px 14px', fontSize: '13px', width: '300px', outline: 'none',
+            }}
+          />
         </div>
 
-
-              <div>
-              <div className="table-container mb-5">
-                <DataTable 
-                  customStyles={customStyles}
-                  columns={columns}
-                  data={records}
-                  selectableRows
-                  fixedHeader
-                  pagination
-                >
-                </DataTable>
-              </div>
-              </div>
-
-         
-            </div>
-            <div>
-            </div>
-          </div>
+        {filtered.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '40px 0', margin: 0 }}>
+            {investigations.length === 0 ? 'No investigations recorded yet.' : 'No results match your search.'}
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '14px' }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Investigator</th>
+                <th style={{ color: NAVY }}>What Happened</th>
+                <th style={{ color: NAVY }}>Task Performed</th>
+                <th style={{ color: NAVY }}>Location</th>
+                <th style={{ color: NAVY }}>Date</th>
+                <th style={{ color: NAVY }}>Edit</th>
+                <th style={{ color: NAVY }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(i => (
+                <tr key={i.id}>
+                  <td style={{ fontWeight: '600' }}>{staffName(i.investigator)}</td>
+                  <td style={{ maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {i.what_happened || '—'}
+                  </td>
+                  <td style={{ color: '#666', fontSize: '13px', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {i.task_performed || '—'}
+                  </td>
+                  <td style={{ color: '#666', fontSize: '13px' }}>{i.location_of_incident || '—'}</td>
+                  <td style={{ color: '#666', fontSize: '13px', whiteSpace: 'nowrap' }}>{i.date_of_incident || '—'}</td>
+                  <td>
+                    <Link to={`/incidentinvestigationedit/${i.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(i.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
+    </div>
   )
 }
-
-export default IncidentInvestigationList

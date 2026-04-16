@@ -1,128 +1,105 @@
-import React , {useEffect , useState} from 'react'
-import JobSafetyAnalysisAPI from '../../../API/JobSafetyAnalysisAPI';
-
-import JobSafetyHazardsAPI from '../../../API/JobSafetyHazardsAPI';
-import JobSafetyStepsAPI from '../../../API/JobSafetyStepsAPI';
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import JobSafetyHazardsAPI from '../../../API/JobSafetyHazardsAPI'
+import AuthContext from '../../../context/AuthContext'
+import API_BASE from '../../../utils/apiBase'
 
-// Others 
-import { useNavigate } from 'react-router'
-import { useParams } from 'react-router-dom';
-import API_BASE from "../../../utils/apiBase";
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-function JobSafetyHazardsEdit(props) {
-    const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
+export default function JobSafetyHazardsEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const params = useParams()
+  const navigate = useNavigate()
 
-    const [jobsafetyhazards , setJobSafetyHazards] = useState([])
-    const job_safety_analysis = props.jobsafetyanalysis
-    const [hazards , setHazards] = useState('')
-    const [controls , setControls] = useState('')
-    const [id , setId] = useState(null)
-    const navigate  = useNavigate()
-    const params = useParams()
+  const [job_safety_analysis, setJobSafetyAnalysis] = useState(null)
+  const [hazards, setHazards] = useState('')
+  const [controls, setControls] = useState('')
 
-    useEffect(() => {
-        fetchJobSafetyHazards()
-        setId(params.id)
-    },[params.id])
+  useEffect(() => {
+    const h = { Authorization: `Bearer ${authTokens.access}` }
+    axios.get(`${API_BASE}/hseapp/jobsafetyhazards/${params.id}/`, { headers: h })
+      .then(res => {
+        setJobSafetyAnalysis(res.data.job_safety_analysis)
+        setHazards(res.data.hazards || '')
+        setControls(res.data.controls || '')
+      }).catch(console.log)
+  }, [params.id])
 
-    const fetchJobSafetyHazards = () => {
-        axios.get(`${API_BASE}/hseapp/jobsafetyhazards/${params.id}`)    
-        .then((res) => {
-            setJobSafetyHazards(res.data)
-            setControls(res.data.controls)
-            setHazards(res.data.hazards)
-        })
-        .catch(console.log)
-    }
+  const onUpdate = (e) => {
+    e.preventDefault()
+    JobSafetyHazardsAPI.patch(`/${params.id}/`, {
+      hazards,
+      controls,
+      job_safety_analysis,
+    }, {
+      headers: { Authorization: `Bearer ${authTokens.access}` },
+    }).then(() => navigate(-1)).catch(console.log)
+  }
 
-    useEffect(() => {
-        fetchJobSafetyAnalysis()
-    },[])
-
-    const fetchJobSafetyAnalysis = () => {
-        JobSafetyAnalysisAPI.get('/')
-        .then((res) => {
-            setJobSafetyAnalysises(res.data)
-        })
-        .catch(console.log)
-    }
-
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            hazards,
-            controls,
-            job_safety_analysis
-        }
-        navigate(0)
-        JobSafetyHazardsAPI.post('/', item).then(() => fetchJobSafetyHazards())
-    }
-
-    const updateEntryToDatabase = (id) => {
-        let item = {
-            hazards,
-            controls,
-            job_safety_analysis
-        }
-        JobSafetyHazardsAPI.patch(`/${id}/`, item).then(() => {
-            setHazards('')
-            setControls('')
-            fetchJobSafetyHazards()
-        })
-        navigate(-1)
-    }
-
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
   return (
-    <div className="container mt-5">
-          <div className="row">
-            <div className= "col-md-12"></div>
-            <div className="col-md-12 ">
-              <h3 className="float-left">List Job Hazard</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Hazards</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Hazards"
-                    value={hazards}
-                    onChange={(e) => setHazards(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Controls</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Controls"
-                    value={controls}
-                    onChange={(e) => setControls(e.target.value)}
-                  />
-                </Form.Group>
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
-                <div className="mt-3 float-right">
-                  <Button
-                    variant="primary"
-                    type="button"
-                    onClick={(e) =>  updateEntryToDatabase(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
+      <div style={{ marginBottom: '32px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', padding: 0, color: '#888', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to JSA
+        </button>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Job Hazard</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+          Update the hazard description and control measures.
+        </p>
+      </div>
+
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onUpdate}>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Hazards</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Describe the hazard..."
+              value={hazards}
+              onChange={e => setHazards(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Controls</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Control measures in place..."
+              value={controls}
+              onChange={e => setControls(e.target.value)}
+            />
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}
+            >
+              Cancel
+            </Button>
           </div>
-        </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default JobSafetyHazardsEdit
