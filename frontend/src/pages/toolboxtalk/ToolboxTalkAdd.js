@@ -4,6 +4,7 @@ import StaffAPI from '../../API/StaffAPI';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { Link , useNavigate } from 'react-router-dom';
+import API_BASE from "../../utils/apiBase";
 
 export default function ToolBoxTalkAdd() {
     const [toolbox_date , setToolBoxDate] = useState('')
@@ -29,7 +30,7 @@ export default function ToolBoxTalkAdd() {
     }
 
     const staffData = () => {
-      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      axios.get(`${API_BASE}/hseapp/staff/`)
       .then((res) => {
           setStaffs(res.data);
       }).catch(console.log)

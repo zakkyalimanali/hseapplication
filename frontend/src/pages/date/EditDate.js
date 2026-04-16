@@ -5,6 +5,7 @@ import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios'
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
+import API_BASE from "../../utils/apiBase";
 
 export default function EditStaff() {
     const params = useParams()
@@ -18,7 +19,7 @@ export default function EditStaff() {
     }, [params.id])
 
     const dataDate = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/datelist/${params.id}/`)
+        axios.get(`${API_BASE}/hseapp/datelist/${params.id}/`)
         .then((res) => {
             setDates(res.data);
             setDateAttendence(res.data.date_attendence);

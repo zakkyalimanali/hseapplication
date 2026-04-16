@@ -8,6 +8,7 @@ import { Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router'
+import API_BASE from "../../utils/apiBase";
 
 
 function EquipmentEdit() {
@@ -31,7 +32,7 @@ function EquipmentEdit() {
     },[params.id])
 
     const fetchEquipment = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/equipmentanditems/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/equipmentanditems/${params.id}`)
         .then((res) => {
             setEquipments(res.data)
             setEquipmentItem(res.data.equipment_item)

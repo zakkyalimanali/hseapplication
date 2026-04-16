@@ -36,29 +36,40 @@ SECRET_KEY = 'django-insecure-!q(sk!f5y-9$q8_9$k#%kickn6sx!ll!&e3$*5r^3-z(d*8pai
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '.localhost', '127.0.0.1']
 
 
 # Application definition
+# django-tenants: apps in the public (shared) schema
+SHARED_APPS = [
+    'django_tenants',   # must be first
+    'tenants',          # our tenant/domain models
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # First Party App
-    'hseapp',
-
-
-    # third party app
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'csp',
 ]
+
+# django-tenants: apps replicated into every tenant's schema
+TENANT_APPS = [
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.admin',
+    'hseapp',
+]
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+
+TENANT_MODEL = 'tenants.Client'
+TENANT_DOMAIN_MODEL = 'tenants.Domain'
+
+DATABASE_ROUTERS = ['django_tenants.routers.TenantSyncRouter']
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
@@ -109,6 +120,8 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    # TenantMainMiddleware must be first — it sets the schema on every request
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -121,6 +134,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'hseproject.urls'
+# URLs served when accessing the public (shared) schema
+PUBLIC_SCHEMA_URLCONF = 'hseproject.urls_public'
 
 TEMPLATES = [
     {
@@ -146,7 +161,7 @@ WSGI_APPLICATION = 'hseproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_tenants.postgresql_backend',
         'NAME': 'hseapplication',
         'USER': 'postgres',
         'PASSWORD': 'Crazyno248@',
@@ -286,17 +301,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS HEADERS
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-]
-
-
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = [
-#     '*',
-# ]
+# CORS — allow the React dev server from any subdomain of localhost
+CORS_ALLOW_ALL_ORIGINS = True   # fine for local dev; lock this down in production
 
 CSP_DEFAULT_SRC = ("'self'", "data:",)  # Other default directives
 CSP_IMG_SRC = ("*",)  # Allow images from any source

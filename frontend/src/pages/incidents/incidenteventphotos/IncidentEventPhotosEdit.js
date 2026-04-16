@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 // Others 
 import { useNavigate } from 'react-router'
 import AuthContext from "../../../context/AuthContext";
+import API_BASE from "../../../utils/apiBase";
 
 function IncidentEventPhotosEdit(props) {
     const [incidents , setIncidents] = useState([])
@@ -36,8 +37,8 @@ function IncidentEventPhotosEdit(props) {
     },[params.id])
 
     const fetchIncidentEventPhoto = () => {
-        // axios.get(`http://127.0.0.1:8000/hseapp/incidenteventphotos/${params.id}`)
-        axios.get(`http://127.0.0.1:8000/hseapp/safetycardphotos/${params.id}`)
+        // axios.get(`${API_BASE}/hseapp/incidenteventphotos/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/safetycardphotos/${params.id}`)
         .then((res) => {
             setIncidentEventPhotos(res.data)
             setTitle(res.data.title)

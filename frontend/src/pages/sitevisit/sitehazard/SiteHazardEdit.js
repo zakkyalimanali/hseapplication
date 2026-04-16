@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router'
+import API_BASE from "../../../utils/apiBase";
 
 function SiteHazardEdit(props) {
   const params = useParams()
@@ -29,7 +30,7 @@ function SiteHazardEdit(props) {
   },[])
 
   const fetchHazards = () => {
-    axios.get(`http://127.0.0.1:8000/hseapp/sitehazard/${params.id}/`)
+    axios.get(`${API_BASE}/hseapp/sitehazard/${params.id}/`)
     .then((res) => {
       setSiteHazards(res.data)
       // setVisit(res.data.visit)

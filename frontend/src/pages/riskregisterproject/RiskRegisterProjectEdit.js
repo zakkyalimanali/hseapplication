@@ -14,6 +14,7 @@ import { Link , useNavigate} from 'react-router-dom';
 
 // DataTable items
 import DataTable from 'react-data-table-component'
+import API_BASE from "../../utils/apiBase";
 
 
 function RiskRegisterProjectEdit() {
@@ -55,7 +56,7 @@ function RiskRegisterProjectEdit() {
     },[params.id]) 
 
     const fetchRiskRegisterProject = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/riskregisterproject/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/riskregisterproject/${params.id}`)
         .then((res) => {
             setRiskRegisterProjects(res.data)
             setProjectName(res.data.project_name)

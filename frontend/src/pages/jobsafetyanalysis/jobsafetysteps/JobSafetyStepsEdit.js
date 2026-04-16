@@ -13,6 +13,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // Others 
 import { useNavigate } from 'react-router'
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../../utils/apiBase";
 
 function JobSafetyStepsEdit(props) {
     const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
@@ -31,7 +32,7 @@ function JobSafetyStepsEdit(props) {
     },[params.id]) 
 
     // const fetchJobSafetySteps = () => {
-    //     axios.get(`http://127.0.0.1:8000/hseapp/jobsafetysteps/${params.id}`)
+    //     axios.get(`${API_BASE}/hseapp/jobsafetysteps/${params.id}`)
     //     .then((res) => {
     //         setJobSafetySteps(res.data)
     //         setJobSteps(res.data.job_steps)
@@ -42,7 +43,7 @@ function JobSafetyStepsEdit(props) {
     // }
 
     const fetchJobSafetySteps = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/jobsafetysteps/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/jobsafetysteps/${params.id}`)
         .then((res) => {
             setJobSafetySteps(res.data)
             setJobSteps(res.data.job_steps)

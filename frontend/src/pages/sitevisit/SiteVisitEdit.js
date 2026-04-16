@@ -15,6 +15,7 @@ import { Outlet } from 'react-router-dom'
 import SiteHazardAdd from './sitehazard/SiteHazardAdd';
 import SiteHazardEdit from './sitehazard/SiteHazardEdit'
 import AttendeesAdd from './attendees/AttendeesAdd'
+import API_BASE from "../../utils/apiBase";
 
 
 function SiteVisitEdit() {
@@ -75,7 +76,7 @@ function SiteVisitEdit() {
     }
 
     const fetchSiteVisit = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/sitevisit/${params.id}/`)
+        axios.get(`${API_BASE}/hseapp/sitevisit/${params.id}/`)
         .then((res) => {
             setSiteVisits(res.data)
             setInspector(res.data.inspector)

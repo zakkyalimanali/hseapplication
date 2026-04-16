@@ -15,6 +15,7 @@ import IncidentPhotosAdd from './incidentphotos/IncidentPhotosAdd'
 // Others 
 import { useNavigate } from 'react-router'
 import IncidentPhotosAPI from '../../API/IncidentPhotosAPI';
+import API_BASE from "../../utils/apiBase";
 
 
 function IncidentInvestigationEdit() {
@@ -57,7 +58,7 @@ function IncidentInvestigationEdit() {
   }
 
   const fetchIncidentInvestigation = () => {
-    axios.get(`http://127.0.0.1:8000/hseapp/incidentinvestigation/${params.id}/`)
+    axios.get(`${API_BASE}/hseapp/incidentinvestigation/${params.id}/`)
     .then((res) => {
       setIncidentInvestigations(res.data)
       setInvestigator(res.data.investigator)

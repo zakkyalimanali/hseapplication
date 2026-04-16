@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import HSEManagementAPI from '../../API/HSEManagementAPI';
+import API_BASE from "../../utils/apiBase";
 
 function HsemanagementOLD() {
   const [hsemanagements , setHSEManagements] = useState([])
@@ -51,7 +52,7 @@ function HsemanagementOLD() {
     form_data.append('image', state.image, state.image.name);
     form_data.append('title', state.title);
     form_data.append('content', state.content);
-    let url = 'http://127.0.0.1:8000/hseapp/hsemanagement/';
+    let url = `${API_BASE}/hseapp/hsemanagement/`;
     // let token = authTokens ? authTokens.accessToken : '';
     let token = authTokens.access
     axios.post(url, form_data, {

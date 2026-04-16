@@ -1,7 +1,8 @@
 import axios from "axios";
+import API_BASE from "../utils/apiBase";
 
 export default axios.create({
-    baseURL: "http://127.0.0.1:8000/hseapp/hsereferences/",
+    baseURL: `${API_BASE}/hseapp/hsereferences/`,
     headers: {
         'Accept':'application/json',
         'Content-Type':'application/json',

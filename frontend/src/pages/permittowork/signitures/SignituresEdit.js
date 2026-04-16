@@ -14,6 +14,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // Others 
 import { useNavigate } from 'react-router'
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../../utils/apiBase";
 
 
 function SignituresEdit(props) {
@@ -57,7 +58,7 @@ function SignituresEdit(props) {
     },[params.id])
 
     const fetchSignitures = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/signitures/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/signitures/${params.id}`)
         .then((res) => {
             setSignitures(res.data)
             setPersonName(res.data.person_name)

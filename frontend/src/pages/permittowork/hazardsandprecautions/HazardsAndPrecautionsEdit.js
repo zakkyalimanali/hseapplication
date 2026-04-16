@@ -12,6 +12,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // Others 
 import { useNavigate } from 'react-router'
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../../utils/apiBase";
 
 function HazardsAndPrecautionsEdit(props) {
     const [permittoworks , setPermitToWorks] = useState([])
@@ -41,7 +42,7 @@ function HazardsAndPrecautionsEdit(props) {
     }
 
     const fetchHazardsAndPrecautions = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/hazardsandprecautions/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/hazardsandprecautions/${params.id}`)
         .then((res) => {
             setHazardsAndPrecautions(res.data)
             setHazards(res.data.hazards)

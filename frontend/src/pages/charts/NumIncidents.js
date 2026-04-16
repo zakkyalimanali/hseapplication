@@ -4,6 +4,7 @@ import IncidentAPI from '../../API/IncidentAPI';
 import SafetyCardAPI from '../../API/SafetyCardAPI';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
+import API_BASE from "../../utils/apiBase";
 
 
 export default function NumIncidents() {
@@ -25,7 +26,7 @@ export default function NumIncidents() {
     useEffect(() => {
         // IncidentAPI.get('/')
         SafetyCardAPI.get('/')
-        // axios.get('http://127.0.0.1:8000/hseapp/safetycard/')
+        // axios.get(`${API_BASE}/hseapp/safetycard/`)
         .then((res) => {
             setIncidents(res.data)
             console.log(res.data)

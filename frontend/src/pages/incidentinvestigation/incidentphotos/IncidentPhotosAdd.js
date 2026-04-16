@@ -7,6 +7,7 @@ import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link , useNavigate } from 'react-router-dom';
 import AuthContext from "../../../context/AuthContext";
+import API_BASE from "../../../utils/apiBase";
 
 function IncidentPhotosAdd(props) {
     const [incidentinvestigations , setIncidentInvestigations] = useState([])
@@ -126,7 +127,7 @@ function IncidentPhotosAdd(props) {
 
             
             </div>
-            {/* <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
+            {/* <div><a href={`${API_BASE}/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
 
         </div>
 

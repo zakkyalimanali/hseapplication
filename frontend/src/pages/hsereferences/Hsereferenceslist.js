@@ -7,6 +7,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import HSEReferenceAPI from '../../API/HSEReferenceAPI';
 import { Link , useNavigate } from 'react-router-dom';
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
+import API_BASE from "../../utils/apiBase";
 
 function Hsereferenceslist() {
   const [hsereferences, setHSEReferences] = useState([])
@@ -130,7 +131,7 @@ return (
 
         
         </div>
-        {/* <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
+        {/* <div><a href={`${API_BASE}/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
 
     </div>
 

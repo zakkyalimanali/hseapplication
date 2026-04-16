@@ -14,6 +14,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 // Others 
 import { useNavigate } from 'react-router'
+import API_BASE from "../../utils/apiBase";
 
 function NewsEdit() {
     const [worknews , setWorkNews] = useState([])
@@ -32,7 +33,7 @@ function NewsEdit() {
     },[params.id])
 
     const fetchNews = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/news/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/news/${params.id}`)
         .then((res) => {
             setWorkNews(res.data)
             setPersonName(res.data.person_name)

@@ -9,6 +9,7 @@ import { Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router'
+import API_BASE from "../../../utils/apiBase";
 
 
 function RiskRegisterEdit(props) {
@@ -49,7 +50,7 @@ function RiskRegisterEdit(props) {
     }
 
     const fetchRiskRegister = () =>{
-        axios.get(`http://127.0.0.1:8000/hseapp/riskregister/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/riskregister/${params.id}`)
         .then((res) => {
             setRiskRegisters(res.data)
             // setDateRaised(res.data.date_raised)

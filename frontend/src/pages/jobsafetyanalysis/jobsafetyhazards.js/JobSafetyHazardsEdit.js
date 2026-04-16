@@ -14,6 +14,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // Others 
 import { useNavigate } from 'react-router'
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../../utils/apiBase";
 
 function JobSafetyHazardsEdit(props) {
     const [jobsafetyanalysises , setJobSafetyAnalysises] = useState([])
@@ -32,7 +33,7 @@ function JobSafetyHazardsEdit(props) {
     },[params.id])
 
     const fetchJobSafetyHazards = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/jobsafetyhazards/${params.id}`)    
+        axios.get(`${API_BASE}/hseapp/jobsafetyhazards/${params.id}`)    
         .then((res) => {
             setJobSafetyHazards(res.data)
             setControls(res.data.controls)

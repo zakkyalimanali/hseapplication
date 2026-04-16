@@ -2,6 +2,7 @@ import React , {useContext} from 'react'
 import AuthContext from '../context/AuthContext'
 import { Form } from 'react-bootstrap'
 import { Button } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   let {loginUser} = useContext(AuthContext)
@@ -36,9 +37,11 @@ const LoginPage = () => {
             {/* <input type="password" name="password" placeholder="Enter Password"/> */}
             <div>
               <Button className="mt-3" type="submit">Submit</Button>
-            </div>  
-            {/* <input type="submit" /> */}
+            </div>
           </Form>
+          <p className="mt-3 text-center">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
         </div>
       </div>
     </div>

@@ -47,9 +47,12 @@ function NewHome() {
             </Nav>
     
             <Nav className="mx-2">
-            <Button variant="warning">
-                <NavLink style={{color: '#E15047' , textDecoration:'none'}} to="stafflog">Login</NavLink>
-            </Button>
+                <Button variant="warning" className="me-2">
+                    <NavLink style={{color: '#E15047', textDecoration: 'none'}} to="/loginpage">Login</NavLink>
+                </Button>
+                <Button variant="outline-danger">
+                    <NavLink style={{color: '#E15047', textDecoration: 'none'}} to="/register">Register</NavLink>
+                </Button>
             </Nav>
            
     

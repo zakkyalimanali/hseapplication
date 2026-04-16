@@ -12,6 +12,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 // Others 
 import { useNavigate } from 'react-router'
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../../utils/apiBase";
 
 
 function PhysicalControlsEdit(props) {
@@ -43,7 +44,7 @@ function PhysicalControlsEdit(props) {
     },[params.id])
 
     const fetchPhysicalControls = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/physicalcontrols/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/physicalcontrols/${params.id}`)
         .then((res) => {
             setPhysicalControls(res.data)
             setControlMechanisms(res.data.control_mechanisms)

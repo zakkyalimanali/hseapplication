@@ -26,7 +26,7 @@
 //             },[params.id])
         
 //              const fetchStaff = () => {
-//                  axios.get('http://127.0.0.1:8000/hseapp/staff/')
+//                  axios.get(`${API_BASE}/hseapp/staff/`)
 //                  .then((res) => {
 //                      setStaffs(res.data)
 //                  })
@@ -36,7 +36,7 @@
 //              const dataAttendence = () => {
 //                       if (params.id) {
 //                         axios
-//                           .get(`http://127.0.0.1:8000/hseapp/attendence/${params.id}/`)
+//                           .get(`${API_BASE}/hseapp/attendence/${params.id}/`)
 //                           .then((res) => {
 //                             setAttendences(res.data);
 //                             console.log(attendences)
@@ -62,6 +62,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import AddDateAPI from '../../API/AddDateAPI';
+import API_BASE from "../../utils/apiBase";
 
 export default function AttendenceEdit() {
     const params = useParams()
@@ -95,7 +96,7 @@ export default function AttendenceEdit() {
     },[params.id])
 
      const fetchStaff = () => {
-         axios.get('http://127.0.0.1:8000/hseapp/staff/')
+         axios.get(`${API_BASE}/hseapp/staff/`)
          .then((res) => {
              setStaffs(res.data)
          })
@@ -106,7 +107,7 @@ export default function AttendenceEdit() {
     const dataAttendence = () => {
       if (params.id) {
         axios
-          .get(`http://127.0.0.1:8000/hseapp/attendence/${params.id}/`)
+          .get(`${API_BASE}/hseapp/attendence/${params.id}/`)
           .then((res) => {
             setAttendences(res.data);
             setAttendenceDate(res.data.attendence_date);
@@ -257,7 +258,7 @@ function selectAttendence(id) {
     // },[params.id])
 
     //  const fetchStaff = () => {
-    //      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+    //      axios.get(`${API_BASE}/hseapp/staff/`)
     //      .then((res) => {
     //          setStaffs(res.data)
     //      })
@@ -268,7 +269,7 @@ function selectAttendence(id) {
 //     const dataAttendence = () => {
 //       if (params.id) {
 //         axios
-//           .get(`http://127.0.0.1:8000/hseapp/attendenceedit/${params.id}/`)
+//           .get(`${API_BASE}/hseapp/attendenceedit/${params.id}/`)
 //           .then((res) => {
 //             setAttendences(res.data);
 //             setAttendenceDate(res.data.attendence_date);

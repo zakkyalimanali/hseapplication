@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import React, { Fragment } from 'react';
 import StaffAPI from '../../API/StaffAPI';
+import API_BASE from "../../utils/apiBase";
 
 export default function AttendenceTable() {
   const [attendences ,setAttendences] = useState([])
@@ -39,7 +40,7 @@ export default function AttendenceTable() {
 }
 
   const fetchStaff = () => {
-      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      axios.get(`${API_BASE}/hseapp/staff/`)
       .then((res) => {
           setStaffs(res.data)
       })

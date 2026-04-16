@@ -8,6 +8,7 @@ import StaffAPI from '../../API/StaffAPI';
 import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import {useEffect , useState} from 'react'
+import API_BASE from "../../utils/apiBase";
 
 
 function Traininglist() {
@@ -29,7 +30,7 @@ function Traininglist() {
     }
 
     const staffData = () => {
-        axios.get('http://127.0.0.1:8000/hseapp/staff/')
+        axios.get(`${API_BASE}/hseapp/staff/`)
         .then((res) => {
             setStaffs(res.data);
         }).catch(console.log)

@@ -19,6 +19,7 @@ import HazardsAndPrecautionsAdd from './hazardsandprecautions/HazardsAndPrecauti
 import { useNavigate } from 'react-router'
 import PhysicalControlsAdd from './physicalcontrols/PhysicalControlsAdd';
 import SignituresAdd from './signitures/SignituresAdd';
+import API_BASE from "../../utils/apiBase";
 
 function PermitToWorkEdit() {
     const [permittoworks , setPermitToWorks] = useState([])
@@ -82,7 +83,7 @@ function PermitToWorkEdit() {
 
 
     const fetchPermitToWork = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/permittowork/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/permittowork/${params.id}`)
         .then((res) => {
             setPermitToWorks(res.data)
             setPermitNumber(res.data.permit_number)

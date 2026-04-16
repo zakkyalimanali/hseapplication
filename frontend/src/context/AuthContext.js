@@ -2,6 +2,7 @@
 import { createContext, useState , useEffect} from 'react';
 import jwt_decode from "jwt-decode";
 import {useNavigate} from 'react-router-dom'
+import API_BASE from '../utils/apiBase';
 
 const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (e) => {
     e.preventDefault();
     // console.log('Form Submitted');
-    let response = await fetch('http://127.0.0.1:8000/api/token/', {
+    let response = await fetch(`${API_BASE}/api/token/`, {
         method:'POST',
         headers: {
             'Content-Type' : 'application/json'
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   let updateToken = async () => {
     console.log('Updated Token')
     // console.log('Update Token Called')
-    let response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
+    let response = await fetch(`${API_BASE}/api/token/refresh/`, {
       method:'POST',
       headers: {
           'Content-Type' : 'application/json'

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import API_BASE from "../../utils/apiBase";
 
 export default function ToolBoxTalkEdit() {
     const params = useParams()
@@ -30,14 +31,14 @@ export default function ToolBoxTalkEdit() {
     },[])
 
     const staffData = () => {
-        axios.get('http://127.0.0.1:8000/hseapp/staff/')
+        axios.get(`${API_BASE}/hseapp/staff/`)
         .then((res) => {
             setStaffs(res.data);
         }).catch(console.log)
     }
 
     const fetchToolBoxTalk = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/toolboxtalk/${params.id}/`)
+        axios.get(`${API_BASE}/hseapp/toolboxtalk/${params.id}/`)
         .then((res) => {
             setToolBoxTalks(res.data)
             setToolBoxDate(res.data.toolbox_date)

@@ -5,6 +5,7 @@ import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
+import API_BASE from "../../utils/apiBase";
 
 function Trainingedit() {
     const params = useParams()
@@ -34,7 +35,7 @@ function Trainingedit() {
     }
 
     const fetchTraining = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/training/${params.id}/`)
+        axios.get(`${API_BASE}/hseapp/training/${params.id}/`)
         .then((res) => {
             setTrainingsList(res.data)
             setTrainingDate(res.data.training_date)

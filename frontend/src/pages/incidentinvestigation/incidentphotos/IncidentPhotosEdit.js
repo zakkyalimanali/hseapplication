@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 // Others 
 import { useNavigate } from 'react-router'
 import AuthContext from "../../../context/AuthContext";
+import API_BASE from "../../../utils/apiBase";
 
 function IncidentPhotosEdit(props) {
     const [incidentinvestigations , setIncidentInvestigations] = useState([])
@@ -41,7 +42,7 @@ function IncidentPhotosEdit(props) {
     },[])
 
     const fetchIncidentPhoto = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/incidentphotos/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/incidentphotos/${params.id}`)
         .then((res) => {
             setIncidentPhotos(res.data)
             setTitle(res.data.title)
@@ -158,7 +159,7 @@ function IncidentPhotosEdit(props) {
 
             
             </div>
-            {/* <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
+            {/* <div><a href={`${API_BASE}/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
 
         </div>
 

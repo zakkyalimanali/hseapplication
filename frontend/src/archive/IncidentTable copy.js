@@ -3,6 +3,7 @@ import { ListGroup, Card, Button, Form } from 'react-bootstrap';
 import IncidentAPI from '../API/IncidentAPI';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE from "utils/apiBase";
 
 export default function IncidentTable() {
     const [incidents , setIncidents] = useState([])
@@ -15,7 +16,7 @@ export default function IncidentTable() {
     },[])
 
     const fetchStaff = () => {
-      axios.get('http://127.0.0.1:8000/hseapp/staff/')
+      axios.get(`${API_BASE}/hseapp/staff/`)
       .then((res) => {
           setStaffs(res.data)
       })

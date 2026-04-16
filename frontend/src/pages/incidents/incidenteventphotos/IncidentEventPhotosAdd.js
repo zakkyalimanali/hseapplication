@@ -13,6 +13,7 @@ import Table from 'react-bootstrap/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
+import API_BASE from "../../../utils/apiBase";
 
 
 function IncidentEventPhotosAdd(props) {
@@ -146,7 +147,7 @@ function IncidentEventPhotosAdd(props) {
 
             
             </div>
-            {/* <div><a href={`http://127.0.0.1:8000/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
+            {/* <div><a href={`${API_BASE}/media/post_documents/${hsemanagements.management_commitment_document}`} download>Download</a></div> */}
 
         </div>
 

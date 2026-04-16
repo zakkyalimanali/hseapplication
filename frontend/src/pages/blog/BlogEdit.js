@@ -14,6 +14,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 // Others 
 import { useNavigate } from 'react-router'
+import API_BASE from "../../utils/apiBase";
 
 function BlogEdit() {
     const [blogs , setBlogs] = useState([])
@@ -33,7 +34,7 @@ function BlogEdit() {
     },[params.id])
 
     const fetchBlog = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/blog/${params.id}`)
+        axios.get(`${API_BASE}/hseapp/blog/${params.id}`)
         .then((res) => {
             setBlogs(res.data)
             setPersonName(res.data.person_name)

@@ -7,6 +7,7 @@ import { useParams } from 'react-router'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router'
+import API_BASE from "../../../utils/apiBase";
 
 function AttendeesEdit(props) {
     const params = useParams()
@@ -39,7 +40,7 @@ function AttendeesEdit(props) {
     }
     
       const fetchAttendees = () => {
-        axios.get(`http://127.0.0.1:8000/hseapp/staffadd/${params.id}/`)
+        axios.get(`${API_BASE}/hseapp/staffadd/${params.id}/`)
         .then((res) => {
           setNames(res.data)
           // setVisit(res.data.visit)

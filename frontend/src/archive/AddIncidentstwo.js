@@ -2,6 +2,7 @@ import {useState , useEffect} from 'react'
 import IncidentAPI from '../API/IncidentAPI'
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import axios from 'axios';
+import API_BASE from "utils/apiBase";
 
 export default function AddIncidents() {
     const [id , setId] = useState(null)
@@ -23,7 +24,7 @@ export default function AddIncidents() {
     }
 
     const staffData = () => {
-        axios.get('http://127.0.0.1:8000/hseapp/staff/')
+        axios.get(`${API_BASE}/hseapp/staff/`)
         .then((res) => {
             setStaffs(res.data);
         }).catch(console.log)

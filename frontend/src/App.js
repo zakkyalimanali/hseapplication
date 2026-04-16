@@ -30,6 +30,7 @@ import Trainingedit from './pages/training/Trainingedit';
 import {AuthProvider} from './context/AuthContext'
 import PrivateRoutes from './utils/PrivateRoutes';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import Sitevisitlist from './pages/sitevisit/Sitevisitlist';
 import SiteVisitAdd from './pages/sitevisit/SiteVisitAdd';
 import SiteVisitEdit from './pages/sitevisit/SiteVisitEdit';
@@ -96,6 +97,7 @@ function App() {
         <Routes>
         {/* <Route path='newhome' element={<NewHome/>} /> */}
         <Route path= '/' element={<NewHome/>} />
+        <Route element={<RegisterPage/>} path="/register"/>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
             <Route  element={<PrivateRoutes/>}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import API_BASE from "utils/apiBase";
 
 export default function HomePage() {
   const [notes, setNotes] = useState([]);
@@ -10,7 +11,7 @@ export default function HomePage() {
   }, []);
 
   const getNotes = async () => {
-    const response = await fetch("http://127.0.0.1:8000/api/notes/", {
+    const response = await fetch(`${API_BASE}/api/notes/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

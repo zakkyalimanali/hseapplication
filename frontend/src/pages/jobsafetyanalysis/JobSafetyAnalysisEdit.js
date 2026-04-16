@@ -19,6 +19,7 @@ import JobSafetyEquipmentAdd from '../jobsafetyanalysis/jobsafetyequipment/JobSa
 import { useNavigate } from 'react-router'
 import JobSafetyStepsAdd from './jobsafetysteps/JobSafetyStepsAdd';
 import JobSafetyHazardsAdd from './jobsafetyhazards.js/JobSafetyHazardsAdd';
+import API_BASE from "../../utils/apiBase";
 
 
 function JobSafetyAnalysisEdit() {
@@ -82,7 +83,7 @@ function JobSafetyAnalysisEdit() {
         }
     
         const fetchJobSafetyAnalysis = () => {
-            axios.get(`http://127.0.0.1:8000/hseapp/jobsafetyanalysis/${params.id}`)
+            axios.get(`${API_BASE}/hseapp/jobsafetyanalysis/${params.id}`)
             .then((res) => {
                 setJobSafetyAnalysises(res.data)
                 setJobTitle(res.data.job_title)

@@ -12,6 +12,7 @@ import IncidentEventPhotosAdd from './incidenteventphotos/IncidentEventPhotosAdd
 import AuthContext from "../../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import API_BASE from "../../utils/apiBase";
 
 
 export default function EditIncident() {
@@ -67,7 +68,7 @@ export default function EditIncident() {
     },[params.id])
 
      const fetchStaff = () => {
-         axios.get('http://127.0.0.1:8000/hseapp/staff/')
+         axios.get(`${API_BASE}/hseapp/staff/`)
          .then((res) => {
              setStaffs(res.data)
          })
@@ -78,7 +79,7 @@ export default function EditIncident() {
     // const dataIncident = () => {
     //   if (params.id) {
     //     axios
-    //       .get(`http://127.0.0.1:8000/hseapp/oneincident/${params.id}/`)
+    //       .get(`${API_BASE}/hseapp/oneincident/${params.id}/`)
     //       .then((res) => {
     //         setIncidents(res.data);
     //         setShortDesc(res.data.short_desc);
@@ -105,8 +106,8 @@ export default function EditIncident() {
     const dataIncident = () => {
       if (params.id) {
         axios
-          // .get(`http://127.0.0.1:8000/hseapp/oneincident/${params.id}/`)
-          .get(`http://127.0.0.1:8000/hseapp/safetycard/${params.id}/`)
+          // .get(`${API_BASE}/hseapp/oneincident/${params.id}/`)
+          .get(`${API_BASE}/hseapp/safetycard/${params.id}/`)
           .then((res) => {
             setIncidents(res.data);
             setShortDesc(res.data.short_desc);

@@ -8,6 +8,7 @@ import AddDateAPI from '../../API/AddDateAPI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 import DataTable from 'react-data-table-component'
+import API_BASE from "../../utils/apiBase";
 
 
 // export default function AttendenceList() {
@@ -73,7 +74,7 @@ import DataTable from 'react-data-table-component'
   // }
 
   //   const fetchStaff = () => {
-  //       axios.get('http://127.0.0.1:8000/hseapp/staff/')
+  //       axios.get(`${API_BASE}/hseapp/staff/`)
   //       .then((res) => {
   //           setStaffs(res.data)
   //       })
@@ -300,7 +301,7 @@ import DataTable from 'react-data-table-component'
 //   }
 
 //     const fetchStaff = () => {
-//         axios.get('http://127.0.0.1:8000/hseapp/staff/')
+//         axios.get(`${API_BASE}/hseapp/staff/`)
 //         .then((res) => {
 //             setStaffs(res.data)
 //         })
@@ -406,7 +407,7 @@ export default function AttendenceList() {
 
   const fetchStaff = () => {
     axios
-      .get('http://127.0.0.1:8000/hseapp/staff/')
+      .get(`${API_BASE}/hseapp/staff/`)
       .then((res) => {
         setStaffs(res.data);
       })

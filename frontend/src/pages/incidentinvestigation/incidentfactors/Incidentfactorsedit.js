@@ -20,6 +20,7 @@ import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
 
 // Others 
 import { useNavigate } from 'react-router'
+import API_BASE from "../../../utils/apiBase";
 
 
 // We props from the incident investigation edit page so that we can get the corrent incident investigation page
@@ -63,7 +64,7 @@ function Incidentfactorsedit(props) {
   // this fetchs the incident factors api, it uses params.id so that the unique entry can be retrived
   // after the then((res) => {}) allows the items inside to be filled up with their existing extries
   const fetchIncidentFactor = () => {
-    axios.get(`http://127.0.0.1:8000/hseapp/incidentfactors/${params.id}/`)
+    axios.get(`${API_BASE}/hseapp/incidentfactors/${params.id}/`)
     .then((res) => {
       setIncidentFactors(res.data)
       setFactor(res.data.factor)
