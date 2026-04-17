@@ -46,13 +46,14 @@ SHARED_APPS = [
     'tenants',          # our tenant/domain models
 
     'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     'rest_framework',
     'corsheaders',
-    'rest_framework_simplejwt.token_blacklist',
     'csp',
 ]
 
@@ -61,6 +62,7 @@ TENANT_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.admin',
+    'rest_framework_simplejwt.token_blacklist',
     'hseapp',
 ]
 
@@ -70,6 +72,8 @@ TENANT_MODEL = 'tenants.Client'
 TENANT_DOMAIN_MODEL = 'tenants.Domain'
 
 DATABASE_ROUTERS = ['django_tenants.routers.TenantSyncRouter']
+
+TEST_RUNNER = 'hseproject.test_runner.TenantAwareTestRunner'
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
@@ -167,6 +171,10 @@ DATABASES = {
         'PASSWORD': 'Crazyno248@',
         'HOST': 'localhost',
         'PORT': '5433',
+        'TEST': {
+            'NAME': 'test_hseapplication',
+            'SERIALIZE': False,  # Skip serialization — auth tables live in tenant schemas only
+        },
     }
 }
 
