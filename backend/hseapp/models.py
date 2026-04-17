@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 from .modelsMisc import why , what, lsr
 import uuid
 
 class Staff(models.Model):
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='staff_profile')
     name = models.CharField(max_length= 100 , null=True , blank= True)
     position = models.CharField(max_length= 100 , null=True , blank= True)
     staff_id_number = models.CharField(max_length= 100 , null=True , blank= True)
@@ -152,6 +154,16 @@ class IncidentInvestigation(models.Model):
     what_happened = models.CharField(max_length=1000 , null=True, blank=True)
     summary_of_remedial_action = models.CharField(max_length=2000 , null=True, blank=True)
     summary_of_incident_investigation = models.CharField(max_length=2000 , null=True, blank=True)
+
+
+class InvestigationTeamMember(models.Model):
+    ROLE_LEAD = 'Lead'
+    ROLE_MEMBER = 'Member'
+    ROLE_CHOICES = [(ROLE_LEAD, 'Lead'), (ROLE_MEMBER, 'Member')]
+
+    incidentinvestigation = models.ForeignKey(IncidentInvestigation, on_delete=models.CASCADE, related_name='team_members', null=True, blank=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default=ROLE_MEMBER)
 
 
 class IncidentFactors(models.Model): 

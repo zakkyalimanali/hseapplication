@@ -1,189 +1,117 @@
-import {useEffect , useState} from 'react'
-import { ListGroup, Card, Button, Form } from 'react-bootstrap';
-import NewsAPI from '../../API/NewsAPI';
-import StaffAPI from '../../API/StaffAPI';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table';
+import { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
-// import {   } from '@fortawesome/free-solid-svg-icons'
-import DataTable from 'react-data-table-component'
+import { faPlus, faPen, faTrash, faNewspaper } from '@fortawesome/free-solid-svg-icons'
+import NewsAPI from '../../API/NewsAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
 
-function NewsList() {
-    const [worknews , setWorkNews] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [records, setRecords] = useState([]);
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-    useEffect(() => {
-        fetchStaff()
-        fetchNews()
-    },[])
+export default function NewsList() {
+  const { authTokens } = useContext(AuthContext)
+  const [news, setNews] = useState([])
+  const [staffs, setStaffs] = useState([])
+  const [search, setSearch] = useState('')
 
-    const fetchNews = () => {
-        NewsAPI.get('/')
-        .then((res) => {
-            setWorkNews(res.data)
-        })
-        .catch(console.log)
-    }
+  const headers = { Authorization: `Bearer ${authTokens.access}` }
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
+  useEffect(() => {
+    NewsAPI.get('/', { headers }).then(res => setNews(res.data)).catch(console.log)
+    StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [])
 
-    const onDelete = (id) => {
-        NewsAPI.delete(`/${id}/`).then((res) => {
-            fetchNews();
-        }).catch(console.log)
-    }
+  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
 
-    const customStyles = {
-        headCells : {
-          style: {
-            border: '1px solid black',
-      
-          },
-            },
-        cells : {
-          style: {
-            border: '1px solid black'
-          },
-        },
-      }
+  const onDelete = (id) => {
+    NewsAPI.delete(`/${id}/`, { headers }).then(() =>
+      setNews(prev => prev.filter(n => n.id !== id))
+    ).catch(console.log)
+  }
 
-      const columns = [
-        {
-          name: 'Id',
-          selector: (row) => row.id,
-          sortable: true,
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Person Name',
-          selector: (row) => row.person_name,
-          sortable: true,
-          // width: '8rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Headline',
-          selector: (row) => row.headline,
-          sortable: true,
-          // width: '8rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Brief',
-          selector: (row) => row.textbrief,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'News Date',
-          selector: (row) => row.news_date,
-          sortable: true,
-          // width: '12rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'More Info',
-          selector: (row) => row.more_info,
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-        {
-          name: 'Delete',
-          selector: (row) => row.delete,
-          // width: '6rem'
-          // style: {
-          //   background: 'rgba(251,212,124, 0.5)',
-          // },
-        },
-      ];
-
-
-
-useEffect(() => {
-  const data = worknews.map((worknew) => {
-    const person_name = staffs.find((staff) => staff.id === worknew.person_name)?.name  
-    return {
-      id: worknew.id,
-      person_name : person_name,
-      headline : worknew.headline,
-      textbrief : worknew.textbrief,
-      news_date : worknew.news_date,
-      more_info : <Link to={`/newsedit/${worknew.id}`}><FontAwesomeIcon icon={faPen } /></Link> ,
-      // more_info : "More Info",
-      delete: (
-        <FontAwesomeIcon
-          icon={faTrash}
-          onClick={() => onDelete(worknew.id)}
-        />
-      ),
-      // delete: "Delete",
-
-    }
+  const filtered = news.filter(n => {
+    const q = search.toLowerCase()
+    return (
+      n.headline?.toLowerCase().includes(q) ||
+      n.textbrief?.toLowerCase().includes(q) ||
+      staffName(n.person_name).toLowerCase().includes(q)
+    )
   })
-  setRecords(data);
-}, [worknews])
 
-
+  const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
 
   return (
-    <div className="row justify-content-center"> 
-    <h1 className="row justify-content-center mt-5">News List</h1>
-      
-      <div className="mt-4 col-md-10 m row justify-content-center">
-      <div className="row justify-content-around">
-      <Button href="/newsadd" variant="secondary" className="mb-4 col-md-2">
-                      Add News
-      </Button>
+    <div style={{ padding: '40px', maxWidth: '1100px', margin: '0 auto' }}>
 
-        {/* <Button href="/permittoworkadd" variant="secondary" className="col-md-2 mb-4">Add Permit to Work</Button> */}
-        {/* <div className="col-md-2 mb-4"><input className="text-center" type="text" placeholder="Search..." onChange={handleFilter}/></div> */}
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
+        <div>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>News</h2>
+          <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>
+            {news.length} article{news.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+        <Link to="/newsadd">
+          <button style={{ backgroundColor: ORANGE, color: 'white', border: 'none', borderRadius: '8px', padding: '10px 20px', fontWeight: '600', fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FontAwesomeIcon icon={faPlus} /> Add News
+          </button>
+        </Link>
       </div>
 
-       
-  
-            <div>
-            <div className="table-container mb-5">
-              <DataTable 
-                customStyles={customStyles}
-                //  style={{backgroundColor: 'rgba(235,114,106, 0.5)'}}
-                //  className='stripe'
-                columns={columns}
-                data={records}
-                selectableRows
-                fixedHeader
-                pagination
-              >
-              </DataTable>
-            </div>
-            </div>
+      {/* Search */}
+      <div style={{ marginBottom: '24px' }}>
+        <input
+          type="text"
+          placeholder="Search by headline, brief, or author..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ width: '100%', maxWidth: '400px', padding: '9px 14px', borderRadius: '8px', border: '1.5px solid #e5e7eb', fontSize: '14px', outline: 'none' }}
+        />
+      </div>
 
-       
-          </div>
+      {/* Cards */}
+      {filtered.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: '#aaa' }}>
+          <FontAwesomeIcon icon={faNewspaper} style={{ fontSize: '40px', marginBottom: '12px', display: 'block', margin: '0 auto 12px' }} />
+          <p style={{ margin: 0 }}>{search ? 'No articles match your search.' : 'No news articles yet.'}</p>
         </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+          {filtered.map(n => (
+            <div key={n.id} style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              {/* Card top accent */}
+              <div style={{ height: '4px', backgroundColor: ORANGE }} />
+              <div style={{ padding: '20px', flex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '12px', color: '#888' }}>{formatDate(n.news_date)}</span>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <Link to={`/newsedit/${n.id}`} style={{ color: NAVY }}>
+                      <FontAwesomeIcon icon={faPen} style={{ fontSize: '13px' }} />
+                    </Link>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDelete(n.id)}>
+                      <FontAwesomeIcon icon={faTrash} style={{ fontSize: '13px' }} />
+                    </span>
+                  </div>
+                </div>
+                <h5 style={{ color: NAVY, fontWeight: '700', marginBottom: '8px', fontSize: '16px', lineHeight: '1.4' }}>
+                  {n.headline || 'Untitled'}
+                </h5>
+                {n.textbrief && (
+                  <p style={{ color: '#555', fontSize: '13px', margin: '0 0 12px', lineHeight: '1.6' }}>
+                    {n.textbrief}
+                  </p>
+                )}
+              </div>
+              <div style={{ padding: '12px 20px', borderTop: '1px solid #f3f4f6', backgroundColor: '#fafafa' }}>
+                <span style={{ fontSize: '12px', color: '#888' }}>
+                  By <span style={{ color: NAVY, fontWeight: '600' }}>{staffName(n.person_name)}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
-
-export default NewsList

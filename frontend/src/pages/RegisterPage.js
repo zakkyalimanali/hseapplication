@@ -8,6 +8,7 @@ const RegisterPage = () => {
 
   const [formData, setFormData] = useState({
     username: '',
+    full_name: '',
     email: '',
     password: '',
     password2: '',
@@ -60,6 +61,21 @@ const RegisterPage = () => {
           {errors.detail && <Alert variant="danger">{errors.detail}</Alert>}
 
           <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="full_name"
+                placeholder="Enter your full name"
+                value={formData.full_name}
+                onChange={handleChange}
+                isInvalid={!!errors.full_name}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.full_name}
+              </Form.Control.Feedback>
+            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control

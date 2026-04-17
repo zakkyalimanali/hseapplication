@@ -85,16 +85,10 @@ export default function AddIncidents() {
     }).then(res => setStaffs(res.data)).catch(console.log)
   }, [])
 
-  // Auto-select the logged-in user's staff record once staffs are loaded
+  // Auto-select the logged-in user's linked staff record using staff_id from JWT
   useEffect(() => {
-    if (staffs.length === 0 || raised_by) return
-    const uname = (user?.username || '').toLowerCase().replace(/\s/g, '')
-    const match = staffs.find(s => {
-      const sname = (s.name || '').toLowerCase().replace(/\s/g, '')
-      return sname === uname || sname.startsWith(uname) || uname.startsWith(sname)
-    })
-    if (match) setRaisedBy(String(match.id))
-  }, [staffs])
+    if (user?.staff_id) setRaisedBy(String(user.staff_id))
+  }, [user])
 
   const onSubmit = (e) => {
     e.preventDefault()

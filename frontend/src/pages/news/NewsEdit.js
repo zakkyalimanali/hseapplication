@@ -1,173 +1,125 @@
-import React , {useEffect , useState} from 'react'
-// APIS
-import NewsAPI from '../../API/NewsAPI';
-import StaffAPI from '../../API/StaffAPI';
-
-import axios from 'axios'
-import Table from 'react-bootstrap/Table';
-import { ListGroup, Card, Button, Form } from "react-bootstrap";
-import { Link} from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash , faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import NewsAPI from '../../API/NewsAPI'
+import StaffAPI from '../../API/StaffAPI'
+import AuthContext from '../../context/AuthContext'
+import axios from 'axios'
+import API_BASE from '../../utils/apiBase'
 
+const NAVY = '#1B2B4B'
+const ORANGE = '#E15047'
 
-// Others 
-import { useNavigate } from 'react-router'
-import API_BASE from "../../utils/apiBase";
+export default function NewsEdit() {
+  const { authTokens } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const params = useParams()
 
-function NewsEdit() {
-    const [worknews , setWorkNews] = useState([])
-    const [staffs , setStaffs] = useState([])
-    const [person_name , setPersonName] = useState('')
-    const [headline , setHeadline] = useState('')
-    const [textbrief , setTextBrief] = useState('')
-    const [textcontent , setTextContent] = useState('')
-    const [id , setId] = useState(null)
-    const navigate = useNavigate()
-    const params = useParams() 
+  const [person_name, setPersonName] = useState('')
+  const [headline, setHeadline] = useState('')
+  const [textbrief, setTextBrief] = useState('')
+  const [textcontent, setTextContent] = useState('')
+  const [staffs, setStaffs] = useState([])
 
-    useEffect(() => {
-        fetchNews() 
-        setId(params.id)
-    },[params.id])
+  const headers = { Authorization: `Bearer ${authTokens.access}` }
 
-    const fetchNews = () => {
-        axios.get(`${API_BASE}/hseapp/news/${params.id}`)
-        .then((res) => {
-            setWorkNews(res.data)
-            setPersonName(res.data.person_name)
-            setHeadline(res.data.headline)
-            setTextBrief(res.data.textbrief)
-            setTextContent(res.data.textcontent)
-        })
-        .catch(console.log)
-    }
+  useEffect(() => {
+    axios.get(`${API_BASE}/hseapp/news/${params.id}/`, { headers })
+      .then(res => {
+        const d = res.data
+        setPersonName(d.person_name || '')
+        setHeadline(d.headline || '')
+        setTextBrief(d.textbrief || '')
+        setTextContent(d.textcontent || '')
+      }).catch(console.log)
 
-    useEffect(() => {
-        fetchStaff() 
-    },[])
+    StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+  }, [params.id])
 
-    const fetchStaff = () => {
-        StaffAPI.get('/')
-        .then((res) => {
-            setStaffs(res.data)
-        })
-        .catch(console.log)
-    }
+  const onSubmit = (e) => {
+    e.preventDefault()
+    NewsAPI.patch(`/${params.id}/`, {
+      person_name: person_name || null,
+      headline,
+      textbrief,
+      textcontent,
+    }, { headers }).then(() => navigate('/newslist')).catch(console.log)
+  }
 
-    const willSubmitTheEntryIntoDatabase = (e) => {
-        e.preventDefault()
-        let item = {
-            person_name : person_name || null,
-            headline,
-            textbrief,
-            textcontent,
-        }
-        navigate(-1);
-        NewsAPI.post('/', item).then(()=> 
-            fetchNews())
-            .catch((error) => {
-                console.log("Error:", error);
-              })
-    }
-
-    const toUpdateDatabaseInfo = (id) => {
-        let item = {
-            person_name : person_name || null,
-            headline,
-            textbrief,
-            textcontent,
-        }
-    NewsAPI.patch(`/${id}/`, item).then(() => {
-        setPersonName('')
-        setHeadline('')
-        setTextBrief('')
-        setTextContent('')
-        fetchNews()
-    })
-    navigate(-1)
-    }
+  const L = { fontWeight: '600', fontSize: '14px', color: NAVY }
 
   return (
-    <div className="container mt-5 pb-5">
-          <div className="row">
-            <div className= "col-md-4"></div>
-            <div className="col-md-4 ">
-              <h3 className="float-left mt-5">Create a New Permit To Work</h3>
-              
-              <Form onSubmit={willSubmitTheEntryIntoDatabase} 
-              className="mt-4">
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Reporter</Form.Label>
-                  <Form.Control
-                    as="select"
-                    placeholder="Reporter"
-                    value={person_name}
-                    onChange={(e) => setPersonName(e.target.value)}
-                  >
-                    <option value=''>Select An Option</option>
-                {staffs.map(staff => {
-                  return <option key={staff.id} value={staff.id}>{staff.name} ({staff.position})</option>
-                })}
+    <div style={{ padding: '40px', maxWidth: '680px', margin: '0 auto' }}>
 
+      <div style={{ marginBottom: '32px' }}>
+        <Link to="/newslist" style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Back to News
+        </Link>
+        <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Edit Article</h2>
+        <p style={{ color: '#888', margin: 0, fontSize: '14px' }}>Update the article content and details.</p>
+      </div>
 
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Headline</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Headline"
-                    value={headline}
-                    onChange={(e) => setHeadline(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Brief</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Brief"
-                    value={textbrief}
-                    onChange={(e) => setTextBrief(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formName">
-                  <Form.Label>Content</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Text Content"
-                    value={textcontent}
-                    onChange={(e) => setTextContent(e.target.value)}
-                  />
-                </Form.Group>
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+        <Form onSubmit={onSubmit}>
 
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Author</Form.Label>
+            <Form.Select value={person_name} onChange={e => setPersonName(e.target.value)}>
+              <option value="">Select staff member...</option>
+              {staffs.map(s => (
+                <option key={s.id} value={s.id}>{s.name}{s.position ? ` (${s.position})` : ''}</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
 
-                
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Headline</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Article headline..."
+              value={headline}
+              onChange={e => setHeadline(e.target.value)}
+            />
+          </Form.Group>
 
-                <div className="mt-3 float-right">
-                  {/* <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={willSubmitTheEntryIntoDatabase}
-                    className="mx-2"
-                  >
-                    Save
-                  </Button> */}
-                  <Button
-                    variant="warning"
-                    type="button"
-                    onClick={(e) => toUpdateDatabaseInfo(id)}
-                    className="mx-2"
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Form>    
-            </div>            
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Brief</Form.Label>
+            <Form.Control
+              as="textarea" rows={2}
+              placeholder="Short summary shown on the news list..."
+              value={textbrief}
+              onChange={e => setTextBrief(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label style={L}>Full Content</Form.Label>
+            <Form.Control
+              as="textarea" rows={6}
+              placeholder="Full article content..."
+              value={textcontent}
+              onChange={e => setTextContent(e.target.value)}
+            />
+          </Form.Group>
+
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button
+              type="submit"
+              style={{ flex: 1, backgroundColor: ORANGE, border: 'none', fontWeight: '600', padding: '10px' }}
+            >
+              Save Changes
+            </Button>
+            <Link to="/newslist">
+              <Button type="button" style={{ backgroundColor: 'transparent', border: `1.5px solid ${NAVY}`, color: NAVY, fontWeight: '600', padding: '10px 24px' }}>
+                Cancel
+              </Button>
+            </Link>
           </div>
-        </div>
+
+        </Form>
+      </div>
+    </div>
   )
 }
-
-export default NewsEdit

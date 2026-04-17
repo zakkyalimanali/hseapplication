@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard, SafetyCardPhotos, SafeWorkPractice, HseAudit, EmergencyPlan, RiskManagement, Report, WorkplaceRule, RiskMitigation
+from .models import Staff , Incident, Attendence , DateList , ToolBoxTalk, Training, SiteHazards , SiteVisit, StaffAdd ,IncidentInvestigation , InvestigationTeamMember, IncidentFactors, EquipmentAndItems , ItemsPerBox , HSEManagement , HSERefrences, RiskRegister, IncidentPhotos ,JobSafetyAnalysis , JobSafetyEquipment, JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions , PhysicalControls, Signitures , News , Blog ,RiskRegisterProject ,SafetyCard, SafetyCardPhotos, SafeWorkPractice, HseAudit, EmergencyPlan, RiskManagement, Report, WorkplaceRule, RiskMitigation
 # from .models import Staff
 
 class StaffSeriallizer(serializers.ModelSerializer):
@@ -148,6 +148,11 @@ class StaffAddSerializer(serializers.ModelSerializer):
 class IncidentInvestigationSerializer(serializers.ModelSerializer):
     class Meta:
         model = IncidentInvestigation
+        fields = '__all__'
+
+class InvestigationTeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvestigationTeamMember
         fields = '__all__'
 
 class IncidentFactorsSerializer(serializers.ModelSerializer):

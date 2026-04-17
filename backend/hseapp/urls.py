@@ -20,6 +20,7 @@ router.register(r'sitehazard', views.SiteHazardsViewSet, basename="sitehazard")
 router.register(r'staffadd', views.StaffAddViewSet, basename="staffadd")
 router.register(r'incidentinvestigation', views.IncidentInvestigationViewSet, basename='incidentinvestigation'),
 router.register(r'incidentfactors', views.IncidentFactorsViewSet, basename='incidentfactors'),
+router.register(r'investigationteammember', views.InvestigationTeamMemberViewSet, basename='investigationteammember'),
 router.register(r'equipmentanditems', views.EquipmentAndItemsViewSet, basename='equipmentanditems')
 router.register(r'itemsperbox', views.ItemsPerBoxViewSet, basename='itemsperbox')
 router.register(r'hsemanagement', views.HSEManagementViewSet, basename='hsemanagement')

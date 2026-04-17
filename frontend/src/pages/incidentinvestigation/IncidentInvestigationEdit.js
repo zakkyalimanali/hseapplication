@@ -6,6 +6,7 @@ import { faArrowLeft, faTrash, faPen, faPlus, faImage } from '@fortawesome/free-
 import IncidentInvestigationAPI from '../../API/IncidentInvestigationAPI'
 import IncidentFactorsAPI from '../../API/IncidentFactorsAPI'
 import IncidentPhotosAPI from '../../API/IncidentPhotosAPI'
+import InvestigationTeamMemberAPI from '../../API/InvestigationTeamMemberAPI'
 import StaffAPI from '../../API/StaffAPI'
 import AuthContext from '../../context/AuthContext'
 import axios from 'axios'
@@ -20,22 +21,22 @@ export default function IncidentInvestigationEdit() {
   const navigate = useNavigate()
 
   // Main form fields
-  const [investigator, setInvestigator] = useState('')
   const [date_of_incident, setDateOfIncident] = useState('')
   const [location_of_incident, setLocationOfIncident] = useState('')
   const [task_performed, setTaskPerformed] = useState('')
   const [what_happened, setWhatHappened] = useState('')
-  const [team_member_one, setTeamMemberOne] = useState('')
-  const [team_member_two, setTeamMemberTwo] = useState('')
-  const [team_member_three, setTeamMemberThree] = useState('')
-  const [team_member_four, setTeamMemberFour] = useState('')
   const [summary_of_remedial_action, setSummaryOfRemedialAction] = useState('')
   const [summary_of_incident_investigation, setSummaryOfIncidentInvestigation] = useState('')
 
   // Reference data
   const [staffs, setStaffs] = useState([])
+  const [teamMembers, setTeamMembers] = useState([])
   const [incidentFactors, setIncidentFactors] = useState([])
   const [incidentPhotos, setIncidentPhotos] = useState([])
+
+  // Team member add form
+  const [newMemberStaff, setNewMemberStaff] = useState('')
+  const [newMemberRole, setNewMemberRole] = useState('Member')
 
   // Incident factor add form
   const [newFactor, setNewFactor] = useState('')
@@ -56,23 +57,23 @@ export default function IncidentInvestigationEdit() {
     axios.get(`${API_BASE}/hseapp/incidentinvestigation/${params.id}/`, { headers })
       .then(res => {
         const d = res.data
-        setInvestigator(d.investigator || '')
         setDateOfIncident(d.date_of_incident || '')
         setLocationOfIncident(d.location_of_incident || '')
         setTaskPerformed(d.task_performed || '')
         setWhatHappened(d.what_happened || '')
-        setTeamMemberOne(d.team_member_one || '')
-        setTeamMemberTwo(d.team_member_two || '')
-        setTeamMemberThree(d.team_member_three || '')
-        setTeamMemberFour(d.team_member_four || '')
         setSummaryOfRemedialAction(d.summary_of_remedial_action || '')
         setSummaryOfIncidentInvestigation(d.summary_of_incident_investigation || '')
       }).catch(console.log)
 
     StaffAPI.get('/', { headers }).then(res => setStaffs(res.data)).catch(console.log)
+    fetchTeamMembers()
     fetchFactors()
     fetchPhotos()
   }, [params.id])
+
+  const fetchTeamMembers = () => {
+    InvestigationTeamMemberAPI.get('/', { headers }).then(res => setTeamMembers(res.data)).catch(console.log)
+  }
 
   const fetchFactors = () => {
     IncidentFactorsAPI.get('/', { headers }).then(res => setIncidentFactors(res.data)).catch(console.log)
@@ -85,21 +86,34 @@ export default function IncidentInvestigationEdit() {
   const onUpdate = (e) => {
     e.preventDefault()
     const item = {
-      investigator: investigator || null,
       date_of_incident: date_of_incident || null,
       location_of_incident,
       task_performed,
       what_happened,
-      team_member_one: team_member_one || null,
-      team_member_two: team_member_two || null,
-      team_member_three: team_member_three || null,
-      team_member_four: team_member_four || null,
       summary_of_remedial_action,
       summary_of_incident_investigation,
     }
     IncidentInvestigationAPI.patch(`/${params.id}/`, item, { headers })
       .then(() => navigate('/incidentinvestigationlist'))
       .catch(console.log)
+  }
+
+  const onAddTeamMember = (e) => {
+    e.preventDefault()
+    if (!newMemberStaff) return
+    InvestigationTeamMemberAPI.post('/', {
+      incidentinvestigation: Number(params.id),
+      staff: Number(newMemberStaff),
+      role: newMemberRole,
+    }, { headers }).then(() => {
+      setNewMemberStaff('')
+      setNewMemberRole('Member')
+      fetchTeamMembers()
+    }).catch(console.log)
+  }
+
+  const onDeleteTeamMember = (id) => {
+    InvestigationTeamMemberAPI.delete(`/${id}/`, { headers }).then(() => fetchTeamMembers()).catch(console.log)
   }
 
   const onAddFactor = (e) => {
@@ -148,7 +162,11 @@ export default function IncidentInvestigationEdit() {
     IncidentPhotosAPI.delete(`/${id}/`, { headers }).then(() => fetchPhotos()).catch(console.log)
   }
 
-  const staffName = (id) => staffs.find(s => s.id === id)?.name || '—'
+  const staffName = (id) => {
+    const s = staffs.find(s => String(s.id) === String(id))
+    return s ? `${s.name}${s.position ? ` (${s.position})` : ''}` : '—'
+  }
+  const visitTeamMembers = teamMembers.filter(m => m.incidentinvestigation === Number(params.id))
   const visitFactors = incidentFactors.filter(f => f.incidentinvestigation === Number(params.id))
   const visitPhotos = incidentPhotos.filter(p => p.incidentinvestigation === Number(params.id))
 
@@ -164,16 +182,14 @@ export default function IncidentInvestigationEdit() {
     </h5>
   )
 
-  const StaffSelect = ({ label, value, onChange }) => (
-    <Form.Group className="mb-3">
-      <Form.Label style={L}>{label}</Form.Label>
-      <Form.Select value={value} onChange={onChange}>
-        <option value="">Select staff member...</option>
-        {staffs.map(s => (
-          <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
-        ))}
-      </Form.Select>
-    </Form.Group>
+  const roleBadge = (role) => (
+    <span style={{
+      fontSize: '11px', fontWeight: '600', padding: '2px 8px', borderRadius: '4px',
+      backgroundColor: role === 'Lead' ? '#FEF3C7' : '#EFF6FF',
+      color: role === 'Lead' ? '#D97706' : '#2563EB',
+    }}>
+      {role}
+    </span>
   )
 
   return (
@@ -190,23 +206,83 @@ export default function IncidentInvestigationEdit() {
         </p>
       </div>
 
+      {/* Investigation Team Section */}
+      <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
+        <SectionTitle count={visitTeamMembers.length} countColor="#2563EB" countBg="#DBEAFE">
+          Investigation Team
+        </SectionTitle>
+
+        <Form onSubmit={onAddTeamMember} style={{ marginBottom: '16px' }}>
+          <div className="row align-items-end">
+            <div className="col-md-6">
+              <Form.Group>
+                <Form.Label style={L}>Staff Member</Form.Label>
+                <Form.Select value={newMemberStaff} onChange={e => setNewMemberStaff(e.target.value)}>
+                  <option value="">Select staff member...</option>
+                  {staffs.map(s => (
+                    <option key={s.id} value={s.id}>{s.name}{s.position ? ` (${s.position})` : ''}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Form.Group>
+                <Form.Label style={L}>Role</Form.Label>
+                <Form.Select value={newMemberRole} onChange={e => setNewMemberRole(e.target.value)}>
+                  <option value="Lead">Lead</option>
+                  <option value="Member">Member</option>
+                </Form.Select>
+              </Form.Group>
+            </div>
+            <div className="col-md-3">
+              <Button
+                type="submit"
+                disabled={!newMemberStaff}
+                style={{ backgroundColor: NAVY, border: 'none', fontWeight: '600', padding: '8px 20px', width: '100%' }}
+              >
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: '6px' }} />
+                Add Member
+              </Button>
+            </div>
+          </div>
+        </Form>
+
+        {visitTeamMembers.length === 0 ? (
+          <p style={{ color: '#aaa', textAlign: 'center', padding: '20px 0', margin: 0, fontSize: '14px' }}>
+            No team members assigned yet.
+          </p>
+        ) : (
+          <Table hover responsive style={{ fontSize: '13px', marginBottom: 0 }}>
+            <thead style={{ backgroundColor: '#f8f9fa' }}>
+              <tr>
+                <th style={{ color: NAVY }}>Name</th>
+                <th style={{ color: NAVY }}>Role</th>
+                <th style={{ color: NAVY }}>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visitTeamMembers.map(m => (
+                <tr key={m.id}>
+                  <td style={{ fontWeight: '600' }}>{staffName(m.staff)}</td>
+                  <td>{roleBadge(m.role)}</td>
+                  <td>
+                    <span style={{ cursor: 'pointer', color: '#dc3545' }} onClick={() => onDeleteTeamMember(m.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </div>
+
       {/* Main Investigation Form */}
       <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '32px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
         <SectionTitle>Investigation Details</SectionTitle>
         <Form onSubmit={onUpdate}>
           <div className="row">
-            <div className="col-md-5">
-              <h6 style={{ color: '#666', fontWeight: '600', marginBottom: '12px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Investigation Team</h6>
-              <StaffSelect label="Investigator (Lead)" value={investigator} onChange={e => setInvestigator(e.target.value)} />
-              <StaffSelect label="Team Member 1" value={team_member_one} onChange={e => setTeamMemberOne(e.target.value)} />
-              <StaffSelect label="Team Member 2" value={team_member_two} onChange={e => setTeamMemberTwo(e.target.value)} />
-              <StaffSelect label="Team Member 3" value={team_member_three} onChange={e => setTeamMemberThree(e.target.value)} />
-              <StaffSelect label="Team Member 4" value={team_member_four} onChange={e => setTeamMemberFour(e.target.value)} />
-            </div>
-
-            <div className="col-md-7">
-              <h6 style={{ color: '#666', fontWeight: '600', marginBottom: '12px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Incident Details</h6>
-
+            <div className="col-md-6">
               <Form.Group className="mb-3">
                 <Form.Label style={L}>Location of Incident</Form.Label>
                 <Form.Control
@@ -216,7 +292,8 @@ export default function IncidentInvestigationEdit() {
                   onChange={e => setLocationOfIncident(e.target.value)}
                 />
               </Form.Group>
-
+            </div>
+            <div className="col-md-6">
               <Form.Group className="mb-3">
                 <Form.Label style={L}>Date of Incident</Form.Label>
                 <Form.Control
@@ -225,28 +302,28 @@ export default function IncidentInvestigationEdit() {
                   onChange={e => setDateOfIncident(e.target.value)}
                 />
               </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label style={L}>Task Being Performed</Form.Label>
-                <Form.Control
-                  as="textarea" rows={3}
-                  placeholder="Describe the task being performed..."
-                  value={task_performed}
-                  onChange={e => setTaskPerformed(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label style={L}>What Happened</Form.Label>
-                <Form.Control
-                  as="textarea" rows={4}
-                  placeholder="Describe what happened..."
-                  value={what_happened}
-                  onChange={e => setWhatHappened(e.target.value)}
-                />
-              </Form.Group>
             </div>
           </div>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>Task Being Performed</Form.Label>
+            <Form.Control
+              as="textarea" rows={3}
+              placeholder="Describe the task being performed..."
+              value={task_performed}
+              onChange={e => setTaskPerformed(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label style={L}>What Happened</Form.Label>
+            <Form.Control
+              as="textarea" rows={4}
+              placeholder="Describe what happened..."
+              value={what_happened}
+              onChange={e => setWhatHappened(e.target.value)}
+            />
+          </Form.Group>
 
           <hr style={{ margin: '24px 0', borderColor: '#f0f0f0' }} />
 

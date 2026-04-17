@@ -22,6 +22,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         from django.db import connection
         token['tenant_schema'] = connection.schema_name
 
+        # Include linked staff ID so the frontend can auto-fill "Raised By" fields
+        try:
+            token['staff_id'] = user.staff_profile.id
+        except Exception:
+            token['staff_id'] = None
+
         return token
 
 
@@ -57,9 +63,10 @@ def tenantInfo(request):
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
-    username = data.get('username', '').strip()
-    email = data.get('email', '').strip()
-    password = data.get('password', '')
+    username  = data.get('username', '').strip()
+    full_name = data.get('full_name', '').strip()
+    email     = data.get('email', '').strip()
+    password  = data.get('password', '')
     password2 = data.get('password2', '')
 
     errors = {}
@@ -67,6 +74,9 @@ def registerUser(request):
         errors['username'] = 'Username is required.'
     elif User.objects.filter(username=username).exists():
         errors['username'] = 'Username already taken.'
+
+    if not full_name:
+        errors['full_name'] = 'Full name is required.'
 
     if not password:
         errors['password'] = 'Password is required.'
@@ -78,5 +88,17 @@ def registerUser(request):
     if errors:
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-    User.objects.create_user(username=username, email=email, password=password)
+    user = User.objects.create_user(username=username, email=email, password=password)
+
+    # Link to an existing Staff record with the same name, or create a new one
+    from hseapp.models import Staff
+    existing = Staff.objects.filter(
+        name__iexact=full_name, user__isnull=True
+    ).first()
+    if existing:
+        existing.user = user
+        existing.save()
+    else:
+        Staff.objects.create(user=user, name=full_name)
+
     return Response({'detail': 'Account created. You can now log in.'}, status=status.HTTP_201_CREATED)

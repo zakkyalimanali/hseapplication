@@ -11,7 +11,7 @@ const NAVY = '#1B2B4B'
 const ORANGE = '#E15047'
 
 export default function Trainingadd() {
-  const { authTokens } = useContext(AuthContext)
+  const { authTokens, user } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [staff_name, setStaffName] = useState('')
@@ -26,6 +26,10 @@ export default function Trainingadd() {
       headers: { Authorization: `Bearer ${authTokens.access}` },
     }).then(res => setStaffs(res.data)).catch(console.log)
   }, [])
+
+  useEffect(() => {
+    if (user?.staff_id) setStaffName(String(user.staff_id))
+  }, [user])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -61,11 +65,18 @@ export default function Trainingadd() {
         <Form onSubmit={onSubmit}>
 
           <Form.Group className="mb-3">
-            <Form.Label style={L}>Staff Member</Form.Label>
+            <Form.Label style={L}>
+              Staff Member
+              {staff_name && user?.staff_id && String(staff_name) === String(user.staff_id) && (
+                <span style={{ fontWeight: '400', color: '#10B981', fontSize: '12px', marginLeft: '8px' }}>
+                  ✓ auto-filled
+                </span>
+              )}
+            </Form.Label>
             <Form.Select value={staff_name} onChange={e => setStaffName(e.target.value)}>
               <option value="">Select staff member...</option>
               {staffs.map(s => (
-                <option key={s.id} value={s.id}>{s.name} ({s.position})</option>
+                <option key={s.id} value={s.id}>{s.name}{s.position ? ` (${s.position})` : ''}</option>
               ))}
             </Form.Select>
           </Form.Group>

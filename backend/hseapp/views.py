@@ -1,6 +1,6 @@
 from django.shortcuts import render 
-from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement, HSERefrences, RiskRegister, IncidentPhotos,JobSafetyAnalysis , JobSafetyEquipment ,JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions, PhysicalControls, Signitures , News , Blog,RiskRegisterProject , SafetyCard , SafetyCardPhotos, SafeWorkPractice, HseAudit, EmergencyPlan, RiskManagement, Report, WorkplaceRule, RiskMitigation
-from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, HSERefrencesSerializer,  RiskRegisterSerializer , IncidentPhotosSerializer, JobSafetyAnalysisSerializer , JobSafetyEquipmentSerializer , JobSafetyStepsSerializer, JobSafetyHazardsSerializer, IncidentEventPhotosSerializer , PermitToWorkSerializer, HazardsAndPrecautionsSerializer , PhysicalControlsSeralizer, SignituresSerializer , NewsSerializer , BlogSerializer , RiskRegisterProjectSerializer, SafetyCardSerializer, SafetyCardPhotosSerializer, SafeWorkPracticeSerializer, HseAuditSerializer, EmergencyPlanSerializer, RiskManagementSerializer, ReportSerializer, WorkplaceRuleSerializer, RiskMitigationSerializer
+from .models import Staff , Incident ,Attendence , DateList ,ToolBoxTalk, Training , SiteVisit, SiteHazards, StaffAdd , IncidentInvestigation , InvestigationTeamMember, IncidentFactors , EquipmentAndItems , ItemsPerBox, HSEManagement, HSERefrences, RiskRegister, IncidentPhotos,JobSafetyAnalysis , JobSafetyEquipment ,JobSafetySteps, JobSafetyHazards, IncidentEventPhotos , PermitToWork, HazardsAndPrecautions, PhysicalControls, Signitures , News , Blog,RiskRegisterProject , SafetyCard , SafetyCardPhotos, SafeWorkPractice, HseAudit, EmergencyPlan, RiskManagement, Report, WorkplaceRule, RiskMitigation
+from .serializers import StaffSeriallizer , IncidentSeriallizer , AttendenceSeriallizer , DateListSeriallizer , ToolBoxTalkSeriallizer, TrainingSerializer, SiteHazardsSerializer , SiteVisitSerializer, StaffAddSerializer, IncidentInvestigationSerializer , InvestigationTeamMemberSerializer, IncidentFactorsSerializer ,EquipmentAndItemsSerializer ,ItemsPerBoxSerializer, HSEManagementSerializer, HSERefrencesSerializer,  RiskRegisterSerializer , IncidentPhotosSerializer, JobSafetyAnalysisSerializer , JobSafetyEquipmentSerializer , JobSafetyStepsSerializer, JobSafetyHazardsSerializer, IncidentEventPhotosSerializer , PermitToWorkSerializer, HazardsAndPrecautionsSerializer , PhysicalControlsSeralizer, SignituresSerializer , NewsSerializer , BlogSerializer , RiskRegisterProjectSerializer, SafetyCardSerializer, SafetyCardPhotosSerializer, SafeWorkPracticeSerializer, HseAuditSerializer, EmergencyPlanSerializer, RiskManagementSerializer, ReportSerializer, WorkplaceRuleSerializer, RiskMitigationSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse , request
 # from django.views.decorators.http import require_GET
@@ -71,6 +71,10 @@ class StaffAddViewSet(viewsets.ModelViewSet):
 class IncidentInvestigationViewSet(viewsets.ModelViewSet):
     serializer_class = IncidentInvestigationSerializer
     queryset = IncidentInvestigation.objects.all()
+
+class InvestigationTeamMemberViewSet(viewsets.ModelViewSet):
+    serializer_class = InvestigationTeamMemberSerializer
+    queryset = InvestigationTeamMember.objects.all()
 
 class IncidentFactorsViewSet(viewsets.ModelViewSet):
     serializer_class = IncidentFactorsSerializer
