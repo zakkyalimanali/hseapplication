@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import RegisterPage from '../pages/RegisterPage'
+import RegisterPage from '../../pages/RegisterPage'
 
 // Mock fetch globally
 global.fetch = jest.fn()

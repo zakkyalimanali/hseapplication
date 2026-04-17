@@ -1,13 +1,13 @@
 import React from 'react'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
-import { renderWithAuth, mockUser } from '../test-utils/mockAuthContext'
-import NewsAdd from '../pages/news/NewsAdd'
+import { renderWithAuth, mockUser } from '../../test-utils/mockAuthContext'
+import NewsAdd from '../../pages/news/NewsAdd'
 
-jest.mock('../API/NewsAPI', () => ({ post: jest.fn() }))
-jest.mock('../API/StaffAPI', () => ({ get: jest.fn() }))
+jest.mock('../../API/NewsAPI', () => ({ post: jest.fn() }))
+jest.mock('../../API/StaffAPI', () => ({ get: jest.fn() }))
 
-const NewsAPI = require('../API/NewsAPI')
-const StaffAPI = require('../API/StaffAPI')
+const NewsAPI = require('../../API/NewsAPI')
+const StaffAPI = require('../../API/StaffAPI')
 
 const MOCK_STAFFS = [
   { id: 42, name: 'Test User',  position: 'HSE Officer' },

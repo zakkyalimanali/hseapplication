@@ -1,10 +1,10 @@
 import React from 'react'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
-import { renderWithAuth } from '../test-utils/mockAuthContext'
-import AttendenceList from '../pages/attendence/AttendenceList'
+import { renderWithAuth } from '../../test-utils/mockAuthContext'
+import AttendenceList from '../../pages/attendence/AttendenceList'
 
 // Mock the API modules
-jest.mock('../API/AttendenceAPI', () => ({
+jest.mock('../../API/AttendenceAPI', () => ({
   get: jest.fn(),
   post: jest.fn(),
   patch: jest.fn(),
@@ -12,7 +12,7 @@ jest.mock('../API/AttendenceAPI', () => ({
 }))
 jest.mock('axios', () => ({ get: jest.fn() }))
 
-const AttendenceAPI = require('../API/AttendenceAPI')
+const AttendenceAPI = require('../../API/AttendenceAPI')
 const axios = require('axios')
 
 const MOCK_STAFFS = [

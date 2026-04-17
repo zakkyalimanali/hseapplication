@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import AuthContext from '../context/AuthContext'
-import LoginPage from '../pages/LoginPage'
+import AuthContext from '../../context/AuthContext'
+import LoginPage from '../../pages/LoginPage'
 
 const mockLoginUser = jest.fn()
 
