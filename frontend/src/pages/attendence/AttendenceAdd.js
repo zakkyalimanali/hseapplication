@@ -16,7 +16,7 @@ export default function AttendenceAdd() {
   const navigate = useNavigate()
 
   const [staff_name, setStaffName] = useState('')
-  const [attendence_date, setAttendenceDate] = useState('')
+  const [attendence_date, setAttendenceDate] = useState(new Date().toISOString().split('T')[0])
   const [attendence_status, setAttendenceStatus] = useState('')
   const [staffs, setStaffs] = useState([])
 
