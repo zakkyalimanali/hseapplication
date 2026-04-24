@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django_tenants.utils import get_public_schema_name
 from django.db import connection
-from .models import HSEManagement, Incident
+from .models import HSEManagement, Incident, Staff
 
 
 class TenantAwareUserAdmin(UserAdmin):
@@ -26,6 +26,15 @@ class TenantAwareUserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, TenantAwareUserAdmin)
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'role', 'position', 'staff_id_number')
+    list_editable = ('role',)
+    list_filter = ('role',)
+    search_fields = ('name', 'user__username', 'staff_id_number')
+    fields = ('user', 'role', 'name', 'position', 'staff_id_number', 'gender', 'nationality', 'citizenship', 'home_address', 'date_of_birth', 'joining_date', 'smart_card_number', 'smart_card_colour')
+
 
 admin.site.register(HSEManagement)
 admin.site.register(Incident)
