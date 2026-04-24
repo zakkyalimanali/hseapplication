@@ -2,21 +2,18 @@ import { useContext } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import AuthContext from '../context/AuthContext'
+import { hasMinRole, ROLES } from '../utils/roleUtils'
 
 const NAVY = '#1B2B4B'
 const ORANGE = '#E15047'
 
-const navLinkStyle = {
-  color: 'rgba(255,255,255,0.85)',
-  textDecoration: 'none',
-  fontSize: '14px',
-  fontWeight: '500',
-  padding: '4px 0',
-  transition: 'color 0.15s',
-}
 
 export default function Navtop() {
-  const { user, logoutUser, tenantName } = useContext(AuthContext)
+  const { user, userRole, logoutUser, tenantName } = useContext(AuthContext)
+
+  const isSupervisor = hasMinRole(userRole, ROLES.SUPERVISOR)
+  const isHSEOfficer = hasMinRole(userRole, ROLES.HSE_OFFICER)
+  const isCompanyAdmin = hasMinRole(userRole, ROLES.COMPANY_ADMIN)
 
   return (
     <Navbar
@@ -69,7 +66,7 @@ export default function Navtop() {
             <NavDropdown.Item as={NavLink} to="hseauditlist">HSE Audit</NavDropdown.Item>
             <NavDropdown.Item as={NavLink} to="emergencyplanlist">Emergency Plan</NavDropdown.Item>
             <NavDropdown.Item as={NavLink} to="riskmanagementlist">Risk Management</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="reportinglist">Reporting</NavDropdown.Item>
+            {isHSEOfficer && <NavDropdown.Item as={NavLink} to="reportinglist">Reporting</NavDropdown.Item>}
             <NavDropdown.Item as={NavLink} to="workplaceruleslist">Workplace Rules</NavDropdown.Item>
             <NavDropdown.Item as={NavLink} to="riskmitigationlist">Risk Mitigation</NavDropdown.Item>
           </NavDropdown>
@@ -79,18 +76,21 @@ export default function Navtop() {
             title={<span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '14px', fontWeight: '500' }}>Staff</span>}
             id="staff-dropdown"
           >
-            <NavDropdown.Item as={NavLink} to="stafflist">Staff List</NavDropdown.Item>
+            {isCompanyAdmin && <NavDropdown.Item as={NavLink} to="stafflist">Staff List</NavDropdown.Item>}
             <NavDropdown.Item as={NavLink} to="attendencelist">Attendance</NavDropdown.Item>
+            {isSupervisor && <NavDropdown.Item as={NavLink} to="attendenceadd">Record Attendance</NavDropdown.Item>}
           </NavDropdown>
 
-          {/* Equipment Dropdown */}
-          <NavDropdown
-            title={<span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '14px', fontWeight: '500' }}>Equipment</span>}
-            id="equipment-dropdown"
-          >
-            <NavDropdown.Item as={NavLink} to="equipment">Equipment & Items</NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="equipmenttotals">Equipment Totals</NavDropdown.Item>
-          </NavDropdown>
+          {/* Equipment Dropdown — HSE Officer+ */}
+          {isHSEOfficer && (
+            <NavDropdown
+              title={<span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '14px', fontWeight: '500' }}>Equipment</span>}
+              id="equipment-dropdown"
+            >
+              <NavDropdown.Item as={NavLink} to="equipment">Equipment & Items</NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="equipmenttotals">Equipment Totals</NavDropdown.Item>
+            </NavDropdown>
+          )}
 
           {/* More Dropdown */}
           <NavDropdown
@@ -105,11 +105,23 @@ export default function Navtop() {
 
         </Nav>
 
-        {/* Right side — user info + logout */}
+        {/* Right side — user info + role badge + logout */}
         <Nav style={{ alignItems: 'center', gap: '12px' }}>
           {user && (
             <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
               {user.username}
+              {userRole && (
+                <span style={{
+                  marginLeft: '6px',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
+                  borderRadius: '4px',
+                  padding: '1px 6px',
+                  fontSize: '11px',
+                  textTransform: 'capitalize',
+                }}>
+                  {userRole.replace('_', ' ')}
+                </span>
+              )}
             </span>
           )}
           {user ? (

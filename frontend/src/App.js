@@ -28,7 +28,7 @@ import Traininglist from './pages/training/Traininglist';
 import Trainingadd from './pages/training/Trainingadd';
 import Trainingedit from './pages/training/Trainingedit';
 import {AuthProvider} from './context/AuthContext'
-import PrivateRoutes from './utils/PrivateRoutes';
+import PrivateRoutes, { RoleRoute } from './utils/PrivateRoutes';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Sitevisitlist from './pages/sitevisit/Sitevisitlist';
@@ -102,87 +102,97 @@ function App() {
         <Route element={<SuperAdminPage/>} path="/superadmin"/>
           <Route element={<AuthProvider><Layout/></AuthProvider>}>
             <Route element={<LoginPage/>} path="/loginpage"/>
-            <Route  element={<PrivateRoutes/>}>
-              {/* <Route path='/' element={<Home/>} exact/> */}
+            <Route element={<PrivateRoutes/>}>
+
+              {/* ── All authenticated users ── */}
               <Route path='stafflog' element={<Home/>} exact/>
+              <Route path='stafflist' element={<StaffList/>} />
+              <Route path='incident' element={<Incident/>} />
+              <Route path='incidenttable' element={<IncidentTable/>}/>
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
-              <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
-              <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
-              <Route path='Incidentfactorsedit/:id' element={<Incidentfactorsedit/>}/>
-              <Route path="incidentphotosedit/:id" element ={<IncidentPhotosEdit/>}/>
               <Route path="hsereferenceslist" element={<Hsereferenceslist/>}/>
               <Route path="workplaceruleslist" element={<Workplaceruleslist/>}/>
               <Route path="safeworkpracticelist" element={<Safeworkpracticelist/>}/>
               <Route path="riskmitigationlist" element={<Riskmitigationlist/>}/>
               <Route path='equipment' element={<Equipment/>}/>
-              <Route path='equipmentadd' element={<EquipmentAdd/>}/>
-              <Route path='equipmentedit/:id' element={<EquipmentEdit/>}/>
-              <Route path="riskregisterlist" element={<RiskRegisterList/>}/>
-              <Route path="riskregisteradd" element={<RiskRegisterAdd/>}/>
-              <Route path="riskregisteredit/:id" element={<RiskRegisterEdit/>}/>
-              <Route path='riskregisterprojectlist' element={<RiskRegisterProjectList/>}/>
-              <Route path="riskregisterprojectadd" element={<RiskRegisterProjectAdd/>}/>
-              <Route path="riskregisterprojectedit/:id" element={<RiskRegisterProjectEdit/>}/>
               <Route path="equipmenttotals" element={<EquipmentTotals/>}/>
+              <Route path="riskregisterlist" element={<RiskRegisterList/>}/>
+              <Route path='riskregisterprojectlist' element={<RiskRegisterProjectList/>}/>
               <Route path="hseauditlist" element={<Hseaditlist/>}/>
               <Route path="emergencyplanlist" element={<Emergencyplanlist/>}/>
               <Route path="hsemanagement" element={<Hsemanagement/>}/>
               <Route path="riskmanagementlist" element={<Riskmanagementlist/>}/>
-              <Route path="reportinglist" element={<Reportinglist/>}/>
-              <Route path='stafflist' element={<StaffList/>} />
               <Route path="permittowork" element={<PermitToWorkList/>}/>
-              <Route path="permittoworkadd" element={<PermitToWorkAdd/>}/>
-              <Route path="permittoworkedit/:id" element={<PermitToWorkEdit/>}/>
-              <Route path="hazardsandprecautionsedit/:id" element={<HazardsAndPrecautionsEdit/>}/>
-              <Route path="physicalcontrolsedit/:id" element={<PhysicalControlsEdit/>}/>
-              <Route path="signituresedit/:id" element={<SignituresEdit/>}/>
               <Route path="jobsafetyanalysis" element={<JobSafetyAnalysis/>}/>
-              <Route path="jobsafetyanalysisadd" element={<JobSafetyAnalysisAdd/>}/>
-              <Route path="jobsafetyanalysisedit/:id" element={<JobSafetyAnalysisEdit/>}/>
-              <Route path="jobsafetyequipmentedit/:id" element={<JobSafetyEquipmentEdit/>}/> 
-              <Route path="jobsafetystepsedit/:id" element={<JobSafetyStepsEdit/>}/>
-              <Route path="jobsafetyhazardsedit/:id" element={<JobSafetyHazardsEdit/>}/>
               <Route path="newslist" element={<NewsList/>}/>
-              <Route path="newsadd" element={<NewsAdd/>}/>
-              <Route path="newsedit/:id" element={<NewsEdit/>}/>
               <Route path="bloglist" element={<Bloglist/>} />
-              <Route path='blogadd' element={<BlogAdd/>} />
-              <Route path="blogedit/:id" element={<BlogEdit/>}/>
               <Route path="chartspage" element={<ChartsPage/>}/>
               <Route path='about' element={<About/>}/>
               <Route path='login' element={<Login/>} />
               <Route path='stats' element={<Stats/>}/>
               <Route path="datelist" element={<DateList/>}/>
-              <Route path="adddate" element={<AddDate/>}/>
-              <Route path="editdate/:id" element={<EditDate/>}/>
-              <Route path="toolboxtalkadd" element={<ToolBoxTalkAdd/>}/>
               <Route path="toolboxtalklist" element={<ToolBoxTalkList/>}/>
-              <Route path="toolboxtalkedit/:id" element={<ToolBoxTalkEdit/>}/>
-              <Route path="editdate/:id" element={<EditDate/>}/>
               <Route path="attendencetable" element={<AttendenceTable/>}/>
               <Route path="attendencelist" element={<AttendenceList/>} />
-              <Route path="attendenceadd" element={<AttendenceAdd/>} />
-              <Route path='attendenceedit/:id' element={<AttendenceEdit/>} />
-              <Route path='addstaff' element={<AddStaff/>} />
-              <Route path='editstaff/:id' element={<EditStaff/>} />
-              <Route path='addincident' element={<AddIncident/>} />
-              <Route path='incident' element={<Incident/>} />
-              <Route path='editincident/:id' element={<EditIncident/>}/>
-              <Route path="incidenteventphotosedit/:id" element={<IncidentEventPhotosEdit/>} />
-              <Route path='incidenttable' element={<IncidentTable/>}/>
               <Route path='traininglist' element={<Traininglist/>}/>
-              <Route path='trainingadd' element={<Trainingadd/>}/>
-              <Route path='trainingedit/:id' element={<Trainingedit/>}/>
               <Route path="sitevisitlist" element={<Sitevisitlist/>} />
-              <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
-              <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}>
-                <Route path="sitehazardadd" element={<SiteHazardAdd />}/>
-              </Route>
-              {/* <Route path="sitehazardadd" element={<SiteHazardAdd />}/> */}
-              <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
-              <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
 
-              {/* <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/> */}
+              {/* ── Supervisor and above ── */}
+              <Route element={<RoleRoute minRole="supervisor" />}>
+                <Route path='addincident' element={<AddIncident/>} />
+                <Route path='editincident/:id' element={<EditIncident/>}/>
+                <Route path="incidenteventphotosedit/:id" element={<IncidentEventPhotosEdit/>} />
+                <Route path="attendenceadd" element={<AttendenceAdd/>} />
+                <Route path='attendenceedit/:id' element={<AttendenceEdit/>} />
+                <Route path="adddate" element={<AddDate/>}/>
+                <Route path="editdate/:id" element={<EditDate/>}/>
+                <Route path="toolboxtalkadd" element={<ToolBoxTalkAdd/>}/>
+                <Route path="toolboxtalkedit/:id" element={<ToolBoxTalkEdit/>}/>
+              </Route>
+
+              {/* ── HSE Officer and above ── */}
+              <Route element={<RoleRoute minRole="hse_officer" />}>
+                <Route path="incidentinvestigationadd" element={<IncidentInvestigationAdd/>}/>
+                <Route path="incidentinvestigationedit/:id" element={<IncidentInvestigationEdit/>}/>
+                <Route path='Incidentfactorsedit/:id' element={<Incidentfactorsedit/>}/>
+                <Route path="incidentphotosedit/:id" element={<IncidentPhotosEdit/>}/>
+                <Route path='equipmentadd' element={<EquipmentAdd/>}/>
+                <Route path='equipmentedit/:id' element={<EquipmentEdit/>}/>
+                <Route path="riskregisteradd" element={<RiskRegisterAdd/>}/>
+                <Route path="riskregisteredit/:id" element={<RiskRegisterEdit/>}/>
+                <Route path="riskregisterprojectadd" element={<RiskRegisterProjectAdd/>}/>
+                <Route path="riskregisterprojectedit/:id" element={<RiskRegisterProjectEdit/>}/>
+                <Route path="reportinglist" element={<Reportinglist/>}/>
+                <Route path="permittoworkadd" element={<PermitToWorkAdd/>}/>
+                <Route path="permittoworkedit/:id" element={<PermitToWorkEdit/>}/>
+                <Route path="hazardsandprecautionsedit/:id" element={<HazardsAndPrecautionsEdit/>}/>
+                <Route path="physicalcontrolsedit/:id" element={<PhysicalControlsEdit/>}/>
+                <Route path="signituresedit/:id" element={<SignituresEdit/>}/>
+                <Route path="jobsafetyanalysisadd" element={<JobSafetyAnalysisAdd/>}/>
+                <Route path="jobsafetyanalysisedit/:id" element={<JobSafetyAnalysisEdit/>}/>
+                <Route path="jobsafetyequipmentedit/:id" element={<JobSafetyEquipmentEdit/>}/>
+                <Route path="jobsafetystepsedit/:id" element={<JobSafetyStepsEdit/>}/>
+                <Route path="jobsafetyhazardsedit/:id" element={<JobSafetyHazardsEdit/>}/>
+                <Route path="newsadd" element={<NewsAdd/>}/>
+                <Route path="newsedit/:id" element={<NewsEdit/>}/>
+                <Route path='blogadd' element={<BlogAdd/>} />
+                <Route path="blogedit/:id" element={<BlogEdit/>}/>
+                <Route path='trainingadd' element={<Trainingadd/>}/>
+                <Route path='trainingedit/:id' element={<Trainingedit/>}/>
+                <Route path="sitevisitadd" element={<SiteVisitAdd/>}/>
+                <Route path="sitevisitedit/:id" element={<SiteVisitEdit/>}>
+                  <Route path="sitehazardadd" element={<SiteHazardAdd />}/>
+                </Route>
+                <Route path="sitehazardedit/:id" element={<SiteHazardEdit/>}/>
+                <Route path="attendeeedit/:id" element={<AttendeesEdit/>}/>
+              </Route>
+
+              {/* ── Company Admin only ── */}
+              <Route element={<RoleRoute minRole="company_admin" />}>
+                <Route path='addstaff' element={<AddStaff/>} />
+                <Route path='editstaff/:id' element={<EditStaff/>} />
+              </Route>
+
             </Route>
             <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>

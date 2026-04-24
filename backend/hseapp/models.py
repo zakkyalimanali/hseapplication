@@ -4,7 +4,19 @@ from .modelsMisc import why , what, lsr
 import uuid
 
 class Staff(models.Model):
+    ROLE_STAFF = 'staff'
+    ROLE_SUPERVISOR = 'supervisor'
+    ROLE_HSE_OFFICER = 'hse_officer'
+    ROLE_COMPANY_ADMIN = 'company_admin'
+    ROLE_CHOICES = [
+        (ROLE_STAFF, 'Staff'),
+        (ROLE_SUPERVISOR, 'Supervisor'),
+        (ROLE_HSE_OFFICER, 'HSE Officer'),
+        (ROLE_COMPANY_ADMIN, 'Company Admin'),
+    ]
+
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='staff_profile')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default=ROLE_STAFF)
     name = models.CharField(max_length= 100 , null=True , blank= True)
     position = models.CharField(max_length= 100 , null=True , blank= True)
     staff_id_number = models.CharField(max_length= 100 , null=True , blank= True)

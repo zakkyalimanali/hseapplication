@@ -28,6 +28,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         except Exception:
             token['staff_id'] = None
 
+        # Include role — company admins (Django superusers) get company_admin automatically
+        if user.is_superuser:
+            token['role'] = 'company_admin'
+        else:
+            try:
+                token['role'] = user.staff_profile.role
+            except Exception:
+                token['role'] = 'staff'
+
         return token
 
 
@@ -60,6 +69,8 @@ def tenantInfo(request):
         return Response({'name': schema, 'schema': schema})
 
 
+VALID_ROLES = {'staff', 'supervisor', 'hse_officer', 'company_admin'}
+
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
@@ -68,6 +79,7 @@ def registerUser(request):
     email     = data.get('email', '').strip()
     password  = data.get('password', '')
     password2 = data.get('password2', '')
+    role      = data.get('role', 'staff').strip()
 
     errors = {}
     if not username:
@@ -85,6 +97,9 @@ def registerUser(request):
     elif password != password2:
         errors['password2'] = 'Passwords do not match.'
 
+    if role not in VALID_ROLES:
+        role = 'staff'
+
     if errors:
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -97,8 +112,9 @@ def registerUser(request):
     ).first()
     if existing:
         existing.user = user
+        existing.role = role
         existing.save()
     else:
-        Staff.objects.create(user=user, name=full_name)
+        Staff.objects.create(user=user, name=full_name, role=role)
 
     return Response({'detail': 'Account created. You can now log in.'}, status=status.HTTP_201_CREATED)

@@ -81,8 +81,11 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const userRole = user?.role || 'staff'
+
   const contextData = {
     user : user,
+    userRole : userRole,
     authTokens : authTokens,
     loginUser : loginUser,
     logoutUser : logoutUser,

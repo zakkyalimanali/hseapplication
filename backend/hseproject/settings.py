@@ -5,20 +5,21 @@ Django settings for hseproject project.
 from pathlib import Path
 from datetime import timedelta
 import os
+from decouple import config, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ─────────────────────────────────────────────────────────────────
 # Environment-driven core settings
 # ─────────────────────────────────────────────────────────────────
+# python-decouple reads from a .env file automatically, then falls
+# back to environment variables, then to the default value.
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key-change-in-production')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-local-dev-key-change-in-production')
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', 'localhost,.localhost,127.0.0.1'
-).split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,.localhost,127.0.0.1', cast=Csv())
 
 # ─────────────────────────────────────────────────────────────────
 # Application definition
@@ -154,11 +155,11 @@ WSGI_APPLICATION = 'hseproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        'NAME': os.environ.get('DB_NAME', 'hseapplication'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': config('DB_NAME', default='hseapplication'),
+        'USER': config('DB_USER', default='postgres'),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
         'TEST': {
             'NAME': 'test_hseapplication',
             'SERIALIZE': False,
@@ -202,7 +203,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS
 # ─────────────────────────────────────────────────────────────────
 
-_cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+_cors_origins = config('CORS_ALLOWED_ORIGINS', default='')
 if _cors_origins:
     CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(',')]
 else:

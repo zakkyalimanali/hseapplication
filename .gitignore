@@ -3,6 +3,7 @@
 backend/.env
 frontend/.env
 frontend/.env.local
+# .env.production is safe to commit (no secrets, just port config)
 
 # Python
 __pycache__/
