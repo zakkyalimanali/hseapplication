@@ -3,6 +3,7 @@ Seed demo data for Ali Company.
 Run with:  python manage.py seed_ali_company
 Use --clear to wipe existing records first.
 """
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date, timedelta
@@ -51,25 +52,61 @@ class Command(BaseCommand):
                 Staff,
             ]:
                 model.objects.all().delete()
+            # Delete seeded users (identified by @alicompany.com email)
+            User.objects.filter(email__endswith='@alicompany.com').delete()
 
-        self.stdout.write('Creating staff...')
+        self.stdout.write('Creating staff and users...')
+        # username, password, role, then all Staff fields
         staff_data = [
-            dict(name='Ali Rahman',       position='HSE Manager',        staff_id_number='EMP-001', gender='Male',   nationality='Brunei',   citizenship='Citizen', smart_card_colour='Green',  joining_date=days_ago(730), date_of_birth=date(1980, 3, 15), yearly_leave_days=21, yearly_leave_taken=5,  telephone_number=8231001, email_address='ali.rahman@alicompany.com',   passport_number='BN1001001', passport_expiry_date=days_from(365*3)),
-            dict(name='Sarah Abdullah',   position='HSE Officer',         staff_id_number='EMP-002', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Yellow', joining_date=days_ago(540), date_of_birth=date(1990, 7, 22), yearly_leave_days=18, yearly_leave_taken=3,  telephone_number=8231002, email_address='sarah.ab@alicompany.com',     passport_number='BN1001002', passport_expiry_date=days_from(365*2)),
-            dict(name='Ahmad Hassan',     position='Site Supervisor',     staff_id_number='EMP-003', gender='Male',   nationality='Malaysia', citizenship='PR',      smart_card_colour='Green',  joining_date=days_ago(900), date_of_birth=date(1975, 11, 8), yearly_leave_days=21, yearly_leave_taken=10, telephone_number=8231003, email_address='ahmad.h@alicompany.com',      passport_number='MY2001003', passport_expiry_date=days_from(365*4)),
-            dict(name='Wati Aziz',        position='Safety Officer',      staff_id_number='EMP-004', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Yellow', joining_date=days_ago(400), date_of_birth=date(1993, 5, 30), yearly_leave_days=18, yearly_leave_taken=2,  telephone_number=8231004, email_address='wati.aziz@alicompany.com',    passport_number='BN1001004', passport_expiry_date=days_from(365*2)),
-            dict(name='James Wilson',     position='Project Manager',     staff_id_number='EMP-005', gender='Male',   nationality='UK',       citizenship='Other',   smart_card_colour='Green',  joining_date=days_ago(600), date_of_birth=date(1978, 9, 12), yearly_leave_days=25, yearly_leave_taken=8,  telephone_number=8231005, email_address='james.w@alicompany.com',      passport_number='UK3001005', passport_expiry_date=days_from(365*5)),
-            dict(name='Roslan Omar',      position='Foreman',             staff_id_number='EMP-006', gender='Male',   nationality='Malaysia', citizenship='PR',      smart_card_colour='Yellow', joining_date=days_ago(700), date_of_birth=date(1982, 2, 18), yearly_leave_days=18, yearly_leave_taken=6,  telephone_number=8231006, email_address='roslan.o@alicompany.com',     passport_number='MY2001006', passport_expiry_date=days_from(365*3)),
-            dict(name='Kevin Tan',        position='Crane Operator',      staff_id_number='EMP-007', gender='Male',   nationality='Malaysia', citizenship='Other',   smart_card_colour='Red',    joining_date=days_ago(90),  date_of_birth=date(1995, 6, 25), yearly_leave_days=14, yearly_leave_taken=1,  telephone_number=8231007, email_address='kevin.t@alicompany.com',      passport_number='MY2001007', passport_expiry_date=days_from(365*1)),
-            dict(name='Fatimah Ali',      position='Admin Officer',       staff_id_number='EMP-008', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Green',  joining_date=days_ago(1100),date_of_birth=date(1985, 4, 10), yearly_leave_days=21, yearly_leave_taken=14, telephone_number=8231008, email_address='fatimah.a@alicompany.com',    passport_number='BN1001008', passport_expiry_date=days_from(365*2)),
-            dict(name='David Brooks',     position='Mechanical Engineer', staff_id_number='EMP-009', gender='Male',   nationality='Australia',citizenship='Other',   smart_card_colour='Green',  joining_date=days_ago(450), date_of_birth=date(1983, 8, 5),  yearly_leave_days=25, yearly_leave_taken=7,  telephone_number=8231009, email_address='david.b@alicompany.com',      passport_number='AU4001009', passport_expiry_date=days_from(365*6)),
-            dict(name='Nurul Hana',       position='HSE Trainee',         staff_id_number='EMP-010', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Red',    joining_date=days_ago(60),  date_of_birth=date(1999, 1, 14), yearly_leave_days=14, yearly_leave_taken=0,  telephone_number=8231010, email_address='nurul.h@alicompany.com',      passport_number='BN1001010', passport_expiry_date=days_from(365*4)),
+            dict(username='ali.rahman',    password='AliCompany@001', role='company_admin', name='Ali Rahman',       position='HSE Manager',        staff_id_number='EMP-001', gender='Male',   nationality='Brunei',   citizenship='Citizen', smart_card_colour='Green',  smart_card_number=1001, joining_date=days_ago(730),  date_of_birth=date(1980, 3, 15), yearly_leave_days=21, yearly_leave_taken=5,  telephone_number=8231001, email_address='ali.rahman@alicompany.com',   passport_number='BN1001001', passport_expiry_date=days_from(365*3)),
+            dict(username='sarah.abdullah', password='AliCompany@002', role='hse_officer',   name='Sarah Abdullah',   position='HSE Officer',         staff_id_number='EMP-002', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Yellow', smart_card_number=1002, joining_date=days_ago(540),  date_of_birth=date(1990, 7, 22), yearly_leave_days=18, yearly_leave_taken=3,  telephone_number=8231002, email_address='sarah.ab@alicompany.com',     passport_number='BN1001002', passport_expiry_date=days_from(365*2)),
+            dict(username='ahmad.hassan',  password='AliCompany@003', role='supervisor',    name='Ahmad Hassan',     position='Site Supervisor',     staff_id_number='EMP-003', gender='Male',   nationality='Malaysia', citizenship='PR',      smart_card_colour='Green',  smart_card_number=1003, joining_date=days_ago(900),  date_of_birth=date(1975, 11, 8), yearly_leave_days=21, yearly_leave_taken=10, telephone_number=8231003, email_address='ahmad.h@alicompany.com',      passport_number='MY2001003', passport_expiry_date=days_from(365*4)),
+            dict(username='wati.aziz',     password='AliCompany@004', role='hse_officer',   name='Wati Aziz',        position='Safety Officer',      staff_id_number='EMP-004', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Yellow', smart_card_number=1004, joining_date=days_ago(400),  date_of_birth=date(1993, 5, 30), yearly_leave_days=18, yearly_leave_taken=2,  telephone_number=8231004, email_address='wati.aziz@alicompany.com',    passport_number='BN1001004', passport_expiry_date=days_from(365*2)),
+            dict(username='james.wilson',  password='AliCompany@005', role='supervisor',    name='James Wilson',     position='Project Manager',     staff_id_number='EMP-005', gender='Male',   nationality='UK',       citizenship='Other',   smart_card_colour='Green',  smart_card_number=1005, joining_date=days_ago(600),  date_of_birth=date(1978, 9, 12), yearly_leave_days=25, yearly_leave_taken=8,  telephone_number=8231005, email_address='james.w@alicompany.com',      passport_number='UK3001005', passport_expiry_date=days_from(365*5)),
+            dict(username='roslan.omar',   password='AliCompany@006', role='supervisor',    name='Roslan Omar',      position='Foreman',             staff_id_number='EMP-006', gender='Male',   nationality='Malaysia', citizenship='PR',      smart_card_colour='Yellow', smart_card_number=1006, joining_date=days_ago(700),  date_of_birth=date(1982, 2, 18), yearly_leave_days=18, yearly_leave_taken=6,  telephone_number=8231006, email_address='roslan.o@alicompany.com',     passport_number='MY2001006', passport_expiry_date=days_from(365*3)),
+            dict(username='kevin.tan',     password='AliCompany@007', role='staff',         name='Kevin Tan',        position='Crane Operator',      staff_id_number='EMP-007', gender='Male',   nationality='Malaysia', citizenship='Other',   smart_card_colour='Red',    smart_card_number=1007, joining_date=days_ago(90),   date_of_birth=date(1995, 6, 25), yearly_leave_days=14, yearly_leave_taken=1,  telephone_number=8231007, email_address='kevin.t@alicompany.com',      passport_number='MY2001007', passport_expiry_date=days_from(365*1)),
+            dict(username='fatimah.ali',   password='AliCompany@008', role='staff',         name='Fatimah Ali',      position='Admin Officer',       staff_id_number='EMP-008', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Green',  smart_card_number=1008, joining_date=days_ago(1100), date_of_birth=date(1985, 4, 10), yearly_leave_days=21, yearly_leave_taken=14, telephone_number=8231008, email_address='fatimah.a@alicompany.com',    passport_number='BN1001008', passport_expiry_date=days_from(365*2)),
+            dict(username='david.brooks',  password='AliCompany@009', role='staff',         name='David Brooks',     position='Mechanical Engineer', staff_id_number='EMP-009', gender='Male',   nationality='Australia',citizenship='Other',   smart_card_colour='Green',  smart_card_number=1009, joining_date=days_ago(450),  date_of_birth=date(1983, 8, 5),  yearly_leave_days=25, yearly_leave_taken=7,  telephone_number=8231009, email_address='david.b@alicompany.com',      passport_number='AU4001009', passport_expiry_date=days_from(365*6)),
+            dict(username='nurul.hana',    password='AliCompany@010', role='staff',         name='Nurul Hana',       position='HSE Trainee',         staff_id_number='EMP-010', gender='Female', nationality='Brunei',   citizenship='Citizen', smart_card_colour='Red',    smart_card_number=1010, joining_date=days_ago(60),   date_of_birth=date(1999, 1, 14), yearly_leave_days=14, yearly_leave_taken=0,  telephone_number=8231010, email_address='nurul.h@alicompany.com',      passport_number='BN1001010', passport_expiry_date=days_from(365*4)),
         ]
         staffs = []
+        user_summary = []
         for d in staff_data:
-            s, _ = Staff.objects.get_or_create(name=d['name'], defaults=d)
+            username = d.pop('username')
+            password = d.pop('password')
+            role = d.pop('role')
+
+            # Create or retrieve the Django auth user
+            user, user_created = User.objects.get_or_create(
+                username=username,
+                defaults={
+                    'email': d['email_address'],
+                    'first_name': d['name'].split()[0],
+                    'last_name': ' '.join(d['name'].split()[1:]),
+                    'is_staff': role == 'company_admin',
+                },
+            )
+            if user_created:
+                user.set_password(password)
+                user.save()
+
+            # Create or retrieve the Staff profile
+            s, _ = Staff.objects.get_or_create(
+                staff_id_number=d['staff_id_number'],
+                defaults={**d, 'role': role, 'user': user},
+            )
+            # Link user if Staff already existed without one
+            if s.user is None:
+                s.user = user
+                s.role = role
+                s.save(update_fields=['user', 'role'])
+
             staffs.append(s)
-        self.stdout.write(f'  {len(staffs)} staff created.')
+            user_summary.append(f'    {username:20s}  role={role:14s}  pw={password}')
+
+        self.stdout.write(f'  {len(staffs)} staff + users created:')
+        for line in user_summary:
+            self.stdout.write(line)
 
         # ------------------------------------------------------------------
         self.stdout.write('Creating attendance...')
@@ -411,7 +448,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('\nSeed complete for Ali Company!'))
         self.stdout.write(f"""
   Summary:
-    Staff              : {len(staffs)}
+    Staff / Users      : {len(staffs)}
     Safety Cards       : {len(sc_entries)}
     Incidents          : {len(incident_data)}
     Permits to Work    : {len(ptws)}
@@ -427,4 +464,16 @@ class Command(BaseCommand):
     HSE Audits         : {len(audit_data)}
     Safe Work Practices: {len(swp_data)}
     Workplace Rules    : {len(wr_data)}
+
+  Login credentials (all in schema: alicompany):
+    ali.rahman         company_admin  AliCompany@001
+    sarah.abdullah     hse_officer    AliCompany@002
+    ahmad.hassan       supervisor     AliCompany@003
+    wati.aziz          hse_officer    AliCompany@004
+    james.wilson       supervisor     AliCompany@005
+    roslan.omar        supervisor     AliCompany@006
+    kevin.tan          staff          AliCompany@007
+    fatimah.ali        staff          AliCompany@008
+    david.brooks       staff          AliCompany@009
+    nurul.hana         staff          AliCompany@010
         """)

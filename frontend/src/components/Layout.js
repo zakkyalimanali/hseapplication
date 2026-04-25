@@ -1,18 +1,19 @@
-import {Outlet} from 'react-router-dom'
-import Navtop from './Navtop_copy'
-import Sidebar from './Sidebar'
-import Footer from './Footer'
-
+import { Outlet } from 'react-router-dom'
+import AppSidebar from './AppSidebar'
+import AppTopBar from './AppTopBar'
 
 export default function Layout() {
-    return (
-        <div>
-            <Navtop/>
-            {/* <Sidebar/> */}
-            <Outlet/>
-            {/* <Footer/> */}
-        </div>
-    )
+  return (
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      <AppSidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <AppTopBar />
+        <main style={{ flex: 1, overflowY: 'auto' }}>
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  )
 }
 
 

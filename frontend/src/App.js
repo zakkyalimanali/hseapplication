@@ -5,6 +5,8 @@ import AddStaff from './pages/staff/AddStaff';
 import Incident from './pages/incidents/Incident';
 import Home from './pages/Home';
 import IncidentTable from './pages/incidents/IncidentTable';
+import IncidentList from './pages/incidents/IncidentList';
+import AddIncidentForm from './pages/incidents/AddIncidentForm';
 import AddIncident from './pages/incidents/AddIncidents';
 import EditIncident from './pages/incidents/EditIncident';
 import About from './pages/About';
@@ -95,20 +97,22 @@ function App() {
         {/* <div className="mt-5"> */}
         <div>
       <BrowserRouter>
+        <AuthProvider>
         <Routes>
         {/* <Route path='newhome' element={<NewHome/>} /> */}
         <Route path= '/' element={<NewHome/>} />
         <Route element={<RegisterPage/>} path="/register"/>
         <Route element={<SuperAdminPage/>} path="/superadmin"/>
-          <Route element={<AuthProvider><Layout/></AuthProvider>}>
-            <Route element={<LoginPage/>} path="/loginpage"/>
+        <Route element={<LoginPage/>} path="/loginpage"/>
+          <Route element={<Layout/>}>
             <Route element={<PrivateRoutes/>}>
 
               {/* ── All authenticated users ── */}
               <Route path='stafflog' element={<Home/>} exact/>
               <Route path='stafflist' element={<StaffList/>} />
               <Route path='incident' element={<Incident/>} />
-              <Route path='incidenttable' element={<IncidentTable/>}/>
+              <Route path='safetycardtable' element={<IncidentTable/>}/>
+              <Route path='incidentlist' element={<IncidentList/>}/>
               <Route path="incidentinvestigationlist" element={<IncidentInvestigationList/>}/>
               <Route path="hsereferenceslist" element={<Hsereferenceslist/>}/>
               <Route path="workplaceruleslist" element={<Workplaceruleslist/>}/>
@@ -140,6 +144,7 @@ function App() {
               {/* ── Supervisor and above ── */}
               <Route element={<RoleRoute minRole="supervisor" />}>
                 <Route path='addincident' element={<AddIncident/>} />
+                <Route path='incidentadd' element={<AddIncidentForm/>} />
                 <Route path='editincident/:id' element={<EditIncident/>}/>
                 <Route path="incidenteventphotosedit/:id" element={<IncidentEventPhotosEdit/>} />
                 <Route path="attendenceadd" element={<AttendenceAdd/>} />
@@ -194,9 +199,9 @@ function App() {
               </Route>
 
             </Route>
-            <Route element={<LoginPage/>} path="/loginpage"/>
           </Route>
         </Routes>
+        </AuthProvider>
       </BrowserRouter>
       </div>
     </div>

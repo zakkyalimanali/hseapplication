@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import SafetyCardAPI from '../../API/SafetyCardAPI'
+import IncidentAPI from '../../API/IncidentAPI'
 import StaffAPI from '../../API/StaffAPI'
 import AuthContext from '../../context/AuthContext'
 
@@ -55,11 +55,7 @@ const LSR_OPTIONS = [
   '(12) Follow prescribed Journey Management Plan',
 ]
 
-// ── Shared style tokens ──────────────────────────────────────────────────────
-const lbl = {
-  display: 'block', marginBottom: '6px',
-  fontWeight: '600', fontSize: '13px', color: NAVY,
-}
+const lbl = { display: 'block', marginBottom: '6px', fontWeight: '600', fontSize: '13px', color: NAVY }
 const inp = {
   width: '100%', padding: '10px 12px',
   border: '1.5px solid #E5E7EB', borderRadius: '8px',
@@ -90,26 +86,26 @@ function Field({ label, children }) {
   )
 }
 
-export default function AddIncidents() {
+export default function AddIncidentForm() {
   const { authTokens, user } = useContext(AuthContext)
   const navigate = useNavigate()
 
-  const [short_desc,       setShortDesc]       = useState('')
-  const [what_happened,    setWhatHappened]    = useState('')
-  const [why_happened,     setWhyHappened]     = useState('')
-  const [date_raised,      setDateRaised]      = useState('')
-  const [raised_by,        setRaisedBy]        = useState('')
-  const [life_saving_rule, setLifeSavingRule]  = useState('')
-  const [findings,         setFindings]        = useState('')
-  const [incident_date,    setIncidentDate]    = useState('')
-  const [location,         setLocation]        = useState('')
-  const [discussion,       setDiscussion]      = useState('')
-  const [target_date,      setTargetDate]      = useState('')
-  const [follow_up,        setFollowUp]        = useState('')
-  const [follow_up_remarks,setFollowUpRemarks] = useState('')
-  const [status,           setStatus]          = useState('')
-  const [responsible_party,setResponsibleParty]= useState('')
-  const [staffs,           setStaffs]          = useState([])
+  const [short_desc,        setShortDesc]        = useState('')
+  const [what_happened,     setWhatHappened]     = useState('')
+  const [why_happened,      setWhyHappened]      = useState('')
+  const [date_raised,       setDateRaised]       = useState('')
+  const [raised_by,         setRaisedBy]         = useState('')
+  const [life_saving_rule,  setLifeSavingRule]   = useState('')
+  const [findings,          setFindings]         = useState('')
+  const [incident_date,     setIncidentDate]     = useState('')
+  const [location,          setLocation]         = useState('')
+  const [discussion,        setDiscussion]       = useState('')
+  const [target_date,       setTargetDate]       = useState('')
+  const [follow_up,         setFollowUp]         = useState('')
+  const [follow_up_remarks, setFollowUpRemarks]  = useState('')
+  const [status,            setStatus]           = useState('')
+  const [responsible_party, setResponsibleParty] = useState('')
+  const [staffs,            setStaffs]           = useState([])
 
   useEffect(() => {
     StaffAPI.get('/', {
@@ -117,7 +113,6 @@ export default function AddIncidents() {
     }).then(res => setStaffs(res.data)).catch(console.log)
   }, [])
 
-  // Auto-select the logged-in user's linked staff record
   useEffect(() => {
     if (user?.staff_id) setRaisedBy(String(user.staff_id))
   }, [user])
@@ -134,9 +129,9 @@ export default function AddIncidents() {
       target_date: target_date || null,
       follow_up, follow_up_remarks, status, responsible_party,
     }
-    SafetyCardAPI.post('/', item, {
+    IncidentAPI.post('/', item, {
       headers: { Authorization: `Bearer ${authTokens.access}` },
-    }).then(() => navigate('/safetycardtable')).catch(console.log)
+    }).then(() => navigate('/incidentlist')).catch(console.log)
   }
 
   const autoFilled = raised_by && staffs.find(s => String(s.id) === String(raised_by))
@@ -148,18 +143,18 @@ export default function AddIncidents() {
         {/* ── Back + Header ── */}
         <div style={{ marginBottom: '32px' }}>
           <Link
-            to="/safetycardtable"
+            to="/incidentlist"
             style={{ color: '#6B7280', fontSize: '13px', textDecoration: 'none',
               display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
-            Back to Safety Cards
+            Back to Incidents
           </Link>
-          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>New Safety Card</h2>
+          <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>New Incident Report</h2>
           <p style={{ color: '#9CA3AF', margin: 0, fontSize: '14px' }}>
-            Record a safety observation, near miss, or unsafe act.
+            Record a formal incident that requires investigation and follow-up.
           </p>
         </div>
 
@@ -171,7 +166,7 @@ export default function AddIncidents() {
 
             <Field label="Short Description">
               <textarea rows={3} style={{ ...inp, resize: 'vertical' }}
-                placeholder="Brief description of what was observed..."
+                placeholder="Brief description of what occurred..."
                 value={short_desc} onChange={e => setShortDesc(e.target.value)} />
             </Field>
 
@@ -293,9 +288,9 @@ export default function AddIncidents() {
               borderRadius: '8px', padding: '11px 32px',
               fontWeight: '600', fontSize: '14px', cursor: 'pointer',
             }}>
-              Save Safety Card
+              Save Incident
             </button>
-            <Link to="/safetycardtable" style={{ textDecoration: 'none' }}>
+            <Link to="/incidentlist" style={{ textDecoration: 'none' }}>
               <button type="button" style={{
                 backgroundColor: 'transparent', border: '1.5px solid #D1D5DB',
                 color: '#6B7280', borderRadius: '8px', padding: '11px 24px',
