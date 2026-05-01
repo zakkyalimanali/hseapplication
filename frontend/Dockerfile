@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
+RUN NODE_OPTIONS=--max_old_space_size=512 npm run build
 
 # Stage 2 — serve with nginx
 FROM nginx:alpine
