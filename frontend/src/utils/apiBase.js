@@ -7,6 +7,6 @@
 const API_PORT = process.env.REACT_APP_API_PORT;
 const API_BASE = API_PORT
   ? `http://${window.location.hostname}:${API_PORT}`
-  : `http://${window.location.hostname}`;
+  : `${window.location.protocol}//${window.location.host}`;
 
 export default API_BASE;
