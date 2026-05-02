@@ -216,6 +216,15 @@ if _cors_origins:
 else:
     CORS_ALLOW_ALL_ORIGINS = True  # dev only — overridden when CORS_ALLOWED_ORIGINS is set
 
+# Allow all subdomains of PUBLIC_DOMAIN (e.g. tenant.safetymanagementbru.com)
+_public_domain = config('PUBLIC_DOMAIN', default='')
+if _public_domain:
+    import re as _re
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r'^https?://' + _re.escape(_public_domain) + r'$',
+        r'^https?://[a-zA-Z0-9-]+\.' + _re.escape(_public_domain) + r'$',
+    ]
+
 # ─────────────────────────────────────────────────────────────────
 # CSP
 # ─────────────────────────────────────────────────────────────────
