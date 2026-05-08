@@ -16,6 +16,7 @@ pipeline {
         stage('Backend Tests') {
             steps {
                 sh '''
+                    docker rm -f test_db || true
                     docker run -d --name test_db \
                       --network container:jenkins \
                       -e POSTGRES_DB=test_hse \
