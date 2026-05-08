@@ -16,11 +16,29 @@ pipeline {
         stage('Backend Tests') {
             steps {
                 sh '''
+                    docker run -d --name test_db \
+                      --network container:jenkins \
+                      -e POSTGRES_DB=test_hse \
+                      -e POSTGRES_USER=postgres \
+                      -e POSTGRES_PASSWORD=testpass \
+                      postgres:15-alpine
+
+                    sleep 8
+
                     cd backend
                     python -m venv .venv
                     . .venv/bin/activate
                     pip install -r requirements.txt
+
+                    export DB_HOST=localhost
+                    export DB_PORT=5432
+                    export DB_NAME=test_hse
+                    export DB_USER=postgres
+                    export DB_PASSWORD=testpass
+
                     python manage.py test hseapp
+
+                    docker stop test_db && docker rm test_db
                 '''
             }
         }
