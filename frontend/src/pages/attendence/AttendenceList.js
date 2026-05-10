@@ -111,7 +111,7 @@ export default function AttendenceList() {
   })
 
   return (
-    <div style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
+    <div className="page-pad" style={{ maxWidth: '1000px', margin: '0 auto' }}>
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
@@ -173,7 +173,7 @@ export default function AttendenceList() {
           </div>
 
           {/* Summary bar */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '20px' }}>
+          <div className="attend-summary-grid">
             {[
               { label: 'Present',      value: presentCount, bg: '#DCFCE7', color: '#166534' },
               { label: 'MC',           value: mcCount,      bg: '#FEF9C3', color: '#854D0E' },

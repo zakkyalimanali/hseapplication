@@ -255,7 +255,7 @@ export default function Home() {
 
       {/* ── Page Header ── */}
       {/* <div style={{ maxWidth: 'auto', margin: '0 auto', padding: '28px 40px 0' }}> */}
-      <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="page-pad" style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <p style={{ margin: '0 0 2px', fontSize: '12px', fontWeight: '600', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#9CA3AF' }}>
           {tenantName ? `${tenantName} HSE System` : 'HSE System'}
         </p>
@@ -266,7 +266,7 @@ export default function Home() {
       </div>
 
       {/* ── Content ── */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 40px 40px' }}>
+      <div className="page-pad-lr" style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {loading && (
           <p style={{ color: '#9CA3AF', fontSize: '14px', textAlign: 'center', padding: '40px 0' }}>Loading dashboard…</p>

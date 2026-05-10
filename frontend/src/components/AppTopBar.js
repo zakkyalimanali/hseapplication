@@ -238,7 +238,7 @@ function CommandPalette({ onClose }) {
 
 // ── AppTopBar ───────────────────────────────────────────────────────────────
 
-export default function AppTopBar() {
+export default function AppTopBar({ onMenuToggle }) {
   const { user, userRole, logoutUser } = useContext(AuthContext)
   const [paletteOpen, setPaletteOpen] = useState(false)
 
@@ -266,10 +266,19 @@ export default function AppTopBar() {
         borderBottom: '1px solid #E5E7EB',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 24px',
-        gap: '16px',
+        padding: '0 12px',
+        gap: '12px',
         flexShrink: 0,
       }}>
+
+        {/* Hamburger — visible on mobile only */}
+        <button className="hamburger-btn" onClick={onMenuToggle} aria-label="Toggle menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
 
         {/* Search bar */}
         <button
@@ -289,7 +298,7 @@ export default function AppTopBar() {
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <span style={{ flex: 1, fontSize: '14px', color: '#9CA3AF' }}>Search...</span>
-          <span style={{
+          <span className="cmd-k-badge" style={{
             fontSize: '11px', color: '#9CA3AF', fontWeight: '500',
             border: '1px solid #E5E7EB', borderRadius: '4px', padding: '1px 6px',
             backgroundColor: 'white',
@@ -324,7 +333,7 @@ export default function AppTopBar() {
             }}>
               {user?.username?.[0]?.toUpperCase() || 'U'}
             </div>
-            <div style={{ lineHeight: '1.2' }}>
+            <div className="topbar-user-label">
               <div style={{ fontSize: '13px', fontWeight: '600', color: NAVY }}>{user?.username}</div>
               <div style={{ fontSize: '11px', color: '#9CA3AF' }}>{roleLabel}</div>
             </div>

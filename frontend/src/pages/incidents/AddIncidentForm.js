@@ -73,8 +73,6 @@ const sectionHead = {
   fontSize: '11px', fontWeight: '700',
   letterSpacing: '0.1em', textTransform: 'uppercase', color: '#6B7280',
 }
-const grid2 = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }
-const grid3 = { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }
 const fld   = { marginBottom: '20px' }
 
 function Field({ label, children }) {
@@ -138,7 +136,7 @@ export default function AddIncidentForm() {
 
   return (
     <div style={{ backgroundColor: '#F8F9FA', minHeight: '100%' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px' }}>
+      <div className="page-pad" style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* ── Back + Header ── */}
         <div style={{ marginBottom: '32px' }}>
@@ -170,7 +168,7 @@ export default function AddIncidentForm() {
                 value={short_desc} onChange={e => setShortDesc(e.target.value)} />
             </Field>
 
-            <div style={grid2}>
+            <div className="grid-2">
               <Field label="Location">
                 <input style={inp} type="text" placeholder="Where did this occur?"
                   value={location} onChange={e => setLocation(e.target.value)} />
@@ -192,7 +190,7 @@ export default function AddIncidentForm() {
               </Field>
             </div>
 
-            <div style={grid2}>
+            <div className="grid-2">
               <Field label="Date Raised">
                 <input style={inp} type="date" value={date_raised}
                   onChange={e => setDateRaised(e.target.value || null)} />
@@ -234,7 +232,7 @@ export default function AddIncidentForm() {
           <div style={card}>
             <p style={sectionHead}>Follow-up & Resolution</p>
 
-            <div style={grid2}>
+            <div className="grid-2">
               <Field label="Findings">
                 <textarea rows={3} style={{ ...inp, resize: 'vertical' }}
                   placeholder="What was found during investigation..."
@@ -247,7 +245,7 @@ export default function AddIncidentForm() {
               </Field>
             </div>
 
-            <div style={grid3}>
+            <div className="grid-3">
               <Field label="Status">
                 <select style={inp} value={status} onChange={e => setStatus(e.target.value)}>
                   <option value="">Select status...</option>

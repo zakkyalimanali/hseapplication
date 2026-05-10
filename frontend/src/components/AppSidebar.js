@@ -132,7 +132,7 @@ const icons = {
   ),
 }
 
-export default function AppSidebar() {
+export default function AppSidebar({ isOpen, onClose }) {
   const { tenantName, userRole } = useContext(AuthContext)
 
   const isCompanyAdmin = hasMinRole(userRole, ROLES.COMPANY_ADMIN)
@@ -140,16 +140,21 @@ export default function AppSidebar() {
   const isSupervisor   = hasMinRole(userRole, ROLES.SUPERVISOR)
 
   return (
-    <div style={{
-      width: `${W}px`,
-      flexShrink: 0,
-      backgroundColor: BG,
-      height: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowY: 'auto',
-      overflowX: 'hidden',
-    }}>
+    <>
+      {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
+      <div
+        className={`app-sidebar${isOpen ? ' open' : ''}`}
+        style={{
+          width: `${W}px`,
+          flexShrink: 0,
+          backgroundColor: BG,
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+      >
 
       {/* Brand */}
       <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
@@ -172,7 +177,7 @@ export default function AppSidebar() {
       </div>
 
       {/* Nav */}
-      <nav style={{ padding: '12px 10px', flex: 1 }}>
+      <nav style={{ padding: '12px 10px', flex: 1 }} onClick={onClose}>
 
         <NavItem to="/stafflog" icon={icons.home} label="Home" />
 
@@ -210,5 +215,6 @@ export default function AppSidebar() {
 
       </nav>
     </div>
+    </>
   )
 }

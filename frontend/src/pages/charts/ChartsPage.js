@@ -137,7 +137,7 @@ export default function ChartsPage() {
   const noData = <p style={{ color: '#bbb', fontSize: '13px', margin: 0 }}>No data yet</p>
 
   return (
-    <div style={{ padding: '40px', maxWidth: '1300px', margin: '0 auto' }}>
+    <div className="page-pad" style={{ maxWidth: '1300px', margin: '0 auto' }}>
 
       <div style={{ marginBottom: '32px' }}>
         <h2 style={{ color: NAVY, fontWeight: '800', margin: '0 0 4px' }}>Charts</h2>
@@ -186,7 +186,7 @@ export default function ChartsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
           {/* Row 1: Per staff bar + Status pie */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+          <div className="chart-row-2-1">
             <ChartCard title="Safety Cards per Staff" height={Math.max(260, perStaff.length * 36)}>
               {perStaff.length > 0
                 ? <Bar data={makeBarData(perStaff.map(s => s.name), perStaff.map(s => s.count))} options={vBarOptions} />
@@ -210,7 +210,7 @@ export default function ChartsPage() {
           </ChartCard>
 
           {/* Row 3: Why + LSR side by side */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <div className="chart-row-halves">
             <ChartCard title="Why It Happened" height={Math.max(280, whySorted.length * 34)}>
               {whySorted.length > 0
                 ? <Bar
