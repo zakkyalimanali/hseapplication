@@ -52,7 +52,9 @@ pipeline {
 
         stage('Deploy to VPS') {
             when {
-                branch 'main'
+                expression {
+                    return env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main' || env.BRANCH_NAME == 'main'
+                }
             }
             steps {
                 sshagent(['vps-ssh-credentials']) {
