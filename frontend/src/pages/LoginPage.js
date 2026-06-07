@@ -108,7 +108,7 @@ export default function LoginPage() {
             <h2 style={{ color: NAVY, fontWeight: '800', fontSize: '20px', margin: 0 }}>{tenantName || 'HSE Platform'}</h2>
           </div>
 
-          <h2 style={{ color: NAVY, fontWeight: '800', fontSize: '26px', margin: '0 0 6px' }}>
+          <h2 style={{ color: '#E53E3E', fontWeight: '800', fontSize: '26px', margin: '0 0 6px' }}>
             Welcome back
           </h2>
           <p style={{ color: '#888', fontSize: '14px', margin: '0 0 32px' }}>
