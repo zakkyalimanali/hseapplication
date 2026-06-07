@@ -61,7 +61,8 @@ pipeline {
                     sh '''
                         ssh -o StrictHostKeyChecking=no root@206.189.33.58 "
                             cd /root/hseapplication &&
-                            git pull origin main &&
+                            git fetch origin main &&
+                            git reset --hard origin/main &&
                             docker compose down &&
                             docker compose up -d --build
                         "
